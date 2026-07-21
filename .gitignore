@@ -1,0 +1,8 @@
+raw/*
+!raw/.gitkeep
+
+*.pcap
+*.pcapng
+*.usbpcap.json
+.capture-control-*/
+.query-control-*/
