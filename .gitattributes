@@ -1,0 +1,2 @@
+# This reviewed plan is hash-gated evidence. Preserve its committed bytes exactly.
+plans/*.json -text
