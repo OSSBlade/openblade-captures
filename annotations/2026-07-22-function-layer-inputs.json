@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "evidenceProvenance": {
+    "controller": "Razer Synapse 4",
+    "role": "OracleCapture",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeVisualParityConfirmed": false
+  },
+  "capturedAtUtc": "2026-07-23T02:10:14.6499616Z",
+  "device": {
+    "model": "Razer Blade 16 (2026)",
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "bios": "3.01",
+    "usbPcapRoot": "USBPcap3",
+    "usbDeviceAddress": 2,
+    "inputEndpointHex": "82"
+  },
+  "capture": {
+    "sha256": "AF07DCBA621B80459DB7D8D49C7B6AAE0AAF3B48B000487E9A60CD19F189B715",
+    "byteLength": 121177,
+    "packetCount": 868,
+    "durationSeconds": 60.328205,
+    "rawCaptureCommitted": false,
+    "terminationReason": "StopSentinel",
+    "stopMode": "Graceful",
+    "captureProcessId": 31684,
+    "captureProcessGroupId": 31684,
+    "serviceStoppedForCapture": true,
+    "serviceRestoredByCaptureRunner": true,
+    "decodable": true,
+    "descriptorVerified": "1532:02E0"
+  },
+  "actions": [
+    {
+      "function": "M1",
+      "sharedPhysicalKey": "Page Up",
+      "reports": [
+        { "frame": 455, "relativeSeconds": 36.914649, "prefixHex": "040A0000", "meaning": "Fn pressed" },
+        { "frame": 457, "relativeSeconds": 37.325698, "prefixHex": "01004B00", "meaning": "M1 / Page Up pressed" },
+        { "frame": 459, "relativeSeconds": 37.414926, "prefixHex": "01000000", "meaning": "M1 / Page Up released" },
+        { "frame": 469, "relativeSeconds": 37.593828, "prefixHex": "04000000", "meaning": "Fn released" }
+      ]
+    },
+    {
+      "function": "M2",
+      "sharedPhysicalKey": "Page Down",
+      "reports": [
+        { "frame": 489, "relativeSeconds": 40.200794, "prefixHex": "040A0000", "meaning": "Fn pressed" },
+        { "frame": 499, "relativeSeconds": 40.524691, "prefixHex": "01004E00", "meaning": "M2 / Page Down pressed" },
+        { "frame": 501, "relativeSeconds": 40.611913, "prefixHex": "01000000", "meaning": "M2 / Page Down released" },
+        { "frame": 503, "relativeSeconds": 40.839866, "prefixHex": "04000000", "meaning": "Fn released" }
+      ]
+    },
+    {
+      "function": "M3",
+      "sharedPhysicalKey": "Game mode key",
+      "reports": [
+        { "frame": 523, "relativeSeconds": 43.278749, "prefixHex": "040A0000", "meaning": "Fn pressed" },
+        { "frame": 533, "relativeSeconds": 43.643746, "prefixHex": "040A0300", "meaning": "M3 pressed" },
+        { "frame": 535, "relativeSeconds": 43.756714, "prefixHex": "040A0000", "meaning": "M3 released while Fn remains held" },
+        { "frame": 537, "relativeSeconds": 44.034734, "prefixHex": "04000000", "meaning": "Fn released" }
+      ]
+    },
+    {
+      "function": "M4",
+      "sharedPhysicalKey": "Performance mode key",
+      "reports": [
+        { "frame": 555, "relativeSeconds": 46.295644, "prefixHex": "040A0000", "meaning": "Fn pressed" },
+        { "frame": 565, "relativeSeconds": 46.636944, "prefixHex": "040AD300", "meaning": "M4 pressed" },
+        { "frame": 567, "relativeSeconds": 46.731726, "prefixHex": "040A0000", "meaning": "M4 released while Fn remains held" },
+        { "frame": 569, "relativeSeconds": 47.027652, "prefixHex": "04000000", "meaning": "Fn released" }
+      ]
+    },
+    {
+      "function": "M5",
+      "sharedPhysicalKey": "Microphone mute key",
+      "reports": [
+        { "frame": 589, "relativeSeconds": 48.984807, "prefixHex": "040A0000", "meaning": "Fn pressed" },
+        { "frame": 591, "relativeSeconds": 49.415924, "prefixHex": "040AD400", "meaning": "M5 pressed" },
+        { "frame": 593, "relativeSeconds": 49.528685, "prefixHex": "040A0000", "meaning": "M5 released while Fn remains held" },
+        { "frame": 603, "relativeSeconds": 49.893711, "prefixHex": "04000000", "meaning": "Fn released" }
+      ]
+    }
+  ],
+  "notes": [
+    "M1 through M5 are Fn-layer functions on shared physical keys, not five dedicated keys.",
+    "The target reports are 16-byte interrupt transfers on endpoint 82; only the first four bytes are retained here.",
+    "Reports at and after frame 613 are the operator typing the completion message and are excluded from the action evidence.",
+    "The capture proves input identities while a Synapse host-rendered lighting session is active. It does not prove that the same distinct reports are emitted in firmware Normal Mode.",
+    "No raw capture is committed because USB captures can contain device-specific data."
+  ]
+}

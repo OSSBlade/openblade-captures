@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "evidenceProvenance": {
+    "controller": "Razer Synapse 4",
+    "role": "OracleCapture",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeVisualParityConfirmed": false
+  },
+  "capturedAtUtc": "2026-07-23T02:21:00.9851690Z",
+  "device": {
+    "model": "Razer Blade 16 (2026)",
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "bios": "3.01",
+    "usbPcapRoot": "USBPcap3",
+    "usbDeviceAddress": 2,
+    "inputEndpointHex": "82"
+  },
+  "capture": {
+    "sha256": "41BF8587BFBA57F19869A3EF236EF0636B38E82EAF7FE0EE4E0C9EA4536CFA74",
+    "byteLength": 93785,
+    "packetCount": 740,
+    "durationSeconds": 66.894527,
+    "matrixReportCount": 101,
+    "rawCaptureCommitted": false,
+    "terminationReason": "StopSentinel",
+    "stopMode": "Graceful",
+    "captureProcessId": 920,
+    "captureProcessGroupId": 920,
+    "serviceManagementSkipped": true,
+    "openBladeServiceRunningDuringCapture": false,
+    "decodable": true,
+    "descriptorVerified": "1532:02E0"
+  },
+  "synapseStartup": {
+    "firstCommandFrame": 29,
+    "firstCommandRelativeSeconds": 30.143774,
+    "driverMode": {
+      "requestFrame": 71,
+      "requestRelativeSeconds": 30.670662,
+      "command": "00/04",
+      "payloadHex": "0300",
+      "responseFrame": 74,
+      "responseStatusHex": "02",
+      "responsePayloadHex": "0300"
+    },
+    "customMatrixMode": [
+      { "requestFrame": 75, "requestRelativeSeconds": 30.679298, "command": "03/0A", "payloadHex": "0500", "responseFrame": 78, "responseStatusHex": "02" },
+      { "requestFrame": 83, "requestRelativeSeconds": 30.702984, "command": "03/0A", "payloadHex": "0500", "responseFrame": 86, "responseStatusHex": "02" }
+    ]
+  },
+  "functionHoldWhileSynapseActive": {
+    "pressFrame": 523,
+    "pressRelativeSeconds": 38.003537,
+    "pressPrefixHex": "040A0000",
+    "releaseFrame": 571,
+    "releaseRelativeSeconds": 41.240610,
+    "releasePrefixHex": "04000000",
+    "visuallyLitKeys": [
+      "F1-F12",
+      "R",
+      "T",
+      "P",
+      "B",
+      "Copilot secondary",
+      "Arrow keys",
+      "M1-M5 shared keys"
+    ],
+    "matrixFramesAroundHold": [
+      { "frame": 449, "relativeSeconds": 35.753387, "rgbSha256Prefix": "04e19367072852a5" },
+      { "frame": 569, "relativeSeconds": 40.748617, "rgbSha256Prefix": "04e19367072852a5" }
+    ],
+    "matrixChangedForFunctionHold": false
+  },
+  "synapseExit": {
+    "firstCleanupCommandFrame": 573,
+    "firstCleanupCommandRelativeSeconds": 43.621895,
+    "normalMode": {
+      "requestFrame": 681,
+      "requestRelativeSeconds": 45.263918,
+      "command": "00/04",
+      "payloadHex": "0000",
+      "responseFrame": 684,
+      "responseStatusHex": "02",
+      "responsePayloadHex": "0000"
+    },
+    "firmwareStaticGreen": {
+      "requestFrame": 685,
+      "requestRelativeSeconds": 45.271233,
+      "command": "03/0A",
+      "payloadHex": "0600FF00",
+      "responseFrame": 688,
+      "responseStatusHex": "02"
+    }
+  },
+  "functionHoldAfterSynapseExit": {
+    "pressFrame": 711,
+    "pressRelativeSeconds": 56.618148,
+    "pressPrefixHex": "040A0000",
+    "releaseFrame": 713,
+    "releaseRelativeSeconds": 59.214520,
+    "releasePrefixHex": "04000000",
+    "visuallyLitKeys": [
+      "F1-F12",
+      "Copilot secondary",
+      "Arrow keys"
+    ]
+  },
+  "externalReference": {
+    "project": "OpenRazer",
+    "source": "driver/razerchromacommon.c",
+    "url": "https://github.com/openrazer/openrazer/blob/master/driver/razerchromacommon.c",
+    "documentedSemantics": {
+      "00/04:0000": "Normal Mode",
+      "00/04:0300": "Driver Mode",
+      "00/84": "Get device mode"
+    },
+    "limitation": "OpenRazer deliberately treats device-mode writes as a no-op for its existing Blade model list. PID 02E0 therefore still requires its own isolated apply, readback, and restoration validation before production admission."
+  },
+  "conclusions": [
+    "The Fn highlight is composed by keyboard firmware. Synapse did not send a changed host matrix frame when Fn was pressed.",
+    "Synapse entered 00/04 0300 Driver Mode immediately before 03/0A 0500 custom matrix mode and restored 00/04 0000 Normal Mode before returning to a firmware-native static effect.",
+    "Driver Mode is the leading candidate for the extended Fn layer and distinct M1-M5 reports, but this capture changes multiple startup states and is not an isolated causal validation.",
+    "OpenBlade must not admit the setter until a bounded test applies Driver Mode, confirms the function layer, reads back 00/84 where supported, and restores Normal Mode with lighting recovery.",
+    "Reports at and after frame 715 are the operator typing the completion message and are excluded from the function-layer comparison."
+  ]
+}
