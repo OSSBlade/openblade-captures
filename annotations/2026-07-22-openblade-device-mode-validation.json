@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "evidenceProvenance": {
+    "controller": "OpenBlade.Capture",
+    "role": "ExactDeviceInteractiveValidation",
+    "openBladeTypedApplyPerformed": true,
+    "openBladeVisualParityConfirmed": true,
+    "productionAdmitted": false
+  },
+  "validatedAtUtc": "2026-07-23T03:20:32.8378764Z",
+  "device": {
+    "model": "Razer Blade 16 (2026)",
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "bios": "3.01"
+  },
+  "isolation": {
+    "openBladeServiceRunning": false,
+    "temporarilyStoppedServices": [
+      "Razer Elevation Service",
+      "Razer Game Manager Service 3"
+    ],
+    "servicesRestored": true,
+    "usbPcapUsed": false,
+    "consoleControlEventUsed": false
+  },
+  "validation": {
+    "exactTargetConfirmation": "RZ09-0581:1532:02E0:3.01",
+    "baseline": {
+      "command": "00/84",
+      "requestPayloadHex": "0000",
+      "responsePayloadHex": "0000",
+      "decodedMode": "Normal"
+    },
+    "apply": {
+      "command": "00/04",
+      "requestPayloadHex": "0300",
+      "responsePayloadHex": "0300",
+      "decodedMode": "Driver",
+      "acknowledged": true
+    },
+    "candidateReadback": {
+      "command": "00/84",
+      "requestPayloadHex": "0000",
+      "responsePayloadHex": "0300",
+      "decodedMode": "Driver",
+      "confirmed": true
+    },
+    "visualCheck": {
+      "operatorConfirmed": true,
+      "expectedSynapseLayer": [
+        "F1-F12",
+        "R",
+        "T",
+        "P",
+        "B",
+        "Copilot secondary",
+        "Arrow keys",
+        "M1-M5 shared keys"
+      ]
+    },
+    "restore": {
+      "command": "00/04",
+      "requestPayloadHex": "0000",
+      "responsePayloadHex": "0000",
+      "acknowledged": true
+    },
+    "restorationReadback": {
+      "command": "00/84",
+      "requestPayloadHex": "0000",
+      "responsePayloadHex": "0000",
+      "decodedMode": "Normal",
+      "confirmed": true
+    },
+    "manualRecoveryRequired": false,
+    "failure": "None"
+  },
+  "relatedEvidence": {
+    "synapseFunctionLayerAnnotation": "2026-07-22-synapse-function-layer-mode.json",
+    "readOnlyDeviceModeResult": {
+      "mode": "Normal",
+      "responsePayloadHex": "0000"
+    }
+  },
+  "conclusions": [
+    "On RZ09-0581 PID 02E0 BIOS 3.01, 00/04 0300 independently enables the Synapse-style extended Fn lighting layer.",
+    "00/84 is a usable typed readback: it returned 0000 in Normal Mode and 0300 in Driver Mode.",
+    "00/04 0000 restored Normal Mode and the independent 00/84 readback confirmed restoration.",
+    "This validates the device-mode primitive but does not by itself admit an always-on production policy. OpenBlade still needs an ownership and lifecycle design for Driver Mode, custom matrix lighting, suspend, resume, and competing Razer software."
+  ]
+}
