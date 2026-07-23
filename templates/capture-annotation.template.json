@@ -25,6 +25,7 @@
     "decodable": true
   },
   "action": {
+    "kind": "ReadOnlyQuery",
     "subsystem": "TODO",
     "name": "TODO",
     "value": "TODO",
@@ -37,7 +38,16 @@
     "restorationResult": "Not performed",
     "restorationReadbackResult": "Not performed"
   },
-  "sanitizedEvidence": [],
-  "limitations": [],
+  "sanitizedEvidence": [
+    {
+      "kind": "FeatureReportExchange",
+      "summary": "Bounded explanation of what this evidence proves",
+      "requestEnvelopeHex": "0000",
+      "responseEnvelopeHex": "0000"
+    }
+  ],
+  "limitations": [
+    "State what this capture does not prove"
+  ],
   "notes": []
 }

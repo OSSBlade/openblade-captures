@@ -49,6 +49,11 @@ $annotation = [ordered]@{
         decodable = $null
     }
     action = [ordered]@{
+        kind = if ($plan.scope.queryOnly -eq $true) {
+            'ReadOnlyQuery'
+        } else {
+            'SettingChange'
+        }
         subsystem = [string]$plan.scope.subsystem
         name = [string]$plan.scope.action
         value = [string]$plan.scope.value
@@ -61,7 +66,12 @@ $annotation = [ordered]@{
         restorationResult = [string]$plan.validation.restoration
         restorationReadbackResult = [string]$plan.validation.restorationReadback
     }
-    sanitizedEvidence = @()
+    sanitizedEvidence = @(
+        [ordered]@{
+            kind = 'TODO: bounded evidence kind'
+            summary = 'TODO: what the sanitized evidence proves'
+        }
+    )
     limitations = @('TODO: state what this capture does not prove')
     notes = @()
 }

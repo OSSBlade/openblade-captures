@@ -25,11 +25,15 @@ The broader project documentation is maintained in
 - `tools/Convert-UsbPcapToTransactions.ps1`: decode a local PCAP into bounded
   transaction records with tshark.
 - `tools/Compare-CaptureTransactions.ps1`: compare baseline and one-action
-  captures by normalized payload fingerprint.
+  captures by a semantic fingerprint that removes transaction IDs, checksums,
+  and unused padding from validated 90-byte and 374-byte Razer envelopes while
+  retaining command and payload differences.
 - `tools/New-SanitizedCaptureAnnotation.ps1`: create a commit-safe annotation
   skeleton with hashes and restoration results.
 - `tools/Test-CaptureEvidence.ps1`: validate required provenance, redaction,
-  capture hashes, and restoration gates.
+  bounded evidence, capture hashes, and restoration gates. Use `-PcapPath`
+  before committing to verify the local capture; use the explicit `-SchemaOnly`
+  mode only when the raw capture is intentionally unavailable.
 - `tools/Test-UsbPcapShutdownSafety.ps1`: regression-check that capture shutdown
   cannot broadcast Ctrl+C to the parent console.
 
@@ -45,6 +49,7 @@ RZ09-0581.
 - `plans`: reviewed, hash-gated interactive validation plans.
 - `raw`: ignored local PCAP files. Only `.gitkeep` is committed.
 - `templates`: versioned starting documents for new investigations.
+- `tests`: safe synthetic regression tests that never access live hardware.
 - `tools`: capture, decoding, comparison, sanitization, and validation scripts.
 
 Never commit raw PCAP/PCAPNG files, serial numbers, local paths, device-instance
@@ -53,3 +58,10 @@ suffixes, usernames, or unreviewed payload streams.
 Copy `templates/device-coverage.template.json` when starting a model. Keep each
 capability at `NotInvestigated` until its evidence advances it through capture,
 query validation, setter validation, and production admission.
+
+Run the offline toolkit regressions after changing schemas, comparison,
+sanitization, or coverage:
+
+```powershell
+.\tests\Run-All.ps1
+```

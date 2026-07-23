@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "device": {
     "modelNumber": "RZ09-XXXX",
     "vendorIdHex": "1532",
@@ -18,30 +18,194 @@
     "ProductionAdmitted"
   ],
   "capabilities": {
-    "identityAndFirmware": "NotInvestigated",
-    "performancePresets": "NotInvestigated",
-    "customPerformance": "NotInvestigated",
-    "automaticFans": "NotInvestigated",
-    "fixedFans": "NotInvestigated",
-    "maximumFans": "NotInvestigated",
-    "manualFanCurve": "NotInvestigated",
-    "fanRpm": "NotInvestigated",
-    "batteryProtection": "NotInvestigated",
-    "temporaryFullCharge": "NotInvestigated",
-    "keyboardLighting": "NotInvestigated",
-    "logoLighting": "NotInvestigated",
-    "functionKeyBehavior": "NotInvestigated",
-    "gamingMode": "NotInvestigated",
-    "startupAnimation": "NotInvestigated",
-    "specialKeys": "NotInvestigated",
-    "displayModes": "NotInvestigated",
-    "hdr": "NotInvestigated",
-    "colorProfiles": "NotInvestigated",
-    "sleepResume": "NotInvestigated",
-    "deviceReconnect": "NotInvestigated",
-    "powerTransitions": "NotInvestigated",
-    "controllerConflicts": "NotInvestigated",
-    "malformedReplyHandling": "NotInvestigated"
+    "identityAndFirmware": {
+      "usbDescriptors": "NotInvestigated",
+      "modelNumber": "NotInvestigated",
+      "biosVersion": "NotInvestigated",
+      "ecVersion": "NotInvestigated",
+      "mcuVersion": "NotInvestigated",
+      "relevantInterfaces": "NotInvestigated"
+    },
+    "performance": {
+      "ac": {
+        "presets": "NotInvestigated",
+        "customCpuLevels": "NotInvestigated",
+        "customGpuLevels": "NotInvestigated",
+        "readback": "NotInvestigated"
+      },
+      "usbC": {
+        "powerClasses": "NotInvestigated",
+        "presetsByPowerClass": "NotInvestigated",
+        "customCpuLevels": "NotInvestigated",
+        "customGpuLevels": "NotInvestigated",
+        "readback": "NotInvestigated"
+      },
+      "battery": {
+        "presets": "NotInvestigated",
+        "customCpuLevels": "NotInvestigated",
+        "customGpuLevels": "NotInvestigated",
+        "readback": "NotInvestigated"
+      }
+    },
+    "fans": {
+      "automatic": "NotInvestigated",
+      "fixedMinimum": "NotInvestigated",
+      "fixedMaximum": "NotInvestigated",
+      "fixedStep": "NotInvestigated",
+      "maximum": "NotInvestigated",
+      "manualCurveWrites": "NotInvestigated",
+      "manualCurveReadback": "NotInvestigated",
+      "rpmQuery": "NotInvestigated"
+    },
+    "battery": {
+      "protectionOff": "NotInvestigated",
+      "advertisedLimits": "NotInvestigated",
+      "limitQuery": "NotInvestigated",
+      "temporaryFullCharge": "NotInvestigated",
+      "temporaryFullChargeQuery": "NotInvestigated"
+    },
+    "keyboardLighting": {
+      "off": "NotInvestigated",
+      "brightnessRange": "NotInvestigated",
+      "brightnessQuery": "NotInvestigated",
+      "effects": {
+        "ambientAwareness": {
+          "base": "NotInvestigated",
+          "screenRegions": "NotInvestigated",
+          "matrixFormat": "NotInvestigated",
+          "frameCadence": "NotInvestigated"
+        },
+        "breathing": {
+          "base": "NotInvestigated",
+          "singleColor": "NotInvestigated",
+          "dualColor": "NotInvestigated",
+          "randomColor": "NotInvestigated",
+          "durations": "NotInvestigated"
+        },
+        "customMatrix": {
+          "setupCommand": "NotInvestigated",
+          "matrixFormat": "NotInvestigated",
+          "frameCadence": "NotInvestigated"
+        },
+        "reactive": {
+          "base": "NotInvestigated",
+          "colors": "NotInvestigated",
+          "durations": "NotInvestigated",
+          "keyMap": "NotInvestigated"
+        },
+        "ripple": {
+          "base": "NotInvestigated",
+          "colors": "NotInvestigated",
+          "durations": "NotInvestigated",
+          "keyMap": "NotInvestigated"
+        },
+        "spectrum": {
+          "base": "NotInvestigated",
+          "hostColorSequence": "NotInvestigated",
+          "frameCadence": "NotInvestigated"
+        },
+        "starlight": {
+          "base": "NotInvestigated",
+          "singleColor": "NotInvestigated",
+          "dualColor": "NotInvestigated",
+          "randomColor": "NotInvestigated",
+          "durations": "NotInvestigated"
+        },
+        "static": {
+          "base": "NotInvestigated",
+          "colors": "NotInvestigated"
+        },
+        "tidal": {
+          "base": "NotInvestigated",
+          "primaryColor": "NotInvestigated",
+          "secondaryColor": "NotInvestigated",
+          "randomColor": "NotInvestigated",
+          "inwardDirection": "NotInvestigated",
+          "outwardDirection": "NotInvestigated"
+        },
+        "wave": {
+          "base": "NotInvestigated",
+          "leftDirection": "NotInvestigated",
+          "rightDirection": "NotInvestigated"
+        },
+        "wheel": {
+          "base": "NotInvestigated",
+          "leftDirection": "NotInvestigated",
+          "rightDirection": "NotInvestigated"
+        }
+      },
+      "effectGetter": "NotInvestigated"
+    },
+    "logoLighting": {
+      "off": "NotInvestigated",
+      "static": "NotInvestigated",
+      "breathing": "NotInvestigated",
+      "getter": "NotInvestigated"
+    },
+    "keyboardBehavior": {
+      "functionKeyPrimary": "NotInvestigated",
+      "functionKeyPrimaryGetter": "NotInvestigated",
+      "gamingMode": "NotInvestigated",
+      "gamingModeGetter": "NotInvestigated",
+      "startupAnimation": "NotInvestigated",
+      "startupAnimationGetter": "NotInvestigated",
+      "normalDeviceMode": "NotInvestigated",
+      "driverDeviceMode": "NotInvestigated",
+      "deviceModeGetter": "NotInvestigated"
+    },
+    "specialKeys": {
+      "functionLayerReports": "NotInvestigated",
+      "performanceKey": "NotInvestigated",
+      "m1PageUp": "NotInvestigated",
+      "m2PageDown": "NotInvestigated",
+      "m3GamingMode": "NotInvestigated",
+      "m4PerformanceMode": "NotInvestigated",
+      "m5MicrophoneMute": "NotInvestigated"
+    },
+    "display": {
+      "windowsVisibleModes": "NotInvestigated",
+      "dynamicRefreshRate": "NotInvestigated",
+      "variableRefreshRange": "NotInvestigated",
+      "hdr": "NotInvestigated",
+      "colorProfilesSdr": "NotInvestigated",
+      "colorProfilesHdr": "NotInvestigated"
+    },
+    "lifecycle": {
+      "coldBoot": "NotInvestigated",
+      "signIn": "NotInvestigated",
+      "serviceRestart": "NotInvestigated",
+      "sleepResume": "NotInvestigated",
+      "deviceReconnect": "NotInvestigated"
+    },
+    "power": {
+      "fullAc": "NotInvestigated",
+      "usbCPowerClasses": "NotInvestigated",
+      "battery": "NotInvestigated",
+      "acToUsbC": "NotInvestigated",
+      "usbCToAc": "NotInvestigated",
+      "acToBattery": "NotInvestigated",
+      "batteryToAc": "NotInvestigated",
+      "usbCToBattery": "NotInvestigated",
+      "batteryToUsbC": "NotInvestigated"
+    },
+    "conflicts": {
+      "vendorControllerPresent": "NotInvestigated",
+      "externalChangeDetection": "NotInvestigated",
+      "defaultZeroWritePolicy": "NotInvestigated",
+      "explicitReclaim": "NotInvestigated"
+    },
+    "failures": {
+      "timeout": "NotInvestigated",
+      "malformedResponse": "NotInvestigated",
+      "checksumMismatch": "NotInvestigated",
+      "transactionMismatch": "NotInvestigated",
+      "commandClassMismatch": "NotInvestigated",
+      "commandIdMismatch": "NotInvestigated",
+      "statusFailure": "NotInvestigated",
+      "unsupportedPid": "NotInvestigated",
+      "unsupportedFirmware": "NotInvestigated",
+      "disconnectMidTransaction": "NotInvestigated"
+    }
   },
   "notes": []
 }

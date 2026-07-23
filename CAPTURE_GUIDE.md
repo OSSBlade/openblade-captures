@@ -133,7 +133,11 @@ annotation.
 The generic decoder retains frame number, relative time, direction, endpoint,
 setup fields, bounded payload hex, and length. Treat its output as raw until it
 has been reviewed and sanitized. A payload difference is a candidate, not a
-command definition.
+command definition. The comparer recognizes checksum-valid 90-byte and
+374-byte Razer envelopes, with or without a report-ID prefix. It ignores the
+transaction ID, checksum, reserved bytes, and unused padding, but retains
+status, report ID, command class/ID, payload length, and semantic payload.
+Unknown or malformed payloads fall back to exact full-payload comparison.
 
 Correlate candidates with:
 
@@ -200,6 +204,12 @@ confirmation alone does not replace restoration.
 Investigate only controls present on the target, but explicitly mark every row
 as supported, absent, software-only, or not investigated.
 
+Copy `templates/device-coverage.template.json` for the target. Its schema-2
+nested matrix tracks each power context, USB-C power class, lighting variant,
+color/duration/direction/region group, lifecycle event, conflict behavior, and
+failure mode independently. Mark a missing target feature `Absent`; do not
+delete the row or collapse several variants into one status.
+
 | Area | Minimum capture set |
 | --- | --- |
 | Identity | descriptors, model, BIOS, EC, MCU, relevant interfaces |
@@ -233,16 +243,36 @@ Create an annotation skeleton:
 ```
 
 Replace placeholders with reviewed, bounded evidence. Never paste an entire
-payload stream. Then run:
+payload stream. Set `action.kind` to `ReadOnlyQuery`, `SettingChange`,
+`Observation`, or `NegativeControl`; every `SettingChange` needs successful
+prior-state, apply, readback, restoration, and restoration-readback results.
+Use the provenance role `OracleCapture`, `ReadOnlyQueryCapture`,
+`NegativeCapture`, `ExactDeviceInteractiveValidation`, or
+`OpenBladeTypedValidation`, and include the controller name and version.
+Each `sanitizedEvidence` item needs a short `kind`, a human-readable `summary`,
+and only the bounded fields necessary to reproduce the protocol conclusion.
+Then run:
 
 ```powershell
 .\tools\Test-CaptureEvidence.ps1 `
-  -AnnotationPath .\annotations\YYYY-MM-DD-action.json
+  -AnnotationPath .\annotations\YYYY-MM-DD-action.json `
+  -PcapPath $session.ActionPcap
 ```
 
 The validator rejects missing provenance, empty or all-device captures without
 disclosure, forced shutdown without disclosure, missing restoration outcomes,
-local paths, serial-like values, and raw capture extensions.
+local paths, serial-like values, unbounded evidence, and raw capture
+extensions. `-PcapPath` is the pre-commit gate: it verifies the stored SHA-256
+and byte length against the local raw capture. When reviewing an already
+committed annotation without its intentionally untracked PCAP, use the explicit
+`-SchemaOnly` mode; it validates schema and redaction but reports that the PCAP
+hash was not independently verified.
+
+Run the safe offline regressions after changing the toolkit:
+
+```powershell
+.\tests\Run-All.ps1
+```
 
 ## 10. Production admission
 

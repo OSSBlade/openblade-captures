@@ -18,5 +18,8 @@ device-control code.
   `feat(capture): add unsupported-model inventory tool`.
 - Run `tools/Test-UsbPcapShutdownSafety.ps1` after changing capture process
   ownership or shutdown code.
-- Run `tools/Test-CaptureEvidence.ps1` before committing a new schema-2
-  annotation.
+- Before committing a new schema-2 annotation, run
+  `tools/Test-CaptureEvidence.ps1` with both `-AnnotationPath` and
+  `-PcapPath`.
+- Run `tests/Run-All.ps1` after changing generic capture schemas, comparison,
+  sanitization, or coverage behavior.
