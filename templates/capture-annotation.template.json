@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "Vendor application name and version",
+    "role": "OracleCapture",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeReadbackConfirmed": false
+  },
+  "capturedAtUtc": "YYYY-MM-DDTHH:MM:SS.fffffffZ",
+  "device": {
+    "modelNumber": "RZ09-XXXX",
+    "vendorIdHex": "1532",
+    "productIdHex": "0000",
+    "bios": "0.00",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "sha256": "64 UPPERCASE HEX CHARACTERS",
+    "byteLength": 1,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddress",
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "subsystem": "TODO",
+    "name": "TODO",
+    "value": "TODO",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": false,
+    "applyResult": "Not performed",
+    "readbackResult": "Not performed",
+    "restorationResult": "Not performed",
+    "restorationReadbackResult": "Not performed"
+  },
+  "sanitizedEvidence": [],
+  "limitations": [],
+  "notes": []
+}

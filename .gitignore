@@ -1,5 +1,7 @@
 raw/*
 !raw/.gitkeep
+work/*
+!work/.gitkeep
 
 *.pcap
 *.pcapng

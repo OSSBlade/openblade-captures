@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "createdAtUtc": "YYYY-MM-DDTHH:MM:SS.fffffffZ",
+  "purpose": "One precise investigation",
+  "device": {
+    "modelNumber": "RZ09-XXXX",
+    "vendorIdHex": "1532",
+    "productIdHex": "0000",
+    "bios": "0.00",
+    "ec": null,
+    "mcu": null
+  },
+  "scope": {
+    "subsystem": "TODO",
+    "action": "TODO: exactly one operator action",
+    "value": "TODO",
+    "queryOnly": true
+  },
+  "preconditions": [
+    "TODO: power source",
+    "TODO: vendor application version and page",
+    "OpenBlade service state will be managed by the capture runner"
+  ],
+  "expectedObservation": "TODO",
+  "priorState": {
+    "query": "TODO",
+    "confirmedValue": "TODO"
+  },
+  "validation": {
+    "operatorConfirmationRequired": true,
+    "apply": "Not started",
+    "readback": "Not started",
+    "restoration": "Not started",
+    "restorationReadback": "Not started"
+  },
+  "privacy": {
+    "rawCaptureCommitted": false,
+    "serialNumbersAllowed": false,
+    "fullLocalPathsAllowed": false
+  }
+}

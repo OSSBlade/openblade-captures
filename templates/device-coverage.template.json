@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "device": {
+    "modelNumber": "RZ09-XXXX",
+    "vendorIdHex": "1532",
+    "productIdHex": "0000",
+    "bios": "0.00",
+    "ec": null,
+    "mcu": null
+  },
+  "statusValues": [
+    "NotInvestigated",
+    "Absent",
+    "SoftwareOnly",
+    "Captured",
+    "QueryValidated",
+    "SetterValidated",
+    "ProductionAdmitted"
+  ],
+  "capabilities": {
+    "identityAndFirmware": "NotInvestigated",
+    "performancePresets": "NotInvestigated",
+    "customPerformance": "NotInvestigated",
+    "automaticFans": "NotInvestigated",
+    "fixedFans": "NotInvestigated",
+    "maximumFans": "NotInvestigated",
+    "manualFanCurve": "NotInvestigated",
+    "fanRpm": "NotInvestigated",
+    "batteryProtection": "NotInvestigated",
+    "temporaryFullCharge": "NotInvestigated",
+    "keyboardLighting": "NotInvestigated",
+    "logoLighting": "NotInvestigated",
+    "functionKeyBehavior": "NotInvestigated",
+    "gamingMode": "NotInvestigated",
+    "startupAnimation": "NotInvestigated",
+    "specialKeys": "NotInvestigated",
+    "displayModes": "NotInvestigated",
+    "hdr": "NotInvestigated",
+    "colorProfiles": "NotInvestigated",
+    "sleepResume": "NotInvestigated",
+    "deviceReconnect": "NotInvestigated",
+    "powerTransitions": "NotInvestigated",
+    "controllerConflicts": "NotInvestigated",
+    "malformedReplyHandling": "NotInvestigated"
+  },
+  "notes": []
+}
