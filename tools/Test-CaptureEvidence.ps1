@@ -79,9 +79,12 @@ if ($typedApply) {
 }
 
 $forbiddenPatterns = [ordered]@{
-    'local user path' = '(?i)[A-Z]:\\Users\\[^\\"]+'
+    'local filesystem path' = '(?i)[A-Z]:\\+[^"\r\n]+'
     'raw capture file extension' = '(?i)\.(pcap|pcapng)(?:["\s,}]|$)'
-    'device instance suffix' = '(?i)VID_[0-9A-F]{4}&PID_[0-9A-F]{4}\\[^"\\\s]+'
+    'serial-number property' = '(?i)"serial(?:number)?"\s*:'
+    'system UUID property' = '(?i)"(?:system)?uuid"\s*:'
+    'device-instance property' = '(?i)"deviceinstanceid"\s*:'
+    'device instance suffix' = '(?i)VID_[0-9A-F]{4}&PID_[0-9A-F]{4}\\+[^"\\\s]+'
     'unfinished placeholder' = '(?i)\bTODO\b'
 }
 foreach ($entry in $forbiddenPatterns.GetEnumerator()) {
