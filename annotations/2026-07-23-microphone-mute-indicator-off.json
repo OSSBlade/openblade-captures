@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "Razer Synapse 4.0.698",
+    "role": "OracleCapture",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeReadbackConfirmed": false
+  },
+  "capturedAtUtc": "2026-07-24T04:03:16.2444280Z",
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "bios": "3.01",
+    "ec": "1.04",
+    "mcu": "1.5.0.0"
+  },
+  "capture": {
+    "sha256": "008434CF650C2304EED6125957B7189BAAC7CAA6F21B225C2F39FC30E6155C4E",
+    "byteLength": 26155,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddress",
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "kind": "Observation",
+    "subsystem": "Keyboard indicator",
+    "name": "Microphone mute indicator",
+    "value": "Off",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": false,
+    "applyResult": "Successful oracle command observation",
+    "readbackResult": "Successful response envelope and operator visual confirmation",
+    "restorationResult": "Successful original unmuted state restoration",
+    "restorationReadbackResult": "Successful operator confirmation of LED off"
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "InputReport",
+      "summary": "The microphone mute key input preceded the oracle setter by 3.467 milliseconds.",
+      "frame": 143,
+      "reportHex": "04D40000000000000000000000000000"
+    },
+    {
+      "kind": "FeatureReportExchange",
+      "summary": "The exact setter and successful response use command class 18 hexadecimal, command 04 hexadecimal, and payload 00 02 00.",
+      "requestFrame": 145,
+      "responseFrame": 148,
+      "requestReportHex": "001200000003180400020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001D00",
+      "responseReportHex": "021200000003180400020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001D00",
+      "responseDelayMilliseconds": 6.96
+    }
+  ],
+  "limitations": [
+    "This is oracle evidence from Synapse, not a typed OpenBlade hardware validation.",
+    "No independent firmware getter for the microphone mute indicator was observed.",
+    "The operator visually confirmed that the mute indicator turned off."
+  ],
+  "notes": [
+    "The raw capture remains local and is identified only by its hash and byte length.",
+    "This transition restored the operator's original unmuted state."
+  ]
+}
