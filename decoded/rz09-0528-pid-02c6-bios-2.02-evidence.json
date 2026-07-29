@@ -58,7 +58,10 @@
     "keyboardBehavior": {
       "status": "PartialProductionAdmission",
       "startupAnimationGetter": "ProductionAdmitted: 0F/98 returned enabled",
-      "settersAndOtherGetters": "NotInvestigated"
+      "functionKeyPrimaryGetter": "ProductionAdmitted: 02/86 returned FunctionKeys",
+      "gamingModeGetter": "ProductionAdmitted: 00/88 returned disabled",
+      "deviceModeGetter": "ProductionAdmitted: 00/84 returned Driver",
+      "setters": "NotInvestigated"
     }
   },
   "annotations": [

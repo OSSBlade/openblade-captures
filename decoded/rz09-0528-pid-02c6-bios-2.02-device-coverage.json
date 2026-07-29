@@ -147,14 +147,14 @@
     },
     "keyboardBehavior": {
       "functionKeyPrimary": "NotInvestigated",
-      "functionKeyPrimaryGetter": "NotInvestigated",
+      "functionKeyPrimaryGetter": "ProductionAdmitted",
       "gamingMode": "NotInvestigated",
-      "gamingModeGetter": "NotInvestigated",
+      "gamingModeGetter": "ProductionAdmitted",
       "startupAnimation": "NotInvestigated",
       "startupAnimationGetter": "ProductionAdmitted",
       "normalDeviceMode": "NotInvestigated",
       "driverDeviceMode": "NotInvestigated",
-      "deviceModeGetter": "NotInvestigated"
+      "deviceModeGetter": "ProductionAdmitted"
     },
     "specialKeys": {
       "functionLayerReports": "NotInvestigated",
@@ -216,6 +216,7 @@
     "CPU preset controls were disabled while CPU Voltage Optimizer was enabled, so the optimizer was preserved and CPU Low/High were not inferred.",
     "Fan RPM selectors 1 and 2 were queried three times through the exact-device factory, then successfully read through the production service routing.",
     "Startup-animation getter 0F/98 returned enabled through both the exact discriminator and the exact production service port.",
+    "Exact read-only getters returned FunctionKeys (02/86 0100), GamingMode false (00/88 00000000), and Driver device mode (00/84 0300); all were reconfirmed through production ports.",
     "Battery limit 70 is the only production-admitted charge-limit setter.",
     "Limit 75 was reversibly validated but is not captured or admitted.",
     "Temporary full charge enable, cancel, query, readback, and restoration are production-admitted.",
