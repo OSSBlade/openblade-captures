@@ -22,6 +22,25 @@
     "fullAc": "ProductionAdmitted: 07/8C returned 1111 (FullPower280W)",
     "usbCAndBatteryTransitions": "NotInvestigated"
   },
+  "display": {
+    "status": "ProductionAdmitted",
+    "resolution": "2560x1600",
+    "refreshModes": [
+      "fixed-60",
+      "fixed-240",
+      "dynamic-48-240"
+    ],
+    "hdrSupported": true,
+    "observedHdrEnabled": false,
+    "sdrColorProfiles": [
+      "Native",
+      "DCI-P3",
+      "sRGB",
+      "Rec. 709",
+      "Adobe RGB"
+    ],
+    "hdrColorProfiles": "NotInvestigated"
+  },
   "productionCoverage": {
     "keyboardBrightness": {
       "status": "ProductionAdmitted",
