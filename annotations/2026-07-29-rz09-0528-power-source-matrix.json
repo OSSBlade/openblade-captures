@@ -34,7 +34,7 @@
   "validation": {
     "priorStateSaved": true,
     "applyResult": "Confirmed: every physical transition produced the expected visible Synapse source state and the outgoing exact-device query/setter pattern described below.",
-    "readbackResult": "Confirmed limitation: the decoded USBPcap stream contains outgoing 07/8C query forms and 0D/02 setters only; no exact PID 02C6 USB-C reply or independent 0D/82 response was captured, so firmware readback is not claimed.",
+    "readbackResult": "Confirmed limitation: the decoded USBPcap stream contains outgoing 07/8C query forms, 0D/02 setters, and source-correlated 16-byte input reports on endpoint 0x82. Those input reports were not independently read through OpenBlade, and no independent 0D/82 response was captured, so typed firmware readback is not claimed.",
     "restorationResult": "Confirmed visually: USB-C was disconnected, barrel AC was reconnected, and Synapse returned to Plugged In, Balanced, Auto with its full-power Performance and Custom options available.",
     "restorationReadbackResult": "Confirmed limitation: restoration was operator-correlated in Synapse and the outgoing restoration setters were decoded, but this matrix did not independently read back the restored thermal state."
   },
@@ -60,6 +60,16 @@
       "barrelAc": "Plugged In; Balanced selected; Auto fan; Performance and Custom available; no inadequate-power warning"
     },
     {
+      "kind": "PowerSourceInputReportCandidates",
+      "summary": "Exact PID 02C6 endpoint 0x82 emitted 16-byte report-ID-05 messages with event byte 33 and source-correlated values 0011, 0711, and 1111. Battery and USB-C transitions repeatedly distinguished 0011 and 0711, while barrel-AC transitions emitted 1111.",
+      "endpoint": "0x82",
+      "byteLength": 16,
+      "batteryCandidate": "05330011000000000000000000000000",
+      "usbCOnlyCandidate": "05330711000000000000000000000000",
+      "barrelAcCandidate": "05331111000000000000000000000000",
+      "admissionBoundary": "The stable USB-C no-action session also emitted 1111 without a captured 07/8C request. These are retained as source-event candidates, not treated as independently matched feature-query replies."
+    },
+    {
       "kind": "SuccessfulCaptureMatrix",
       "summary": "All nine listed captures targeted USBPcap2 device address 3 after visual re-verification, ended through the sentinel-driven graceful-stop path, decoded successfully, and remain private and ignored.",
       "captures": [
@@ -77,7 +87,8 @@
             "0D/02:01020300": 1,
             "0D/02:01010000": 1,
             "0D/02:01020000": 1
-          }
+          },
+          "sourceInputReportValues": ["0011", "0711"]
         },
         {
           "name": "Stable USB-C-only no-action baseline",
@@ -87,7 +98,8 @@
           "byteLength": 8353,
           "transactionCount": 46,
           "transactionsSha256": "283C8A2F5DFC8B760612F2B17AD7482C232F8E177FE364E90C909EA3C6C62619",
-          "relevantCommands": {}
+          "relevantCommands": {},
+          "sourceInputReportValues": ["1111"]
         },
         {
           "name": "Stable USB-C-only to barrel AC",
@@ -104,7 +116,8 @@
             "0D/02:01010000": 1,
             "0D/02:01020000": 1,
             "0D/07:010102": 1
-          }
+          },
+          "sourceInputReportValues": ["0011", "1111"]
         },
         {
           "name": "Full external power to battery-only",
@@ -118,7 +131,8 @@
             "07/8C:0000": 2,
             "0D/02:01010300": 1,
             "0D/02:01020300": 1
-          }
+          },
+          "sourceInputReportValues": ["0011"]
         },
         {
           "name": "Stable battery-only no-action baseline",
@@ -128,7 +142,8 @@
           "byteLength": 5647,
           "transactionCount": 31,
           "transactionsSha256": "9FDB3FEEE6E9429C8E45CB0CBBA788C209CA4689F878C5E90F23F09E148F6C94",
-          "relevantCommands": {}
+          "relevantCommands": {},
+          "sourceInputReportValues": []
         },
         {
           "name": "Battery-only to USB-C-only",
@@ -142,7 +157,8 @@
             "07/8C:0000": 3,
             "0D/02:01010000": 1,
             "0D/02:01020000": 1
-          }
+          },
+          "sourceInputReportValues": ["0711"]
         },
         {
           "name": "USB-C-only to battery-only",
@@ -156,7 +172,8 @@
             "07/8C:0000": 2,
             "0D/02:01010300": 1,
             "0D/02:01020300": 1
-          }
+          },
+          "sourceInputReportValues": ["0011"]
         },
         {
           "name": "Battery-only to barrel AC-only",
@@ -171,7 +188,8 @@
             "0D/02:01010000": 1,
             "0D/02:01020000": 1,
             "0D/07:010102": 1
-          }
+          },
+          "sourceInputReportValues": ["1111"]
         },
         {
           "name": "Barrel AC-only to battery-only",
@@ -185,7 +203,8 @@
             "07/8C:0000": 2,
             "0D/02:01010300": 1,
             "0D/02:01020300": 1
-          }
+          },
+          "sourceInputReportValues": ["0011"]
         }
       ]
     },
@@ -215,9 +234,9 @@
     "identityScope": "RZ09-0528, BIOS 2.02, USB 1532:02C6, HID usage 0001:0002, 91-byte feature reports"
   },
   "limitations": [
-    "The decoded captures contain outgoing feature reports only; they do not contain an exact PID 02C6 07/8C USB-C response or an independent 0D/82 thermal response.",
+    "The decoded captures include source-correlated 16-byte endpoint-0x82 input reports, but they do not contain an independently matched OpenBlade 07/8C USB-C readback or an independent 0D/82 thermal response.",
     "Synapse UI confirmation is not firmware readback and does not production-admit the observed battery or USB-C setters.",
-    "The generic 0711 USB-C power-class mapping has evidence from PID 02E0, not this exact PID, and must not be copied to PID 02C6 without exact-device readback.",
+    "Value 0711 appears in an exact PID 02C6 source-transition input report, but that candidate event is not equivalent to a typed 07/8C readback. The generic PID 02E0 mapping must not be production-admitted for PID 02C6 until an exact OpenBlade query confirms it.",
     "Active Synapse lighting produced unrelated 03/0B matrix writes and 03/0A polling; those commands were excluded from the power-source interpretation.",
     "The occasional 0D/07:010102 write during AC restoration is a CPU High reapplication, not a power-source command.",
     "Raw PCAPs, capture paths, serial numbers, and other unique identifiers remain private and uncommitted."

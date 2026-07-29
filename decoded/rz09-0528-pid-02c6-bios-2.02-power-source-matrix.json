@@ -16,7 +16,14 @@
     "balancedAutomatic": [
       "0D/02:01010000",
       "0D/02:01020000"
-    ]
+    ],
+    "sourceInputReports": {
+      "endpoint": "0x82",
+      "byteLength": 16,
+      "batteryCandidate": "05/33:0011",
+      "usbCOnlyCandidate": "05/33:0711",
+      "barrelAcCandidate": "05/33:1111"
+    }
   },
   "visibleCapabilities": {
     "battery": {
@@ -51,7 +58,8 @@
       "transactionCount": 59,
       "adapterPowerQueryCount": 5,
       "batterySaverPairCount": 1,
-      "balancedPairCount": 1
+      "balancedPairCount": 1,
+      "sourceInputReportValues": ["0011", "0711"]
     },
     {
       "transition": "UsbCStableBaseline",
@@ -61,7 +69,8 @@
       "transactionCount": 46,
       "adapterPowerQueryCount": 0,
       "batterySaverPairCount": 0,
-      "balancedPairCount": 0
+      "balancedPairCount": 0,
+      "sourceInputReportValues": ["1111"]
     },
     {
       "transition": "UsbCToBarrelAc",
@@ -71,7 +80,8 @@
       "transactionCount": 108,
       "adapterPowerQueryCount": 5,
       "batterySaverPairCount": 1,
-      "balancedPairCount": 1
+      "balancedPairCount": 1,
+      "sourceInputReportValues": ["0011", "1111"]
     },
     {
       "transition": "FullExternalPowerToBattery",
@@ -81,7 +91,8 @@
       "transactionCount": 62,
       "adapterPowerQueryCount": 2,
       "batterySaverPairCount": 1,
-      "balancedPairCount": 0
+      "balancedPairCount": 0,
+      "sourceInputReportValues": ["0011"]
     },
     {
       "transition": "BatteryStableBaseline",
@@ -91,7 +102,8 @@
       "transactionCount": 31,
       "adapterPowerQueryCount": 0,
       "batterySaverPairCount": 0,
-      "balancedPairCount": 0
+      "balancedPairCount": 0,
+      "sourceInputReportValues": []
     },
     {
       "transition": "BatteryToUsbC",
@@ -101,7 +113,8 @@
       "transactionCount": 55,
       "adapterPowerQueryCount": 3,
       "batterySaverPairCount": 0,
-      "balancedPairCount": 1
+      "balancedPairCount": 1,
+      "sourceInputReportValues": ["0711"]
     },
     {
       "transition": "UsbCToBattery",
@@ -111,7 +124,8 @@
       "transactionCount": 62,
       "adapterPowerQueryCount": 2,
       "batterySaverPairCount": 1,
-      "balancedPairCount": 0
+      "balancedPairCount": 0,
+      "sourceInputReportValues": ["0011"]
     },
     {
       "transition": "BatteryToBarrelAc",
@@ -121,7 +135,8 @@
       "transactionCount": 63,
       "adapterPowerQueryCount": 3,
       "batterySaverPairCount": 0,
-      "balancedPairCount": 1
+      "balancedPairCount": 1,
+      "sourceInputReportValues": ["1111"]
     },
     {
       "transition": "BarrelAcToBattery",
@@ -131,11 +146,13 @@
       "transactionCount": 55,
       "adapterPowerQueryCount": 2,
       "batterySaverPairCount": 1,
-      "balancedPairCount": 0
+      "balancedPairCount": 0,
+      "sourceInputReportValues": ["0011"]
     }
   ],
   "negativeEvidence": {
     "exactUsbCPowerClassResponseCaptured": false,
+    "sourceInputReportsIndependentlyReadBack": false,
     "independentThermalReadbackCaptured": false,
     "openBladeTypedApplyPerformed": false,
     "productionWired": false,

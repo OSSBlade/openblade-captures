@@ -32,6 +32,19 @@ Assert-True ((@($fixture.transport.batterySaverAutomatic) -join ',') -ceq
 Assert-True ((@($fixture.transport.balancedAutomatic) -join ',') -ceq
     '0D/02:01010000,0D/02:01020000') `
     'The captured external-power Balanced/Automatic pair changed.'
+Assert-True ($fixture.transport.sourceInputReports.endpoint -ceq '0x82') `
+    'The exact source-event candidate endpoint changed.'
+Assert-True ($fixture.transport.sourceInputReports.byteLength -eq 16) `
+    'The exact source-event candidate report length changed.'
+Assert-True ($fixture.transport.sourceInputReports.batteryCandidate -ceq
+    '05/33:0011') `
+    'The battery source-event candidate changed.'
+Assert-True ($fixture.transport.sourceInputReports.usbCOnlyCandidate -ceq
+    '05/33:0711') `
+    'The USB-C source-event candidate changed.'
+Assert-True ($fixture.transport.sourceInputReports.barrelAcCandidate -ceq
+    '05/33:1111') `
+    'The barrel-AC source-event candidate changed.'
 
 Assert-True (@($fixture.sessions).Count -eq 9) `
     'The exact-device power matrix must retain all nine successful sessions.'
@@ -39,6 +52,18 @@ Assert-True (@($fixture.sessions | Where-Object transition -ceq 'UsbCStableBasel
     'The stable USB-C no-action baseline was lost or relabeled.'
 Assert-True (@($fixture.sessions | Where-Object transition -ceq 'BatteryStableBaseline').Count -eq 1) `
     'The stable battery no-action baseline was lost.'
+Assert-True ((@($fixture.sessions |
+    Where-Object transition -ceq 'UsbCStableBaseline' |
+    ForEach-Object sourceInputReportValues) -join ',') -ceq '1111') `
+    'The quiet USB-C 1111 anomaly must remain explicit and block inference.'
+Assert-True ((@($fixture.sessions |
+    Where-Object transition -ceq 'BatteryToUsbC' |
+    ForEach-Object sourceInputReportValues) -join ',') -ceq '0711') `
+    'The exact battery-to-USB-C input report was lost.'
+Assert-True ((@($fixture.sessions |
+    Where-Object transition -ceq 'UsbCToBattery' |
+    ForEach-Object sourceInputReportValues) -join ',') -ceq '0011') `
+    'The exact USB-C-to-battery input report was lost.'
 Assert-True (@($fixture.sessions | Where-Object {
         $_.captureSha256 -notmatch '^[0-9A-F]{64}$' -or
         $_.transactionsSha256 -notmatch '^[0-9A-F]{64}$' -or
@@ -60,6 +85,8 @@ Assert-True ($fixture.visibleCapabilities.battery.fixedFanAvailable -eq $false) 
 
 Assert-True ($fixture.negativeEvidence.exactUsbCPowerClassResponseCaptured -eq $false) `
     'The fixture must not infer an exact USB-C response from outgoing queries.'
+Assert-True ($fixture.negativeEvidence.sourceInputReportsIndependentlyReadBack -eq $false) `
+    'Source-event input reports must not be promoted to typed readback.'
 Assert-True ($fixture.negativeEvidence.independentThermalReadbackCaptured -eq $false) `
     'The fixture must not infer independent thermal readback from visible UI.'
 Assert-True ($fixture.negativeEvidence.productionWired -eq $false) `
