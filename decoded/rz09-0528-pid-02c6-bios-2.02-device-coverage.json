@@ -64,7 +64,7 @@
     },
     "battery": {
       "protectionOff": "ProductionAdmitted",
-      "advertisedLimits": "Captured",
+      "advertisedLimits": "ProductionAdmitted",
       "limitQuery": "ProductionAdmitted",
       "limit70": "ProductionAdmitted",
       "limit75": "ProductionAdmitted",
@@ -199,9 +199,9 @@
     },
     "conflicts": {
       "vendorControllerPresent": "SetterValidated",
-      "externalChangeDetection": "NotInvestigated",
+      "externalChangeDetection": "SoftwareOnly",
       "defaultZeroWritePolicy": "ProductionAdmitted",
-      "explicitReclaim": "NotInvestigated"
+      "explicitReclaim": "SoftwareOnly"
     },
     "failures": {
       "timeout": "Captured",
@@ -238,6 +238,7 @@
     "Malformed, checksum, command-class, command-id, status, and mid-transaction transport failures are deterministic software-only safety cases. The exact PID 02C6 production path uses the same tested 91-byte actor, poisons ambiguous sessions, and never retries an indeterminate write; no malformed report was injected into the physical laptop.",
     "A read-only NVML query selected the NVIDIA GeForce RTX 5090 Laptop GPU, read zero current offsets, and reported core -1000..1000 MHz and memory -2000..6000 MHz ranges; production remains gated on exact Custom-mode admission.",
     "Limits 50 through 80 in five-percent steps and protection-off completed exact-device typed apply/readback/restore validation and are production-admitted.",
+    "External-change detection and explicit scoped reclaim are SoftwareOnly service-runtime behaviors with deterministic drift, latch, readback, and reclaim tests. They do not claim a new physical Synapse action capture.",
     "Temporary full charge enable, cancel, query, readback, and restoration are production-admitted.",
     "Logo Off, Static, and Breathing completed exact selector-00 production apply/readback/restore validation; final logo state is Static.",
     "Startup animation, function-key primary, and Gaming-mode setters were captured in both directions, independently read back, restored, and production-admitted; PID 02C6 function-key setter arguments are 0000/0001, not PID 02E0's 0100/0101.",
