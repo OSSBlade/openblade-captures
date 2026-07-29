@@ -56,7 +56,9 @@
       "status": "NotInvestigated"
     },
     "keyboardBehavior": {
-      "status": "NotInvestigated"
+      "status": "PartialProductionAdmission",
+      "startupAnimationGetter": "ProductionAdmitted: 0F/98 returned enabled",
+      "settersAndOtherGetters": "NotInvestigated"
     }
   },
   "annotations": [
