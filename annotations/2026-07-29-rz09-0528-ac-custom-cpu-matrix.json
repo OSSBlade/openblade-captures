@@ -3,8 +3,8 @@
   "evidenceProvenance": {
     "controller": "Razer Synapse 4.0.698.98 and OpenBlade.Capture 0.1",
     "role": "ExactDeviceInteractiveValidation",
-    "openBladeTypedApplyPerformed": false,
-    "openBladeReadbackConfirmed": false
+    "openBladeTypedApplyPerformed": true,
+    "openBladeReadbackConfirmed": true
   },
   "capturedAtUtc": "2026-07-29T19:14:16.538Z",
   "device": {
@@ -166,19 +166,31 @@
         }
       ],
       "transportFinding": "No target PID 02C6 setting transaction appeared. The Synapse policy bounds are narrower than the independently queried NVML driver bounds and must be exposed as exact-model policy rather than silently discarded."
+    },
+    {
+      "kind": "ProductionRoundTrips",
+      "summary": "The exact production port applied and independently read back Low/Low, High/Low, and Medium/High, restoring the original Balanced/Automatic state after every run. A final timed Low/Low repeat also restored successfully.",
+      "timedRepeat": {
+        "startedUtc": "2026-07-29T19:38:18.338Z",
+        "completedUtc": "2026-07-29T19:38:20.138Z",
+        "baseline": "Balanced/Automatic",
+        "applied": "Custom/Automatic/Low/Low",
+        "restored": "Balanced/Automatic",
+        "restorationConfirmed": true
+      },
+      "finalAdmissionProbe": "ReadyWithAccessFallback; Success=True; Custom included among four AC performance presets."
     }
   ],
   "productionAdmission": {
-    "customMode": false,
-    "customCpuLevels": false,
-    "customGpuLevels": false,
+    "customMode": true,
+    "customCpuLevels": true,
+    "customGpuLevels": true,
     "cpuPowerLimitWatts": false,
     "cpuVoltageOptimizer": false,
     "gpuOverclockToggle": false,
     "identityScope": "RZ09-0528, BIOS 2.02, USB 1532:02C6, HID usage 0001:0002, 91-byte feature reports"
   },
   "limitations": [
-    "OpenBlade production apply/readback had not yet been performed when this evidence annotation was authored.",
     "CPU Power Limit, CPU Voltage Optimizer, and GPU Overclock transport/backends were not identified; visual confirmation alone is not treated as device readback.",
     "The CPU Voltage Optimizer captures cannot distinguish optimizer behavior from CPU-preset reapplication because their 0D/07 payloads collide.",
     "GPU clock offsets were not modified.",
@@ -187,7 +199,7 @@
   "notes": [
     "The verified transient USB device address was 3 before every session, and only USBPcap2/device 3 was captured.",
     "All capture sessions used SkipServiceManagement and SkipAdministratorCheck, then ended by graceful timeout with no recorded capture errors.",
-    "Final visible state was Plugged In, Balanced, Auto fans, CPU Power Limit 60 W, CPU Voltage Optimizer On at -1.000, and GPU Overclock Off.",
+    "Final visible and typed state was Plugged In, Balanced, Automatic fans; Synapse retained CPU Power Limit 60 W, CPU Voltage Optimizer On at -1.000, and GPU Overclock Off.",
     "Keyboard brightness remained Off; keyboard quick effect and logo effect were Static."
   ]
 }

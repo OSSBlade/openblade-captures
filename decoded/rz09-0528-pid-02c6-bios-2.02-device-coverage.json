@@ -29,8 +29,8 @@
     "performance": {
       "ac": {
         "presets": "ProductionAdmitted",
-        "customCpuLevels": "SetterValidated",
-        "customGpuLevels": "SetterValidated",
+        "customCpuLevels": "ProductionAdmitted",
+        "customGpuLevels": "ProductionAdmitted",
         "gpuClockOffsets": "QueryValidated",
         "gpuClockOffsetUiPolicy": "Captured",
         "cpuPowerLimitWatts": "Captured",
@@ -218,7 +218,7 @@
   },
   "notes": [
     "AC Balanced, Silent, Performance, Automatic fan state, paired setters, typed readback, and restoration are production-admitted.",
-    "AC Custom selection plus CPU Low, Medium, and High are setter-validated with exact raw values 00, 01, and 02; GPU Low, Medium, and High are setter-validated with the same raw progression.",
+    "AC Custom selection plus CPU and GPU Low, Medium, and High are production-admitted with exact raw values 00, 01, and 02. Exact production round trips validated Low/Low, High/Low, and Medium/High with independent readback and restoration to Balanced/Automatic.",
     "RZ09-0528 CPU High permits only GPU Low in Synapse; this exact-model combination constraint must not be generalized to PID 02E0.",
     "Disabling CPU Voltage Optimizer exposed a 45-95 W CPU Power Limit control with a visually validated one-watt step; its transport/backend remains unidentified, so visual confirmation is not claimed as device readback.",
     "CPU Voltage Optimizer was restored On at visible -1.000 after range discovery (-30 through -1). Captured 0D/07 writes collide with CPU preset commands and are not admitted as optimizer protocol.",
