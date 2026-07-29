@@ -138,7 +138,8 @@
           "rightDirection": "NotInvestigated"
         }
       },
-      "effectGetter": "NotInvestigated"
+      "effectGetter": "NotInvestigated",
+      "matrixInterfaceDiscovery": "No375ByteFeatureCollection"
     },
     "logoLighting": {
       "off": "ProductionAdmitted",
@@ -230,6 +231,7 @@
     "Startup animation, function-key primary, and Gaming-mode setters were captured in both directions, independently read back, restored, and production-admitted; PID 02C6 function-key setter arguments are 0000/0001, not PID 02E0's 0100/0101.",
     "Logo Off, Static, and Breathing setter pairs were captured with PID 02C6 selector 00, but remain unadmitted without an exact-device getter.",
     "Keyboard lighting is off and the quick effect is Static by operator request, not as production readback evidence.",
+    "A read-only exact PID scan found ten HID collections, including the 91-byte control collection and a 51-byte usage 0059:0001 collection, but no 375-byte feature collection; PID 02E0's matrix writer cannot be reused.",
     "Active Synapse Spectrum traffic can produce rejected TransactionMismatch failures."
   ]
 }

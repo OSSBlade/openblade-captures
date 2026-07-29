@@ -103,7 +103,8 @@
     "lightingEffects": {
       "status": "CapturedNotAdmitted",
       "quickEffectTransitions": "Spectrum, Static, Starlight, Ripple, Tidal, Wave, Wheel",
-      "limitation": "Observed 00/86, 00/84, and 03/0A traffic did not discriminate effect-specific device payloads"
+      "limitation": "Observed 00/86, 00/84, and 03/0A traffic did not discriminate effect-specific device payloads",
+      "interfaceDiscovery": "Exact PID scan found no 375-byte feature collection; do not reuse PID 02E0 matrix assumptions"
     },
     "logoLighting": {
       "status": "ProductionAdmitted",
