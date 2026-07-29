@@ -138,6 +138,74 @@
       "transportFinding": "The captures contain 0D/07 writes whose payloads exactly collide with independently established CPU Medium and High preset setters. They are not admitted as optimizer commands and may be incidental preset reapplication."
     },
     {
+      "kind": "CpuPowerVendorBackendDiscovery",
+      "analyzedAtUtc": "2026-07-29T20:42:34.916Z",
+      "summary": "Static inspection of the installed Synapse module and its cached JavaScript identified CPU Power Limit and CPU Voltage Optimizer as RzAMDOverClock named-pipe service features rather than PID 02C6 HID commands. This identifies the vendor backend but does not admit it for OpenBlade use.",
+      "installedComponents": [
+        {
+          "name": "RzAMDOverClock_v1.1.15.0.dll",
+          "version": "1.1.15.0",
+          "byteLength": 432328,
+          "sha256": "9F0EE89C1E003D2990880BABC7612FA76D0259A716B955FBC0A7D34D5DE8A418"
+        },
+        {
+          "name": "RzAMDOverClockDLL_v1.1.15.0.dll",
+          "version": "1.1.15.0",
+          "byteLength": 767176,
+          "sha256": "7966CF2F6DEAF18A277ACAFED433063AFEC7DB9F5C4275729601AAB40B54EB9E"
+        },
+        {
+          "name": "RzDLLService_v1.0.29.0.exe",
+          "version": "1.0.29.0",
+          "byteLength": 679112,
+          "sha256": "C7D47D88CDA40EC9CC84ABBBBF4B8EBAD13F5113A2DDDADEADF8A8AD6CE87436"
+        }
+      ],
+      "cachedJavascriptEvidence": [
+        {
+          "name": "e7dd76c4121733e2_0",
+          "byteLength": 1900113,
+          "sha256": "7D4581D0BC99BD89871C3A0A82C031678EB3134F5176204083B9B120CD5CE844"
+        },
+        {
+          "name": "e7dd76c4121733e2_1",
+          "byteLength": 1298667,
+          "sha256": "ACCCB7BD4125ED644ABC76FB1BDC1EF1F3FC048226E823A4082B867061D5FDDF"
+        }
+      ],
+      "ffiSurface": {
+        "readFunctions": [
+          "GetPowerLimitValueAsync",
+          "GetCurveOptimizerValueAsync"
+        ],
+        "writeFunctions": [
+          "SetPowerLimitValueAsync(int)",
+          "SetCurveOptimizerValueAsync(int)",
+          "EnableCPUVoltageOptimizerAsync",
+          "ResetVoltageOffsetAsync"
+        ],
+        "lifecycleFunctions": [
+          "DeviceInit",
+          "SetServerDLLPath",
+          "SetExternalDLLPath",
+          "SetNodeFFIEvent",
+          "RegisterFFIEvent",
+          "UnRegisterFFIEvent",
+          "DeviceTerminate"
+        ],
+        "serviceTransport": "JSON messages over a named pipe through RzDLLService"
+      },
+      "sanitizedLogEvidence": {
+        "getCurveOptimizerSuccessMinusOne": 45,
+        "getCurveOptimizerSuccessZero": 3,
+        "setCurveOptimizerMinusOneSuccess": 3,
+        "setPowerLimitSixtySuccess": 7,
+        "finding": "Synapse handled a returned curveOptimizer value of 0 by calling SetCurveOptimizerValueAsync(-1), and it repeatedly re-applied the persisted 60 W power limit. A UI refresh is therefore not a read-only validation path."
+      },
+      "admission": "ObservedOnly",
+      "admissionBlocker": "OpenBlade still lacks an independently validated, isolated lifecycle that can read and write through the proprietary service without Synapse reapplying persisted values. No vendor getter or setter was invoked by this analysis."
+    },
+    {
       "kind": "GpuOverclockUiDiscovery",
       "summary": "Enabling GPU Overclock disclosed Synapse UI policy ranges of -1000 through +400 MHz for core and -1000 through +3000 MHz for memory. Both offsets remained at zero and GPU Overclock was restored to Off.",
       "coreOffsetMHz": {
@@ -191,7 +259,8 @@
     "identityScope": "RZ09-0528, BIOS 2.02, USB 1532:02C6, HID usage 0001:0002, 91-byte feature reports"
   },
   "limitations": [
-    "CPU Power Limit, CPU Voltage Optimizer, and GPU Overclock transport/backends were not identified; visual confirmation alone is not treated as device readback.",
+    "The CPU Power Limit and CPU Voltage Optimizer vendor backend is identified as RzAMDOverClock/RzDLLService, but its lifecycle is not admitted because the Synapse refresh path can issue writes; visual confirmation and vendor logs are not treated as independent OpenBlade readback.",
+    "The GPU Overclock transport/backend remains unidentified; visual confirmation alone is not treated as device readback.",
     "The CPU Voltage Optimizer captures cannot distinguish optimizer behavior from CPU-preset reapplication because their 0D/07 payloads collide.",
     "GPU clock offsets were not modified.",
     "Raw PCAPs and unique device identifiers remain private and uncommitted."
