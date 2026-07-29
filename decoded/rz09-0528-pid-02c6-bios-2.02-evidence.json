@@ -32,6 +32,20 @@
     ],
     "hdrSupported": true,
     "observedHdrEnabled": false,
+    "observedHdrStateSequence": [
+      false,
+      true,
+      false
+    ],
+    "hdrRoundTrip": {
+      "startedAtUtc": "2026-07-29T21:21:08.1366040Z",
+      "completedAtUtc": "2026-07-29T21:21:08.3525889Z",
+      "mutationPolicy": "SaveSetReadbackRestore",
+      "applied": true,
+      "readBack": true,
+      "restored": true,
+      "finalStateConfirmed": "HDR off, fixed-60, 2560x1600, five SDR profiles"
+    },
     "sdrColorProfiles": [
       "Native",
       "DCI-P3",
@@ -39,7 +53,7 @@
       "Rec. 709",
       "Adobe RGB"
     ],
-    "hdrColorProfiles": "NotInvestigated"
+    "hdrColorProfiles": "SoftwareOnlyValidatedUnavailable: OpenBlade disables SDR color-profile controls while Windows HDR is enabled; no color-profile write was attempted"
   },
   "productionCoverage": {
     "keyboardBrightness": {

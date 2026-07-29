@@ -177,7 +177,7 @@
       "variableRefreshRange": "ProductionAdmitted",
       "hdr": "ProductionAdmitted",
       "colorProfilesSdr": "ProductionAdmitted",
-      "colorProfilesHdr": "NotInvestigated"
+      "colorProfilesHdr": "SoftwareOnly"
     },
     "lifecycle": {
       "coldBoot": "NotInvestigated",
@@ -233,7 +233,7 @@
     "Exact 07/8C adapter-power readback returned 1111 (FullPower280W) and was reconfirmed through the production battery port.",
     "Nine exact-device sessions captured the complete barrel AC, USB-C-only, and battery transition matrix. USB-C-only exposed Balanced/Auto with Performance and Custom unavailable and an inadequate-power warning; battery exposed Battery Saver/Auto with fixed fan unavailable.",
     "The transition matrix contains outgoing 07/8C query forms and paired 0D/02 setters but no exact PID 02C6 USB-C response and no independent 0D/82 thermal readback. These power-source capabilities are Captured, not production-admitted.",
-    "The production display query reported 2560x1600, fixed 60/240 Hz, Dynamic 48-240 Hz, HDR support (currently off), and five SDR color profiles.",
+    "The production display query reported 2560x1600, fixed 60/240 Hz, Dynamic 48-240 Hz, HDR support, and five SDR color profiles. A bounded Windows-API round trip enabled HDR, confirmed SDR profile controls unavailable, restored HDR off, and reconfirmed the original display state.",
     "A read-only NVML query selected the NVIDIA GeForce RTX 5090 Laptop GPU, read zero current offsets, and reported core -1000..1000 MHz and memory -2000..6000 MHz ranges; production remains gated on exact Custom-mode admission.",
     "Limits 50 through 80 in five-percent steps and protection-off completed exact-device typed apply/readback/restore validation and are production-admitted.",
     "Temporary full charge enable, cancel, query, readback, and restoration are production-admitted.",
