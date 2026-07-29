@@ -31,7 +31,9 @@
       "status": "NotInvestigated"
     },
     "temporaryFullCharge": {
-      "status": "NotInvestigated"
+      "status": "ProductionAdmitted",
+      "query": "07/8F 00",
+      "setter": "07/0F 04 enable; 07/0F 00 cancel"
     },
     "performance": {
       "status": "NotInvestigated"
@@ -52,7 +54,8 @@
   "annotations": [
     "2026-07-29-rz09-0528-keyboard-brightness-admission.json",
     "2026-07-29-rz09-0528-lighting-query-navigation-negative.json",
-    "2026-07-29-rz09-0528-battery-limit-70-admission.json"
+    "2026-07-29-rz09-0528-battery-limit-70-admission.json",
+    "2026-07-29-rz09-0528-temporary-full-charge-admission.json"
   ],
   "safetyNotes": [
     "Never infer firmware readback from visible Synapse state.",

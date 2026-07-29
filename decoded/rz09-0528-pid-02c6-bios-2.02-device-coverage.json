@@ -64,8 +64,8 @@
       "limit70": "ProductionAdmitted",
       "limit75": "SetterValidated",
       "otherLimitSetters": "NotInvestigated",
-      "temporaryFullCharge": "NotInvestigated",
-      "temporaryFullChargeQuery": "NotInvestigated"
+      "temporaryFullCharge": "ProductionAdmitted",
+      "temporaryFullChargeQuery": "ProductionAdmitted"
     },
     "keyboardLighting": {
       "off": "NotInvestigated",
@@ -213,6 +213,7 @@
   "notes": [
     "Battery limit 70 is the only production-admitted charge-limit setter.",
     "Limit 75 was reversibly validated but is not captured or admitted.",
+    "Temporary full charge enable, cancel, query, readback, and restoration are production-admitted.",
     "Keyboard lighting is currently off by operator request, not as production evidence.",
     "Active Synapse Spectrum traffic can produce rejected TransactionMismatch failures."
   ]

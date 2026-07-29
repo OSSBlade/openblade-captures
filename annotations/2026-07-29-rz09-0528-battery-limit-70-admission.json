@@ -81,7 +81,7 @@
     "identityScope": "RZ09-0528, BIOS 2.02, USB 1532:02C6, HID usage 0001:0002, 91-byte feature reports"
   },
   "limitations": [
-    "Only the captured 70-percent setter is admitted; 50, 55, 60, 65, 75, 80, protection-off, and temporary-full-charge writes remain unavailable.",
+    "At this charge-limit checkpoint, only the captured 70-percent setter was admitted; later exact-device evidence separately admits temporary full charge.",
     "The 75-percent setter was reversibly validated but was not independently captured, so it is not production-admitted.",
     "Active Synapse Spectrum traffic can race the shared feature response; OpenBlade rejects unrelated acknowledgements.",
     "Keyboard lighting remains off at the operator's request.",
