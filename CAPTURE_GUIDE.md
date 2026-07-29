@@ -271,8 +271,14 @@ hash was not independently verified.
 Run the safe offline regressions after changing the toolkit:
 
 ```powershell
-.\tests\Run-All.ps1
+& "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" `
+  -NoProfile -NonInteractive -ExecutionPolicy Bypass `
+  -File .\tests\Run-All.ps1
 ```
+
+Use `-NonInteractive` in automation. One regression deliberately omits the
+validator's required mode to prove that it fails closed; an interactive
+PowerShell host otherwise waits for a mandatory-parameter prompt.
 
 ## 10. Production admission
 

@@ -63,5 +63,11 @@ Run the offline toolkit regressions after changing schemas, comparison,
 sanitization, or coverage:
 
 ```powershell
-.\tests\Run-All.ps1
+& "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" `
+  -NoProfile -NonInteractive -ExecutionPolicy Bypass `
+  -File .\tests\Run-All.ps1
 ```
+
+Keep `-NonInteractive` in automated runs. The evidence-validator regression
+intentionally verifies that omitting both `-PcapPath` and `-SchemaOnly` fails;
+an interactive host would prompt for the missing mandatory parameter instead.
