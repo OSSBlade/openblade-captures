@@ -50,10 +50,10 @@
     },
     "fans": {
       "automatic": "ProductionAdmitted",
-      "fixedMinimum": "NotInvestigated",
-      "fixedMaximum": "NotInvestigated",
-      "fixedStep": "NotInvestigated",
-      "maximum": "NotInvestigated",
+      "fixedMinimum": "SetterValidated",
+      "fixedMaximum": "SetterValidated",
+      "fixedStep": "SetterValidated",
+      "maximum": "SetterValidated",
       "manualCurveWrites": "NotInvestigated",
       "manualCurveReadback": "NotInvestigated",
       "rpmQuery": "ProductionAdmitted"
@@ -216,6 +216,7 @@
     "AC Custom selection and saved CPU Medium (raw 02) are captured; GPU Low, Medium, and High are setter-validated but Custom remains unadmitted until the exact CPU range is safely validated.",
     "CPU preset controls were disabled while CPU Voltage Optimizer was enabled, so the optimizer was preserved and CPU Low/High were not inferred.",
     "Fan RPM selectors 1 and 2 were queried three times through the exact-device factory, then successfully read through the production service routing.",
+    "Fixed Fan Speed selected the paired manual state, validated 2000/3800/5000 RPM targets with payload byte RPM/100, and restored Balanced/Automatic twice; the exact maximum is 5000 RPM, not PID 02E0's 5400 RPM.",
     "Startup-animation getter 0F/98 returned enabled through both the exact discriminator and the exact production service port.",
     "Exact read-only getters returned FunctionKeys (02/86 0100), GamingMode false (00/88 00000000), and Driver device mode (00/84 0300); all were reconfirmed through production ports.",
     "Windows firmware metadata reported EC 1.09; exact 00/87 readback returned MCU 1.9.0.0 and was reconfirmed through the production battery port.",

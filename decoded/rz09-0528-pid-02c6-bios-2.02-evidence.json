@@ -75,7 +75,20 @@
       "status": "PartialProductionAdmission",
       "automatic": "ProductionAdmitted",
       "rpmQuery": "ProductionAdmitted: 0D/88 selectors 01 and 02",
-      "fixedAndManual": "NotInvestigated"
+      "fixed": {
+        "status": "SetterValidated",
+        "modeWrites": [
+          "0D/02 01010001",
+          "0D/02 01020001"
+        ],
+        "minimumRpm": 2000,
+        "maximumRpm": 5000,
+        "stepRpm": 100,
+        "targetFormula": "payload[2] = RPM / 100",
+        "independentReadback": "Typed manual/fixed state plus settled physical RPM at 2000, 3800, and 5000 targets",
+        "restored": "Balanced/Automatic"
+      },
+      "manualCurve": "NotInvestigated"
     },
     "lightingEffects": {
       "status": "NotInvestigated"
@@ -99,7 +112,8 @@
     "2026-07-29-rz09-0528-temporary-full-charge-admission.json",
     "2026-07-29-rz09-0528-ac-balanced-silent-admission.json",
     "2026-07-29-rz09-0528-ac-performance-admission.json",
-    "2026-07-29-rz09-0528-ac-custom-partial.json"
+    "2026-07-29-rz09-0528-ac-custom-partial.json",
+    "2026-07-29-rz09-0528-ac-fixed-fan-validation.json"
   ],
   "safetyNotes": [
     "Never infer firmware readback from visible Synapse state.",
