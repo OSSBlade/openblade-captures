@@ -1,0 +1,193 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "Razer Synapse 4.0.698.98 and OpenBlade.Capture 0.1",
+    "role": "ExactDeviceInteractiveValidation",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeReadbackConfirmed": false
+  },
+  "capturedAtUtc": "2026-07-29T19:14:16.538Z",
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02",
+    "ec": "1.09",
+    "mcu": "1.9.0.0"
+  },
+  "capture": {
+    "sha256": "02930364DC8D3C8E9D52B7219B4662009188112211557C38E55AE2DB1DC5FD90",
+    "byteLength": 1922,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddress",
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "kind": "SettingChange",
+    "subsystem": "AC custom performance",
+    "name": "CPU Medium to Low",
+    "value": "Low",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": true,
+    "applyResult": "Confirmed: Synapse changed the visible CPU level from Medium to Low and emitted 0D/07 with arguments 010100.",
+    "readbackResult": "Confirmed from the query immediately preceding the setter: 0D/87 selector 010100 returned the saved CPU component level before the transition. Subsequent exact captures established all three visible mappings.",
+    "restorationResult": "Confirmed visually: CPU High was returned to Medium, CPU Power Limit was returned to 60 W, CPU Voltage Optimizer was returned to On at the visible -1.000 value, GPU Overclock was returned to Off without changing either offset, and the AC profile was returned to Balanced with Auto fans.",
+    "restorationReadbackResult": "Confirmed: component-level restoration was independently observed in the final High-to-Medium capture as 0D/07 arguments 010101. Power-limit, voltage-optimizer, and GPU-overclock restoration is visual controller evidence only and is not claimed as HID readback."
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "CpuLevelTransitions",
+      "summary": "Exact PID 02C6 maps visible CPU Low, Medium, and High to raw values 00, 01, and 02. Each clean transition included the 0D/87 query form followed by the matching 0D/07 setter.",
+      "levels": {
+        "low": "0D/07:010100",
+        "medium": "0D/07:010101",
+        "high": "0D/07:010102"
+      },
+      "query": "0D/87:010100",
+      "captures": [
+        {
+          "name": "CPU Medium to Low",
+          "sha256": "02930364DC8D3C8E9D52B7219B4662009188112211557C38E55AE2DB1DC5FD90",
+          "byteLength": 1922,
+          "operatorActionUtc": "2026-07-29T19:14:16.538Z"
+        },
+        {
+          "name": "CPU Low to High",
+          "sha256": "F885E718ADDB2F87EEC9A67F3728E483348849BF3DAFCBD84B85E1099E32CF80",
+          "byteLength": 1922,
+          "operatorActionUtc": "2026-07-29T19:14:56.828Z"
+        },
+        {
+          "name": "CPU High to Medium restoration",
+          "sha256": "090C22E23F9C7535C06A761F48404BA8F3B81F1CF2A3C75ED4FB87456A2D3F0F",
+          "byteLength": 1922,
+          "operatorActionUtc": "2026-07-29T19:15:41.014Z"
+        }
+      ]
+    },
+    {
+      "kind": "ModelSpecificCombinationConstraint",
+      "summary": "On RZ09-0528, selecting CPU High disables GPU Medium and GPU High in Synapse; GPU Low remains selectable. This constraint is model-specific and must not be generalized to PID 02E0.",
+      "allowedHighCpuGpuLevel": "Low"
+    },
+    {
+      "kind": "CpuPowerLimitUiDiscovery",
+      "summary": "With CPU Voltage Optimizer disabled, Synapse exposed a CPU Power Limit control accepting 45 through 95 W in one-watt steps. Visible transitions 60 to 45, 45 to 95, 95 to 60, 60 to 61, and 61 to 60 were operator-confirmed.",
+      "minimumWatts": 45,
+      "maximumWatts": 95,
+      "stepWatts": 1,
+      "restoredWatts": 60,
+      "captures": [
+        {
+          "name": "60 W to 45 W",
+          "sha256": "16A71945014A7F5121C43758384CE7B7F884C1D74853B575B3B0392A9082B6B7",
+          "byteLength": 439,
+          "operatorActionUtc": "2026-07-29T19:16:27.938Z"
+        },
+        {
+          "name": "45 W to 95 W",
+          "sha256": "01E6C0227C8E9FDC8694D2E9951958F2917C90D685CCC37E5114014A17F58E72",
+          "byteLength": 439,
+          "operatorActionUtc": "2026-07-29T19:17:56.114Z"
+        },
+        {
+          "name": "95 W to 60 W restoration",
+          "sha256": "0662F01D87D29DE0FE76A32D1FC71AC5CC0C848D8CA52A4BEA30746E1F2C4D5D",
+          "byteLength": 439,
+          "operatorActionUtc": "2026-07-29T19:18:56.063Z"
+        },
+        {
+          "name": "60 W to 61 W",
+          "sha256": "CDD151F7DBD027ABEF97607E7A6775A7A4AF5324213AC20CCEA9E20A4EDEB632",
+          "byteLength": 439,
+          "operatorActionUtc": "2026-07-29T19:19:28.015Z"
+        },
+        {
+          "name": "61 W to 60 W restoration",
+          "sha256": "B572AFC52AE2F9878B89351D9D9A2B479EFCE31AE2799F0E2C312EBC3342EE82",
+          "byteLength": 439,
+          "operatorActionUtc": "2026-07-29T19:20:13.762Z"
+        }
+      ],
+      "transportFinding": "No target PID 02C6 setting transaction appeared on the verified USBPcap2 device-address-3 path. This is controller-scoped negative evidence, not proof that the setting is software-only."
+    },
+    {
+      "kind": "CpuVoltageOptimizerDiscovery",
+      "summary": "Synapse exposed CPU Voltage Optimizer On with a visible value of -1.000 and range -30 through -1. Disabling it unlocked CPU preset and CPU Power Limit controls; it was restored to On after an AMD warning confirmation.",
+      "visibleRange": "-30 through -1",
+      "restoredValue": "-1.000",
+      "captures": [
+        {
+          "name": "Optimizer On to Off",
+          "sha256": "C2F095FAA53318BD4754162993EA51DD372C762E6C9F1546091C215DECE1989A",
+          "byteLength": 1550,
+          "operatorActionUtc": "2026-07-29T19:13:18.793Z"
+        },
+        {
+          "name": "Optimizer Off to On restoration",
+          "sha256": "02E93FC71AFAA6E060AC8FF72222FBB3F44C2BF5FABAC798A3F77F290D6A0170",
+          "byteLength": 1550,
+          "operatorActionUtc": "2026-07-29T19:20:41.932Z",
+          "confirmationUtc": "2026-07-29T19:20:54.232Z"
+        }
+      ],
+      "transportFinding": "The captures contain 0D/07 writes whose payloads exactly collide with independently established CPU Medium and High preset setters. They are not admitted as optimizer commands and may be incidental preset reapplication."
+    },
+    {
+      "kind": "GpuOverclockUiDiscovery",
+      "summary": "Enabling GPU Overclock disclosed Synapse UI policy ranges of -1000 through +400 MHz for core and -1000 through +3000 MHz for memory. Both offsets remained at zero and GPU Overclock was restored to Off.",
+      "coreOffsetMHz": {
+        "minimum": -1000,
+        "maximum": 400,
+        "unchangedValue": 0
+      },
+      "memoryOffsetMHz": {
+        "minimum": -1000,
+        "maximum": 3000,
+        "unchangedValue": 0
+      },
+      "captures": [
+        {
+          "name": "GPU Overclock Off to On",
+          "sha256": "4BB122ADC7BEC2A4D7FA1FEE14C59B9F1F22145DFA7AE041D8FA8EFF612E10BC",
+          "byteLength": 439,
+          "operatorActionUtc": "2026-07-29T19:21:26.666Z",
+          "confirmationUtc": "2026-07-29T19:21:31.267Z"
+        },
+        {
+          "name": "GPU Overclock On to Off restoration",
+          "sha256": "F0AF666A9B1FE2FBCCC9DBE33F5FECCAB6896370290449104E0A8BC6B0E922B0",
+          "byteLength": 439,
+          "operatorActionUtc": "2026-07-29T19:21:57.366Z"
+        }
+      ],
+      "transportFinding": "No target PID 02C6 setting transaction appeared. The Synapse policy bounds are narrower than the independently queried NVML driver bounds and must be exposed as exact-model policy rather than silently discarded."
+    }
+  ],
+  "productionAdmission": {
+    "customMode": false,
+    "customCpuLevels": false,
+    "customGpuLevels": false,
+    "cpuPowerLimitWatts": false,
+    "cpuVoltageOptimizer": false,
+    "gpuOverclockToggle": false,
+    "identityScope": "RZ09-0528, BIOS 2.02, USB 1532:02C6, HID usage 0001:0002, 91-byte feature reports"
+  },
+  "limitations": [
+    "OpenBlade production apply/readback had not yet been performed when this evidence annotation was authored.",
+    "CPU Power Limit, CPU Voltage Optimizer, and GPU Overclock transport/backends were not identified; visual confirmation alone is not treated as device readback.",
+    "The CPU Voltage Optimizer captures cannot distinguish optimizer behavior from CPU-preset reapplication because their 0D/07 payloads collide.",
+    "GPU clock offsets were not modified.",
+    "Raw PCAPs and unique device identifiers remain private and uncommitted."
+  ],
+  "notes": [
+    "The verified transient USB device address was 3 before every session, and only USBPcap2/device 3 was captured.",
+    "All capture sessions used SkipServiceManagement and SkipAdministratorCheck, then ended by graceful timeout with no recorded capture errors.",
+    "Final visible state was Plugged In, Balanced, Auto fans, CPU Power Limit 60 W, CPU Voltage Optimizer On at -1.000, and GPU Overclock Off.",
+    "Keyboard brightness remained Off; keyboard quick effect and logo effect were Static."
+  ]
+}

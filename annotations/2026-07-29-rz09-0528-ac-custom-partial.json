@@ -33,9 +33,9 @@
   },
   "validation": {
     "priorStateSaved": true,
-    "applyResult": "Confirmed: Synapse selected Custom and emitted paired 0D/02 Custom/Automatic writes followed by 0D/07 CPU 02 and GPU 00 writes.",
-    "readbackResult": "Confirmed: independent exact-device 0D/82 queries returned Custom/Automatic and 0D/87 returned CPU 02 and GPU 00.",
-    "restorationResult": "Confirmed visually and by typed readback: the final profile was restored to Balanced/Automatic with saved CPU 02 and GPU 00.",
+    "applyResult": "Confirmed: Synapse selected Custom and emitted paired 0D/02 Custom/Automatic writes followed by 0D/07 CPU 02 and GPU 00 writes. A later controlled CPU matrix established that raw CPU 02 means High, correcting the original visual correlation.",
+    "readbackResult": "Confirmed: independent exact-device 0D/82 queries returned Custom/Automatic and 0D/87 returned CPU 02 and GPU 00. The CPU byte is protocol readback, but the original visible Medium label was miscorrelated; the later matrix is authoritative.",
+    "restorationResult": "Confirmed visually and by typed readback: the final profile was restored to Balanced/Automatic with saved CPU 02 and GPU 00. This does not establish CPU 02 as Medium.",
     "restorationReadbackResult": "Confirmed: exact-device 0D/82 returned both Balanced/Automatic channel values after capture ended."
   },
   "sanitizedEvidence": [
@@ -83,7 +83,7 @@
     },
     {
       "kind": "TypedReadback",
-      "summary": "0D/87 mapped visible GPU Low, Medium, and High to 00, 01, and 02. CPU 02 visibly mapped to Medium on PID 02C6."
+      "summary": "0D/87 mapped visible GPU Low, Medium, and High to 00, 01, and 02. The original CPU 02-to-Medium correlation was later disproven by a controlled matrix: CPU Low, Medium, and High are 00, 01, and 02."
     },
     {
       "kind": "NegativeControls",
@@ -102,9 +102,9 @@
     "identityScope": "RZ09-0528, BIOS 2.02, USB 1532:02C6, HID usage 0001:0002, 91-byte feature reports"
   },
   "limitations": [
-    "Custom is not production-admitted because CPU Low and High could not be exercised while CPU Voltage Optimizer remained enabled.",
-    "PID 02C6 CPU level 02 visibly means Medium; the PID 02E0 CPU mapping must not be reused.",
-    "CPU Voltage Optimizer and GPU Overclock were not changed.",
+    "This partial capture alone does not production-admit Custom; see the later AC custom CPU matrix for the complete CPU Low, Medium, and High evidence.",
+    "The original visible CPU correlation in this session was corrected: PID 02C6 CPU Low, Medium, and High map to 00, 01, and 02.",
+    "CPU Voltage Optimizer and GPU Overclock were not changed during this partial session.",
     "Raw PCAPs and unique device identifiers remain private and uncommitted."
   ],
   "notes": [

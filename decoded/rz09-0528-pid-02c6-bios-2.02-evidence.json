@@ -71,9 +71,13 @@
     "performance": {
       "status": "ProductionAdmitted",
       "acPresets": "Balanced, Silent, Performance",
-      "customMode": "CapturedNotAdmitted",
-      "customCpuLevels": "Captured: visible Medium is raw 02; Low and High unavailable while CPU Voltage Optimizer is enabled",
+      "customMode": "SetterValidatedPendingProductionRoundTrip",
+      "customCpuLevels": "SetterValidated: Low 00, Medium 01, High 02",
       "customGpuLevels": "SetterValidated: Low 00, Medium 01, High 02",
+      "validCombinations": "RZ09-0528 CPU High permits GPU Low only; other observed CPU levels retain the normal GPU choices",
+      "cpuPowerLimitWatts": "Captured UI capability: 45..95 W in 1 W steps; no target PID 02C6 transaction and no backend/readback admitted",
+      "cpuVoltageOptimizer": "Captured UI capability: visible range -30..-1, restored On at -1.000; colliding 0D/07 writes are not admitted as optimizer protocol",
+      "gpuOverclockPolicy": "Captured UI capability: core -1000..400 MHz, memory -1000..3000 MHz; offsets unchanged and toggle restored Off",
       "readback": "0D/82 paired thermal channels; 0D/87 component levels"
     },
     "fans": {
@@ -131,6 +135,7 @@
     "2026-07-29-rz09-0528-ac-balanced-silent-admission.json",
     "2026-07-29-rz09-0528-ac-performance-admission.json",
     "2026-07-29-rz09-0528-ac-custom-partial.json",
+    "2026-07-29-rz09-0528-ac-custom-cpu-matrix.json",
     "2026-07-29-rz09-0528-ac-fixed-fan-validation.json",
     "2026-07-29-rz09-0528-keyboard-behavior-setters.json",
     "2026-07-29-rz09-0528-logo-lighting-setters.json"

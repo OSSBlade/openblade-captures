@@ -29,9 +29,13 @@
     "performance": {
       "ac": {
         "presets": "ProductionAdmitted",
-        "customCpuLevels": "Captured",
+        "customCpuLevels": "SetterValidated",
         "customGpuLevels": "SetterValidated",
         "gpuClockOffsets": "QueryValidated",
+        "gpuClockOffsetUiPolicy": "Captured",
+        "cpuPowerLimitWatts": "Captured",
+        "cpuVoltageOptimizer": "Captured",
+        "gpuOverclockToggle": "Captured",
         "readback": "ProductionAdmitted"
       },
       "usbC": {
@@ -214,8 +218,11 @@
   },
   "notes": [
     "AC Balanced, Silent, Performance, Automatic fan state, paired setters, typed readback, and restoration are production-admitted.",
-    "AC Custom selection and saved CPU Medium (raw 02) are captured; GPU Low, Medium, and High are setter-validated but Custom remains unadmitted until the exact CPU range is safely validated.",
-    "CPU preset controls were disabled while CPU Voltage Optimizer was enabled, so the optimizer was preserved and CPU Low/High were not inferred.",
+    "AC Custom selection plus CPU Low, Medium, and High are setter-validated with exact raw values 00, 01, and 02; GPU Low, Medium, and High are setter-validated with the same raw progression.",
+    "RZ09-0528 CPU High permits only GPU Low in Synapse; this exact-model combination constraint must not be generalized to PID 02E0.",
+    "Disabling CPU Voltage Optimizer exposed a 45-95 W CPU Power Limit control with a visually validated one-watt step; its transport/backend remains unidentified, so visual confirmation is not claimed as device readback.",
+    "CPU Voltage Optimizer was restored On at visible -1.000 after range discovery (-30 through -1). Captured 0D/07 writes collide with CPU preset commands and are not admitted as optimizer protocol.",
+    "Synapse exposes exact-model GPU offset policy ranges of core -1000..400 MHz and memory -1000..3000 MHz, narrower than the queried NVML driver ranges; GPU Overclock was restored Off without changing offsets.",
     "Fan RPM selectors 1 and 2 were queried three times through the exact-device factory, then successfully read through the production service routing.",
     "Fixed Fan Speed selected the paired manual state, validated 2000/3800/5000 RPM targets with payload byte RPM/100, and restored Balanced/Automatic twice; the exact maximum is 5000 RPM, not PID 02E0's 5400 RPM.",
     "Startup-animation getter 0F/98 returned enabled through both the exact discriminator and the exact production service port.",
