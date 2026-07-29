@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "Razer Synapse 4.0.698.98",
+    "role": "OracleCapture",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeReadbackConfirmed": false
+  },
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02"
+  },
+  "sanitizedEvidence": [
+    {
+      "transition": "static->off",
+      "commands": ["03/02 000400", "03/00 000400"],
+      "captureSha256": "F6312D80F1E36FB9F362CBB05BE13BE1432BD74370F7712B9ABC3B75887F6403"
+    },
+    {
+      "transition": "off->static restoration",
+      "commands": ["03/02 000400", "03/00 000401"],
+      "captureSha256": "D2C47B72CD7E7BB46FE56A9B82CBE9C3234D84336B7C409F8132987EE856C0B6"
+    },
+    {
+      "transition": "static->breathing",
+      "commands": ["03/02 000402", "03/00 000401"],
+      "captureSha256": "ED76F697866B36D0C47F8B3681AE0F2369B7151F1562FE116E98C81CD2F835E1"
+    },
+    {
+      "transition": "breathing->static restoration",
+      "commands": ["03/02 000400", "03/00 000401"],
+      "captureSha256": "09B2946A7174395EF7296E142524834F4AA9F852E2BB671F5CF860C7ADA58C2C"
+    }
+  ],
+  "exactDeviceDifference": "PID 02C6 uses selector 00 in these logo setters. Do not copy PID 02E0's selector 01 assumptions.",
+  "validation": {
+    "operatorConfirmed": true,
+    "visibleApplyConfirmed": true,
+    "restorationResult": "Logo visibly restored to Static.",
+    "independentFirmwareReadback": false
+  },
+  "limitations": [
+    "No exact-device logo getter has been independently validated.",
+    "The setters remain Captured and are not production-admitted."
+  ]
+}

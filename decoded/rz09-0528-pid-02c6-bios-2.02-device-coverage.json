@@ -59,17 +59,17 @@
       "rpmQuery": "ProductionAdmitted"
     },
     "battery": {
-      "protectionOff": "NotInvestigated",
+      "protectionOff": "SetterValidated",
       "advertisedLimits": "Captured",
       "limitQuery": "ProductionAdmitted",
       "limit70": "ProductionAdmitted",
       "limit75": "SetterValidated",
-      "otherLimitSetters": "NotInvestigated",
+      "otherLimitSetters": "SetterValidated",
       "temporaryFullCharge": "ProductionAdmitted",
       "temporaryFullChargeQuery": "ProductionAdmitted"
     },
     "keyboardLighting": {
-      "off": "NotInvestigated",
+      "off": "SetterValidated",
       "brightnessRange": "ProductionAdmitted",
       "brightnessQuery": "ProductionAdmitted",
       "effects": {
@@ -141,17 +141,17 @@
       "effectGetter": "NotInvestigated"
     },
     "logoLighting": {
-      "off": "NotInvestigated",
-      "static": "NotInvestigated",
-      "breathing": "NotInvestigated",
+      "off": "SetterValidated",
+      "static": "SetterValidated",
+      "breathing": "SetterValidated",
       "getter": "NotInvestigated"
     },
     "keyboardBehavior": {
-      "functionKeyPrimary": "NotInvestigated",
+      "functionKeyPrimary": "SetterValidated",
       "functionKeyPrimaryGetter": "ProductionAdmitted",
-      "gamingMode": "NotInvestigated",
+      "gamingMode": "SetterValidated",
       "gamingModeGetter": "ProductionAdmitted",
-      "startupAnimation": "NotInvestigated",
+      "startupAnimation": "SetterValidated",
       "startupAnimationGetter": "ProductionAdmitted",
       "normalDeviceMode": "NotInvestigated",
       "driverDeviceMode": "NotInvestigated",
@@ -224,9 +224,11 @@
     "The production display query reported 2560x1600, fixed 60/240 Hz, Dynamic 48-240 Hz, HDR support (currently off), and five SDR color profiles.",
     "A read-only NVML query selected the NVIDIA GeForce RTX 5090 Laptop GPU, read zero current offsets, and reported core -1000..1000 MHz and memory -2000..6000 MHz ranges; production remains gated on exact Custom-mode admission.",
     "Battery limit 70 is the only production-admitted charge-limit setter.",
-    "Limit 75 was reversibly validated but is not captured or admitted.",
+    "Limits 50 through 80 in five-percent steps and protection-off were captured and visibly restored; newly captured values still require OpenBlade typed readback before production admission.",
     "Temporary full charge enable, cancel, query, readback, and restoration are production-admitted.",
-    "Keyboard lighting is currently off by operator request, not as production evidence.",
+    "Startup animation, function-key primary, and Gaming-mode setters were captured in both directions and restored; PID 02C6 function-key setter arguments are 0000/0001, not PID 02E0's 0100/0101.",
+    "Logo Off, Static, and Breathing setter pairs were captured with PID 02C6 selector 00, but remain unadmitted without an exact-device getter.",
+    "Keyboard lighting is off and the quick effect is Static by operator request, not as production readback evidence.",
     "Active Synapse Spectrum traffic can produce rejected TransactionMismatch failures."
   ]
 }

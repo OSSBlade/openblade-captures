@@ -53,10 +53,15 @@
       "setter": "07/12 C6"
     },
     "batteryOtherChargeLimits": {
-      "status": "ValidatedNotCaptured"
+      "status": "SetterValidated",
+      "setter": "07/12 with 0x80 + percentage",
+      "capturedValues": "50, 55, 60, 65, 70, 75, 80",
+      "typedReadback": "Pending for all newly captured values except 70"
     },
     "batteryProtectionOff": {
-      "status": "NotInvestigated"
+      "status": "SetterValidated",
+      "setter": "07/12 50 while saved limit was 80",
+      "typedReadback": "Pending"
     },
     "temporaryFullCharge": {
       "status": "ProductionAdmitted",
@@ -91,10 +96,14 @@
       "manualCurve": "NotInvestigated"
     },
     "lightingEffects": {
-      "status": "NotInvestigated"
+      "status": "CapturedNotAdmitted",
+      "quickEffectTransitions": "Spectrum, Static, Starlight, Ripple, Tidal, Wave, Wheel",
+      "limitation": "Observed 00/86, 00/84, and 03/0A traffic did not discriminate effect-specific device payloads"
     },
     "logoLighting": {
-      "status": "NotInvestigated"
+      "status": "SetterValidatedNotAdmitted",
+      "setters": "Off: 03/02 000400 then 03/00 000400; Static: 03/02 000400 then 03/00 000401; Breathing: 03/02 000402 then 03/00 000401",
+      "readback": "NotInvestigated"
     },
     "keyboardBehavior": {
       "status": "PartialProductionAdmission",
@@ -102,18 +111,23 @@
       "functionKeyPrimaryGetter": "ProductionAdmitted: 02/86 returned FunctionKeys",
       "gamingModeGetter": "ProductionAdmitted: 00/88 returned disabled",
       "deviceModeGetter": "ProductionAdmitted: 00/84 returned Driver",
-      "setters": "NotInvestigated"
+      "setters": "SetterValidated: startup 0F/18 0000 on and 0001 off; function primary 02/06 0000 function and 0001 multimedia; Gaming mode 00/08 01000000 on and 00000000 off",
+      "exactDeviceDifference": "Function-primary setter omits PID 02E0's leading 01 selector"
     }
   },
   "annotations": [
     "2026-07-29-rz09-0528-keyboard-brightness-admission.json",
     "2026-07-29-rz09-0528-lighting-query-navigation-negative.json",
+    "2026-07-29-rz09-0528-lighting-navigation-negative-repeat.json",
     "2026-07-29-rz09-0528-battery-limit-70-admission.json",
+    "2026-07-29-rz09-0528-battery-limit-matrix.json",
     "2026-07-29-rz09-0528-temporary-full-charge-admission.json",
     "2026-07-29-rz09-0528-ac-balanced-silent-admission.json",
     "2026-07-29-rz09-0528-ac-performance-admission.json",
     "2026-07-29-rz09-0528-ac-custom-partial.json",
-    "2026-07-29-rz09-0528-ac-fixed-fan-validation.json"
+    "2026-07-29-rz09-0528-ac-fixed-fan-validation.json",
+    "2026-07-29-rz09-0528-keyboard-behavior-setters.json",
+    "2026-07-29-rz09-0528-logo-lighting-setters.json"
   ],
   "safetyNotes": [
     "Never infer firmware readback from visible Synapse state.",
