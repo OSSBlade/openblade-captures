@@ -17,6 +17,47 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+
+# ProcessStartInfo.ArgumentList is unavailable in Windows PowerShell 5.1's .NET Framework.
+# Build Arguments explicitly using the backslash and quote escaping consumed by CommandLineToArgvW.
+function ConvertTo-NativeProcessArgument {
+    param(
+        [Parameter(Mandatory)]
+        [AllowEmptyString()]
+        [string]$Value
+    )
+
+    $charactersRequiringQuotes = [char[]]@(' ', "`t", "`n", [char]11, '"')
+    if ($Value.Length -gt 0 -and
+        $Value.IndexOfAny($charactersRequiringQuotes) -lt 0) {
+        return $Value
+    }
+
+    $quoted = [Text.StringBuilder]::new()
+    [void]$quoted.Append('"')
+    $backslashes = 0
+    foreach ($character in $Value.ToCharArray()) {
+        if ($character -eq [char]'\') {
+            $backslashes++
+            continue
+        }
+
+        if ($character -eq [char]'"') {
+            [void]$quoted.Append([char]'\', (($backslashes * 2) + 1))
+            [void]$quoted.Append('"')
+            $backslashes = 0
+            continue
+        }
+
+        [void]$quoted.Append([char]'\', $backslashes)
+        $backslashes = 0
+        [void]$quoted.Append($character)
+    }
+
+    [void]$quoted.Append([char]'\', ($backslashes * 2))
+    [void]$quoted.Append('"')
+    return $quoted.ToString()
+}
 $resolvedPcap = (Resolve-Path -LiteralPath $PcapPath -ErrorAction Stop).Path
 $resolvedOutput = [IO.Path]::GetFullPath($OutputPath)
 if ((Test-Path -LiteralPath $resolvedOutput) -and -not $Force) {
@@ -37,40 +78,58 @@ if ([IO.Path]::GetFileName($resolvedTshark) -ine 'tshark.exe') {
     throw "Refusing to run an unexpected decoder: $resolvedTshark"
 }
 
+# Wireshark 4.6 dissects USBPcap control-transfer bodies as usb.data_fragment and
+# HID interrupt reports as usbhid.data. Prefer those semantic fields over usb.capdata,
+# which is only leftover capture padding in current Wireshark builds.
+$payloadFields = [ordered]@{
+    UsbDataFragment = 'usb.data_fragment'
+    UsbHidData = 'usbhid.data'
+    UsbControlResponse = 'usb.control.Response'
+    UsbCaptureData = 'usb.capdata'
+}
+
+# bmRequestType is exposed directly under usb; the other setup fields remain under usb.setup.
 $fields = @(
     'frame.number',
     'frame.time_relative',
     'usb.transfer_type',
     'usb.endpoint_address.direction',
     'usb.endpoint_address',
-    'usb.setup.bmRequestType',
+    'usb.bmRequestType',
     'usb.setup.bRequest',
     'usb.setup.wValue',
     'usb.setup.wIndex',
-    'usb.data_len',
-    'usb.capdata'
+    'usb.data_len'
+) + @($payloadFields.Values)
+$fieldIndex = @{}
+for ($index = 0; $index -lt $fields.Count; $index++) {
+    $fieldIndex[$fields[$index]] = $index
+}
+$tsharkArguments = @(
+    '-r',
+    $resolvedPcap,
+    '-Y',
+    (($payloadFields.Values -join ' || ') + ' || usb.setup.bRequest'),
+    '-T',
+    'fields',
+    '-E',
+    'separator=/t',
+    '-E',
+    'occurrence=f'
 )
+foreach ($field in $fields) {
+    $tsharkArguments += @('-e', $field)
+}
+
 $startInfo = [Diagnostics.ProcessStartInfo]::new()
 $startInfo.FileName = $resolvedTshark
 $startInfo.UseShellExecute = $false
 $startInfo.CreateNoWindow = $true
 $startInfo.RedirectStandardOutput = $true
 $startInfo.RedirectStandardError = $true
-$startInfo.ArgumentList.Add('-r')
-$startInfo.ArgumentList.Add($resolvedPcap)
-$startInfo.ArgumentList.Add('-Y')
-$startInfo.ArgumentList.Add('usb.capdata || usb.setup.bRequest')
-$startInfo.ArgumentList.Add('-T')
-$startInfo.ArgumentList.Add('fields')
-$startInfo.ArgumentList.Add('-E')
-$startInfo.ArgumentList.Add('separator=/t')
-$startInfo.ArgumentList.Add('-E')
-$startInfo.ArgumentList.Add('occurrence=f')
-foreach ($field in $fields) {
-    $startInfo.ArgumentList.Add('-e')
-    $startInfo.ArgumentList.Add($field)
-}
-
+$startInfo.Arguments = (($tsharkArguments | ForEach-Object {
+    ConvertTo-NativeProcessArgument -Value $_
+}) -join ' ')
 $process = [Diagnostics.Process]::Start($startInfo)
 if ($null -eq $process) {
     throw 'Could not start tshark.'
@@ -94,15 +153,29 @@ foreach ($line in $standardOutput -split "`r?`n") {
     if ([string]::IsNullOrWhiteSpace($line)) {
         continue
     }
-    $columns = $line -split "`t", -1
+
+    # String.Split preserves trailing empty tshark columns in both Windows PowerShell 5.1
+    # and PowerShell 7; the negative -split limit has different semantics between hosts.
+    $columns = ([string]$line).Split([char]"`t")
     if ($columns.Count -lt $fields.Count) {
         continue
     }
 
-    $payload = [Text.RegularExpressions.Regex]::Replace(
-        [string]$columns[10],
-        '[^0-9A-Fa-f]',
-        '').ToUpperInvariant()
+    $payload = ''
+    $payloadSource = $null
+    foreach ($sourceName in $payloadFields.Keys) {
+        $fieldName = $payloadFields[$sourceName]
+        $candidate = [Text.RegularExpressions.Regex]::Replace(
+            [string]$columns[$fieldIndex[$fieldName]],
+            '[^0-9A-Fa-f]',
+            '').ToUpperInvariant()
+        if ($candidate.Length -gt 0) {
+            $payload = $candidate
+            $payloadSource = $sourceName
+            break
+        }
+    }
+
     $maximumHexLength = $MaximumPayloadBytes * 2
     $truncated = $payload.Length -gt $maximumHexLength
     if ($truncated) {
@@ -110,24 +183,26 @@ foreach ($line in $standardOutput -split "`r?`n") {
     }
 
     [void]$transactions.Add([ordered]@{
-        frame = [int]$columns[0]
+        frame = [int]$columns[$fieldIndex['frame.number']]
         relativeSeconds = [double]::Parse(
-            $columns[1],
+            $columns[$fieldIndex['frame.time_relative']],
             [Globalization.CultureInfo]::InvariantCulture)
-        transferType = [string]$columns[2]
-        direction = [string]$columns[3]
-        endpoint = [string]$columns[4]
+        transferType = [string]$columns[$fieldIndex['usb.transfer_type']]
+        direction = [string]$columns[$fieldIndex['usb.endpoint_address.direction']]
+        endpoint = [string]$columns[$fieldIndex['usb.endpoint_address']]
         setup = [ordered]@{
-            requestType = [string]$columns[5]
-            request = [string]$columns[6]
-            value = [string]$columns[7]
-            index = [string]$columns[8]
+            requestType = [string]$columns[$fieldIndex['usb.bmRequestType']]
+            request = [string]$columns[$fieldIndex['usb.setup.bRequest']]
+            value = [string]$columns[$fieldIndex['usb.setup.wValue']]
+            index = [string]$columns[$fieldIndex['usb.setup.wIndex']]
         }
-        reportedDataLength = if ([string]::IsNullOrWhiteSpace($columns[9])) {
+        reportedDataLength = if ([string]::IsNullOrWhiteSpace(
+            $columns[$fieldIndex['usb.data_len']])) {
             $null
         } else {
-            [int]$columns[9]
+            [int]$columns[$fieldIndex['usb.data_len']]
         }
+        payloadSource = $payloadSource
         payloadHex = $payload
         payloadTruncated = $truncated
     })
