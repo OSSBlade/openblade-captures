@@ -106,9 +106,9 @@
       "limitation": "Observed 00/86, 00/84, and 03/0A traffic did not discriminate effect-specific device payloads"
     },
     "logoLighting": {
-      "status": "SetterValidatedNotAdmitted",
+      "status": "ProductionAdmitted",
       "setters": "Off: 03/02 000400 then 03/00 000400; Static: 03/02 000400 then 03/00 000401; Breathing: 03/02 000402 then 03/00 000401",
-      "readback": "NotInvestigated"
+      "readback": "03/80 000400 state plus 03/82 000400 effect; exact production round trip Static -> Breathing -> Off -> Static succeeded"
     },
     "keyboardBehavior": {
       "status": "PartialProductionAdmission",
