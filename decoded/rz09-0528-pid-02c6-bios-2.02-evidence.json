@@ -20,7 +20,7 @@
   },
   "power": {
     "fullAc": "ProductionAdmitted: 07/8C returned 1111 (FullPower280W)",
-    "usbCAndBatteryTransitions": "NotInvestigated"
+    "usbCAndBatteryTransitions": "CapturedNotAdmitted: nine exact-device sessions covered all barrel AC, USB-C-only, and battery transitions plus stable baselines. Outgoing 07/8C query forms and 0D/02 source-specific setter pairs were decoded, but no exact PID 02C6 USB-C response or independent 0D/82 readback was captured."
   },
   "display": {
     "status": "ProductionAdmitted",
@@ -139,10 +139,12 @@
     "2026-07-29-rz09-0528-ac-custom-cpu-matrix.json",
     "2026-07-29-rz09-0528-ac-fixed-fan-validation.json",
     "2026-07-29-rz09-0528-keyboard-behavior-setters.json",
-    "2026-07-29-rz09-0528-logo-lighting-setters.json"
+    "2026-07-29-rz09-0528-logo-lighting-setters.json",
+    "2026-07-29-rz09-0528-power-source-matrix.json"
   ],
   "safetyNotes": [
     "Never infer firmware readback from visible Synapse state.",
+    "Do not admit the generic 0711 USB-C power-class mapping for PID 02C6 until the exact-device 07/8C response is independently read back.",
     "Never run USBPcap and OpenBlade control concurrently.",
     "Active Synapse host-rendered lighting can race the shared feature response.",
     "Do not broaden PID 02E0 commands or geometry to PID 02C6 without exact-device evidence."

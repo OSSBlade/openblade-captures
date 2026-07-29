@@ -39,14 +39,14 @@
         "readback": "ProductionAdmitted"
       },
       "usbC": {
-        "powerClasses": "NotInvestigated",
-        "presetsByPowerClass": "NotInvestigated",
+        "powerClasses": "Captured",
+        "presetsByPowerClass": "Captured",
         "customCpuLevels": "NotInvestigated",
         "customGpuLevels": "NotInvestigated",
         "readback": "NotInvestigated"
       },
       "battery": {
-        "presets": "NotInvestigated",
+        "presets": "Captured",
         "customCpuLevels": "NotInvestigated",
         "customGpuLevels": "NotInvestigated",
         "readback": "NotInvestigated"
@@ -188,14 +188,14 @@
     },
     "power": {
       "fullAc": "ProductionAdmitted",
-      "usbCPowerClasses": "NotInvestigated",
-      "battery": "NotInvestigated",
-      "acToUsbC": "NotInvestigated",
-      "usbCToAc": "NotInvestigated",
-      "acToBattery": "NotInvestigated",
-      "batteryToAc": "NotInvestigated",
-      "usbCToBattery": "NotInvestigated",
-      "batteryToUsbC": "NotInvestigated"
+      "usbCPowerClasses": "Captured",
+      "battery": "Captured",
+      "acToUsbC": "Captured",
+      "usbCToAc": "Captured",
+      "acToBattery": "Captured",
+      "batteryToAc": "Captured",
+      "usbCToBattery": "Captured",
+      "batteryToUsbC": "Captured"
     },
     "conflicts": {
       "vendorControllerPresent": "SetterValidated",
@@ -229,14 +229,14 @@
     "Exact read-only getters returned FunctionKeys (02/86 0100), GamingMode false (00/88 00000000), and Driver device mode (00/84 0300); all were reconfirmed through production ports.",
     "Windows firmware metadata reported EC 1.09; exact 00/87 readback returned MCU 1.9.0.0 and was reconfirmed through the production battery port.",
     "Exact 07/8C adapter-power readback returned 1111 (FullPower280W) and was reconfirmed through the production battery port.",
+    "Nine exact-device sessions captured the complete barrel AC, USB-C-only, and battery transition matrix. USB-C-only exposed Balanced/Auto with Performance and Custom unavailable and an inadequate-power warning; battery exposed Battery Saver/Auto with fixed fan unavailable.",
+    "The transition matrix contains outgoing 07/8C query forms and paired 0D/02 setters but no exact PID 02C6 USB-C response and no independent 0D/82 thermal readback. These power-source capabilities are Captured, not production-admitted.",
     "The production display query reported 2560x1600, fixed 60/240 Hz, Dynamic 48-240 Hz, HDR support (currently off), and five SDR color profiles.",
     "A read-only NVML query selected the NVIDIA GeForce RTX 5090 Laptop GPU, read zero current offsets, and reported core -1000..1000 MHz and memory -2000..6000 MHz ranges; production remains gated on exact Custom-mode admission.",
-    "Battery limit 70 is the only production-admitted charge-limit setter.",
     "Limits 50 through 80 in five-percent steps and protection-off completed exact-device typed apply/readback/restore validation and are production-admitted.",
     "Temporary full charge enable, cancel, query, readback, and restoration are production-admitted.",
     "Logo Off, Static, and Breathing completed exact selector-00 production apply/readback/restore validation; final logo state is Static.",
     "Startup animation, function-key primary, and Gaming-mode setters were captured in both directions, independently read back, restored, and production-admitted; PID 02C6 function-key setter arguments are 0000/0001, not PID 02E0's 0100/0101.",
-    "Logo Off, Static, and Breathing setter pairs were captured with PID 02C6 selector 00, but remain unadmitted without an exact-device getter.",
     "Keyboard lighting is off and the quick effect is Static by operator request, not as production readback evidence.",
     "A read-only exact PID scan found ten HID collections, including the 91-byte control collection and a 51-byte usage 0059:0001 collection, but no 375-byte feature collection; PID 02E0's matrix writer cannot be reused.",
     "Active Synapse Spectrum traffic can produce rejected TransactionMismatch failures."
