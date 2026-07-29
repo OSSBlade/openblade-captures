@@ -59,12 +59,12 @@
       "rpmQuery": "ProductionAdmitted"
     },
     "battery": {
-      "protectionOff": "SetterValidated",
+      "protectionOff": "ProductionAdmitted",
       "advertisedLimits": "Captured",
       "limitQuery": "ProductionAdmitted",
       "limit70": "ProductionAdmitted",
-      "limit75": "SetterValidated",
-      "otherLimitSetters": "SetterValidated",
+      "limit75": "ProductionAdmitted",
+      "otherLimitSetters": "ProductionAdmitted",
       "temporaryFullCharge": "ProductionAdmitted",
       "temporaryFullChargeQuery": "ProductionAdmitted"
     },
@@ -147,11 +147,11 @@
       "getter": "NotInvestigated"
     },
     "keyboardBehavior": {
-      "functionKeyPrimary": "SetterValidated",
+      "functionKeyPrimary": "ProductionAdmitted",
       "functionKeyPrimaryGetter": "ProductionAdmitted",
-      "gamingMode": "SetterValidated",
+      "gamingMode": "ProductionAdmitted",
       "gamingModeGetter": "ProductionAdmitted",
-      "startupAnimation": "SetterValidated",
+      "startupAnimation": "ProductionAdmitted",
       "startupAnimationGetter": "ProductionAdmitted",
       "normalDeviceMode": "NotInvestigated",
       "driverDeviceMode": "NotInvestigated",
@@ -224,9 +224,9 @@
     "The production display query reported 2560x1600, fixed 60/240 Hz, Dynamic 48-240 Hz, HDR support (currently off), and five SDR color profiles.",
     "A read-only NVML query selected the NVIDIA GeForce RTX 5090 Laptop GPU, read zero current offsets, and reported core -1000..1000 MHz and memory -2000..6000 MHz ranges; production remains gated on exact Custom-mode admission.",
     "Battery limit 70 is the only production-admitted charge-limit setter.",
-    "Limits 50 through 80 in five-percent steps and protection-off were captured and visibly restored; newly captured values still require OpenBlade typed readback before production admission.",
+    "Limits 50 through 80 in five-percent steps and protection-off completed exact-device typed apply/readback/restore validation and are production-admitted.",
     "Temporary full charge enable, cancel, query, readback, and restoration are production-admitted.",
-    "Startup animation, function-key primary, and Gaming-mode setters were captured in both directions and restored; PID 02C6 function-key setter arguments are 0000/0001, not PID 02E0's 0100/0101.",
+    "Startup animation, function-key primary, and Gaming-mode setters were captured in both directions, independently read back, restored, and production-admitted; PID 02C6 function-key setter arguments are 0000/0001, not PID 02E0's 0100/0101.",
     "Logo Off, Static, and Breathing setter pairs were captured with PID 02C6 selector 00, but remain unadmitted without an exact-device getter.",
     "Keyboard lighting is off and the quick effect is Static by operator request, not as production readback evidence.",
     "Active Synapse Spectrum traffic can produce rejected TransactionMismatch failures."

@@ -70,10 +70,14 @@
     "operatorConfirmed": true,
     "visibleApplyConfirmed": true,
     "restorationResult": "Startup animation on, Function keys primary, Gaming Mode off.",
-    "independentReadbackAvailable": "Exact-device getters 0F/98, 02/86, and 00/88 were independently admitted earlier, but were not executed during these USBPcap sessions."
+    "independentReadbackAvailable": "Exact-device getters 0F/98, 02/86, and 00/88 were independently admitted earlier.",
+    "subsequentOpenBladeValidation": [
+      "StartupAnimation: True -> False -> True; Success=True",
+      "FunctionKeyPrimary: FunctionKeys -> MultimediaKeys -> FunctionKeys; Success=True",
+      "GamingMode: False -> True -> False; Success=True"
+    ]
   },
   "limitations": [
-    "The captures establish setter bytes and visible restoration, not an OpenBlade typed apply/readback/restore cycle.",
-    "Production admission requires exact-device use of the already admitted getters after each typed setter."
+    "The USBPcap captures establish setter bytes; independent readback comes from the subsequent exact-device OpenBlade round trips."
   ]
 }

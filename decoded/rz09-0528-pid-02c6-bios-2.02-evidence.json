@@ -53,15 +53,15 @@
       "setter": "07/12 C6"
     },
     "batteryOtherChargeLimits": {
-      "status": "SetterValidated",
+      "status": "ProductionAdmitted",
       "setter": "07/12 with 0x80 + percentage",
       "capturedValues": "50, 55, 60, 65, 70, 75, 80",
-      "typedReadback": "Pending for all newly captured values except 70"
+      "typedReadback": "Validated for 50, 55, 60, 65, 70, 75, and 80"
     },
     "batteryProtectionOff": {
-      "status": "SetterValidated",
+      "status": "ProductionAdmitted",
       "setter": "07/12 50 while saved limit was 80",
-      "typedReadback": "Pending"
+      "typedReadback": "ProtectionOff applied, read back, and restored to enabled at 80"
     },
     "temporaryFullCharge": {
       "status": "ProductionAdmitted",
@@ -111,7 +111,7 @@
       "functionKeyPrimaryGetter": "ProductionAdmitted: 02/86 returned FunctionKeys",
       "gamingModeGetter": "ProductionAdmitted: 00/88 returned disabled",
       "deviceModeGetter": "ProductionAdmitted: 00/84 returned Driver",
-      "setters": "SetterValidated: startup 0F/18 0000 on and 0001 off; function primary 02/06 0000 function and 0001 multimedia; Gaming mode 00/08 01000000 on and 00000000 off",
+      "setters": "ProductionAdmitted: startup 0F/18 0000 on and 0001 off; function primary 02/06 0000 function and 0001 multimedia; Gaming mode 00/08 01000000 on and 00000000 off",
       "exactDeviceDifference": "Function-primary setter omits PID 02E0's leading 01 selector"
     }
   },

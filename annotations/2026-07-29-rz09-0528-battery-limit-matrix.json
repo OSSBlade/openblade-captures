@@ -98,11 +98,11 @@
     "operatorConfirmed": true,
     "visibleApplyConfirmed": true,
     "restorationResult": "Battery Health Optimizer visibly enabled at 80 percent; temporary full charge remained unchecked.",
-    "independentFirmwareReadback": false
+    "independentFirmwareReadback": true,
+    "subsequentOpenBladeValidation": "Exact-device typed round trips for 50, 55, 60, 65, 75, and protection-off each reported Applied=True, ReadBack=True, Restored=True, Success=True. A production probe then read protection enabled at 80 percent and temporary full charge false."
   },
   "limitations": [
     "These are setter captures. Visible Synapse state is not independent firmware readback.",
-    "Only the previously admitted 70-percent path has completed an OpenBlade typed apply/readback/restore cycle.",
-    "Production admission of the remaining values requires exact-device typed readback and restoration."
+    "Independent readback is supplied by the subsequent exact-device OpenBlade validation, not by the USBPcap trace itself."
   ]
 }
