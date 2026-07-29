@@ -55,6 +55,24 @@
     ],
     "hdrColorProfiles": "SoftwareOnlyValidatedUnavailable: OpenBlade disables SDR color-profile controls while Windows HDR is enabled; no color-profile write was attempted"
   },
+  "failureHandling": {
+    "status": "SoftwareOnlyValidated",
+    "scope": "The exact PID 02C6 production factories use the shared 91-byte WindowsRazerHidSession actor.",
+    "validatedFailures": [
+      "malformed report ID or length",
+      "checksum mismatch",
+      "command-class mismatch",
+      "command-id mismatch",
+      "non-success device status",
+      "mid-transaction native I/O failure or cancellation"
+    ],
+    "invariants": [
+      "Every malformed or mismatched response fails closed.",
+      "An ambiguous submitted write is never retried.",
+      "A checksum, response, or get-completion failure poisons the actor before another command can issue.",
+      "No malformed report was injected into the physical laptop."
+    ]
+  },
   "productionCoverage": {
     "keyboardBrightness": {
       "status": "ProductionAdmitted",
