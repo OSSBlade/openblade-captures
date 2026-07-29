@@ -217,8 +217,21 @@
         "probeResult": "TimedOutWaitingForOwnCallback",
         "finding": "Although OpenBlade bound and invoked only GetPowerLimitValueAsync, the shared service response reached Synapse's active listener. Synapse detected 55 W instead of its persisted 60 W and invoked SetPowerLimitValueAsync(60). The setter succeeded, restoring the user-visible saved value. The failed session is preserved as proof that a getter is not read-only in effect while Synapse is active."
       },
+      "synapseAbsentProbe": {
+        "synapseClientsDisconnectedAtUtc": "2026-07-29T20:54:56.172Z",
+        "namedPipeServerClosedAtUtc": "2026-07-29T20:54:57.046Z",
+        "backendTerminatedAtUtc": "2026-07-29T20:54:57.156Z",
+        "getterAttemptedAtUtc": "2026-07-29T20:55:11.588Z",
+        "clientTeardownAtUtc": "2026-07-29T20:55:11.598Z",
+        "openBladeSetterExportBound": false,
+        "openBladeSetterInvoked": false,
+        "probeResult": "GetterRejectedBecauseNamedPipeServerWasClosed",
+        "synapseRelaunchedAndUiConfirmedAtUtc": "2026-07-29T20:57:00.239Z",
+        "confirmedFinalUiState": "Plugged In; Balanced; Automatic fans; CPU Voltage Optimizer On at -1.000",
+        "finding": "Closing the last Synapse clients terminated the RzAMDOverClock server module and its named-pipe server even though the generic RzDLLService process remained. A later exact getter client could not reconnect and issued no setting command. OpenBlade would need to own privileged server startup and driver lifecycle before this backend can be admitted."
+      },
       "admission": "ObservedOnly",
-      "admissionBlocker": "OpenBlade still lacks an independently validated, isolated lifecycle that can read and write through the proprietary service without Synapse reapplying persisted values. The capture probe now hard-blocks while RazerAppEngine is active; a future validation must run with Synapse fully absent and must prove callback ownership before any production admission."
+      "admissionBlocker": "OpenBlade still lacks an independently validated, isolated lifecycle. With Synapse active, a getter response can trigger its persisted-value setter; with Synapse absent, the last client disconnect terminates the CPU server module and closes its named pipe. The capture probe hard-blocks while RazerAppEngine is active and never starts the privileged service or driver lifecycle."
     },
     {
       "kind": "GpuOverclockUiDiscovery",
