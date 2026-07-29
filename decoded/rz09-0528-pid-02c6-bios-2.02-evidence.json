@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "device": {
+    "model": "RZ09-0528",
+    "vendorId": "1532",
+    "productId": "02C6",
+    "biosVersion": "2.02"
+  },
+  "transport": {
+    "usagePage": "0001",
+    "usage": "0002",
+    "windowsFeatureReportBytes": 91,
+    "usbEnvelopeBytes": 90,
+    "reportId": 0
+  },
+  "productionCoverage": {
+    "keyboardBrightness": {
+      "status": "ProductionAdmitted",
+      "query": "03/83 010500",
+      "setter": "03/03 0105xx"
+    },
+    "batteryChargeLimit70": {
+      "status": "ProductionAdmitted",
+      "query": "07/92 00",
+      "setter": "07/12 C6"
+    },
+    "batteryOtherChargeLimits": {
+      "status": "ValidatedNotCaptured"
+    },
+    "batteryProtectionOff": {
+      "status": "NotInvestigated"
+    },
+    "temporaryFullCharge": {
+      "status": "NotInvestigated"
+    },
+    "performance": {
+      "status": "NotInvestigated"
+    },
+    "fans": {
+      "status": "NotInvestigated"
+    },
+    "lightingEffects": {
+      "status": "NotInvestigated"
+    },
+    "logoLighting": {
+      "status": "NotInvestigated"
+    },
+    "keyboardBehavior": {
+      "status": "NotInvestigated"
+    }
+  },
+  "annotations": [
+    "2026-07-29-rz09-0528-keyboard-brightness-admission.json",
+    "2026-07-29-rz09-0528-lighting-query-navigation-negative.json",
+    "2026-07-29-rz09-0528-battery-limit-70-admission.json"
+  ],
+  "safetyNotes": [
+    "Never infer firmware readback from visible Synapse state.",
+    "Never run USBPcap and OpenBlade control concurrently.",
+    "Active Synapse host-rendered lighting can race the shared feature response.",
+    "Do not broaden PID 02E0 commands or geometry to PID 02C6 without exact-device evidence."
+  ]
+}
