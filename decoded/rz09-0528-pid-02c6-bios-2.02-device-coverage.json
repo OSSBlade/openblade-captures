@@ -181,7 +181,7 @@
       "deviceReconnect": "NotInvestigated"
     },
     "power": {
-      "fullAc": "QueryValidated",
+      "fullAc": "ProductionAdmitted",
       "usbCPowerClasses": "NotInvestigated",
       "battery": "NotInvestigated",
       "acToUsbC": "NotInvestigated",
@@ -218,6 +218,7 @@
     "Startup-animation getter 0F/98 returned enabled through both the exact discriminator and the exact production service port.",
     "Exact read-only getters returned FunctionKeys (02/86 0100), GamingMode false (00/88 00000000), and Driver device mode (00/84 0300); all were reconfirmed through production ports.",
     "Windows firmware metadata reported EC 1.09; exact 00/87 readback returned MCU 1.9.0.0 and was reconfirmed through the production battery port.",
+    "Exact 07/8C adapter-power readback returned 1111 (FullPower280W) and was reconfirmed through the production battery port.",
     "Battery limit 70 is the only production-admitted charge-limit setter.",
     "Limit 75 was reversibly validated but is not captured or admitted.",
     "Temporary full charge enable, cancel, query, readback, and restoration are production-admitted.",

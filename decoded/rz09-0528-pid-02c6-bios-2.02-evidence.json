@@ -18,6 +18,10 @@
     "mcuVersion": "1.9.0.0",
     "mcuQuery": "00/87 00000000"
   },
+  "power": {
+    "fullAc": "ProductionAdmitted: 07/8C returned 1111 (FullPower280W)",
+    "usbCAndBatteryTransitions": "NotInvestigated"
+  },
   "productionCoverage": {
     "keyboardBrightness": {
       "status": "ProductionAdmitted",
