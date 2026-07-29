@@ -239,6 +239,7 @@
     "Startup animation, function-key primary, and Gaming-mode setters were captured in both directions, independently read back, restored, and production-admitted; PID 02C6 function-key setter arguments are 0000/0001, not PID 02E0's 0100/0101.",
     "Keyboard lighting is off and the quick effect is Static by operator request, not as production readback evidence.",
     "A read-only exact PID scan found ten HID collections, including the 91-byte control collection and a 51-byte usage 0059:0001 collection, but no 375-byte feature collection; PID 02E0's matrix writer cannot be reused.",
-    "Active Synapse Spectrum traffic can produce rejected TransactionMismatch failures."
+    "Active Synapse Spectrum traffic can produce rejected TransactionMismatch failures.",
+    "The exact production port admits only the validated 07/8C response 1111 (FullPower280W). Shared decoder value 0711 remains PID 02E0 evidence and is filtered to Unknown for PID 02C6 until exact-device readback exists."
   ]
 }
