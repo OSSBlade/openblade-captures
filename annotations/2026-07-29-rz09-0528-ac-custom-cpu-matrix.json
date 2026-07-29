@@ -199,11 +199,26 @@
         "getCurveOptimizerSuccessMinusOne": 45,
         "getCurveOptimizerSuccessZero": 3,
         "setCurveOptimizerMinusOneSuccess": 3,
-        "setPowerLimitSixtySuccess": 7,
+        "getPowerLimitSuccessFiftyFive": 1,
+        "setPowerLimitSixtySuccess": 8,
         "finding": "Synapse handled a returned curveOptimizer value of 0 by calling SetCurveOptimizerValueAsync(-1), and it repeatedly re-applied the persisted 60 W power limit. A UI refresh is therefore not a read-only validation path."
       },
+      "failedGetterOnlyProbe": {
+        "requestedAtUtc": "2026-07-29T20:50:09.015Z",
+        "backendResponseAtUtc": "2026-07-29T20:50:09.402Z",
+        "synapseRestorationRequestedAtUtc": "2026-07-29T20:50:09.912Z",
+        "synapseRestorationConfirmedAtUtc": "2026-07-29T20:50:10.379Z",
+        "clientTeardownAtUtc": "2026-07-29T20:50:19.022Z",
+        "openBladeSetterExportBound": false,
+        "openBladeSetterInvoked": false,
+        "backendPowerLimitWatts": 55,
+        "synapsePersistedPowerLimitWatts": 60,
+        "restoredPowerLimitWatts": 60,
+        "probeResult": "TimedOutWaitingForOwnCallback",
+        "finding": "Although OpenBlade bound and invoked only GetPowerLimitValueAsync, the shared service response reached Synapse's active listener. Synapse detected 55 W instead of its persisted 60 W and invoked SetPowerLimitValueAsync(60). The setter succeeded, restoring the user-visible saved value. The failed session is preserved as proof that a getter is not read-only in effect while Synapse is active."
+      },
       "admission": "ObservedOnly",
-      "admissionBlocker": "OpenBlade still lacks an independently validated, isolated lifecycle that can read and write through the proprietary service without Synapse reapplying persisted values. No vendor getter or setter was invoked by this analysis."
+      "admissionBlocker": "OpenBlade still lacks an independently validated, isolated lifecycle that can read and write through the proprietary service without Synapse reapplying persisted values. The capture probe now hard-blocks while RazerAppEngine is active; a future validation must run with Synapse fully absent and must prove callback ownership before any production admission."
     },
     {
       "kind": "GpuOverclockUiDiscovery",
@@ -259,7 +274,7 @@
     "identityScope": "RZ09-0528, BIOS 2.02, USB 1532:02C6, HID usage 0001:0002, 91-byte feature reports"
   },
   "limitations": [
-    "The CPU Power Limit and CPU Voltage Optimizer vendor backend is identified as RzAMDOverClock/RzDLLService, but its lifecycle is not admitted because the Synapse refresh path can issue writes; visual confirmation and vendor logs are not treated as independent OpenBlade readback.",
+    "The CPU Power Limit and CPU Voltage Optimizer vendor backend is identified as RzAMDOverClock/RzDLLService, but its lifecycle is not admitted because even an OpenBlade getter-only request caused active Synapse to observe 55 W and restore its persisted 60 W; visual confirmation and vendor logs are not treated as independent OpenBlade readback.",
     "The GPU Overclock transport/backend remains unidentified; visual confirmation alone is not treated as device readback.",
     "The CPU Voltage Optimizer captures cannot distinguish optimizer behavior from CPU-preset reapplication because their 0D/07 payloads collide.",
     "GPU clock offsets were not modified.",
