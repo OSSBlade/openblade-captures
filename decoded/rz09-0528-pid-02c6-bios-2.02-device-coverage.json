@@ -5,8 +5,8 @@
     "vendorIdHex": "1532",
     "productIdHex": "02C6",
     "bios": "2.02",
-    "ec": null,
-    "mcu": null
+    "ec": "1.09",
+    "mcu": "1.9.0.0"
   },
   "statusValues": [
     "NotInvestigated",
@@ -31,6 +31,7 @@
         "presets": "ProductionAdmitted",
         "customCpuLevels": "Captured",
         "customGpuLevels": "SetterValidated",
+        "gpuClockOffsets": "QueryValidated",
         "readback": "ProductionAdmitted"
       },
       "usbC": {
@@ -220,6 +221,7 @@
     "Windows firmware metadata reported EC 1.09; exact 00/87 readback returned MCU 1.9.0.0 and was reconfirmed through the production battery port.",
     "Exact 07/8C adapter-power readback returned 1111 (FullPower280W) and was reconfirmed through the production battery port.",
     "The production display query reported 2560x1600, fixed 60/240 Hz, Dynamic 48-240 Hz, HDR support (currently off), and five SDR color profiles.",
+    "A read-only NVML query selected the NVIDIA GeForce RTX 5090 Laptop GPU, read zero current offsets, and reported core -1000..1000 MHz and memory -2000..6000 MHz ranges; production remains gated on exact Custom-mode admission.",
     "Battery limit 70 is the only production-admitted charge-limit setter.",
     "Limit 75 was reversibly validated but is not captured or admitted.",
     "Temporary full charge enable, cancel, query, readback, and restoration are production-admitted.",
