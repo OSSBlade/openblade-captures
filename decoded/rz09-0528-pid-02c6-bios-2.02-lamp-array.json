@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02"
+  },
+  "source": {
+    "api": "Windows.Devices.Lights.LampArray",
+    "readOnly": true,
+    "uniqueIdentifiersIncluded": false,
+    "rawHidReportsIncluded": false
+  },
+  "lampArray": {
+    "enumeratedDeviceCount": 1,
+    "kind": "Keyboard",
+    "lampCount": 85,
+    "connected": true,
+    "enabled": true,
+    "availableToUnpackagedBackgroundProbe": false,
+    "supportsVirtualKeys": true,
+    "brightnessLevelObserved": 1.0,
+    "minimumUpdateIntervalMicroseconds": 33333,
+    "boundingBoxMeters": [0.308, 0.11, 0.015],
+    "geometryAndVirtualKeysSha256": "C82E71D69DCAADDCB8530C0744B7B3240CC2E9C8FEF6CDAF1AB16B76F7A6A450",
+    "mappedVirtualKeyCount": 72,
+    "unmappedLampIndices": [15, 59, 72, 74, 78, 84]
+  },
+  "admission": {
+    "status": "QueryValidated",
+    "productionControlAdmitted": false,
+    "reason": "Read-only enumeration proves an exact OS-native 85-lamp interface. Background availability, application identity, priority behavior, writes, and restoration are not yet validated."
+  },
+  "boundaries": [
+    "The OS LampArray brightness value is not the firmware 03/83 keyboard-brightness readback and must not be used as a substitute.",
+    "The absent PID 02E0-style 375-byte raw matrix interface remains absent on PID 02C6.",
+    "No color, brightness, effect, or priority mutation was performed."
+  ]
+}

@@ -84,6 +84,8 @@ $requiredPaths = @(
     'keyboardLighting.off',
     'keyboardLighting.brightnessRange',
     'keyboardLighting.effectGetter',
+    'keyboardLighting.matrixInterfaceDiscovery',
+    'keyboardLighting.lampArrayInterfaceDiscovery',
     'keyboardLighting.effects.ambientAwareness.screenRegions',
     'keyboardLighting.effects.ambientAwareness.frameCadence',
     'keyboardLighting.effects.breathing.singleColor',

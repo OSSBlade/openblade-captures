@@ -6,7 +6,8 @@ $tests = @(
     'Test-CaptureEvidence.Tests.ps1',
     'Compare-CaptureTransactions.Tests.ps1',
     'DeviceCoverageTemplate.Tests.ps1',
-    'PowerSourceMatrixEvidence.Tests.ps1'
+    'PowerSourceMatrixEvidence.Tests.ps1',
+    'LampArrayEvidence.Tests.ps1'
 )
 
 foreach ($test in $tests) {
