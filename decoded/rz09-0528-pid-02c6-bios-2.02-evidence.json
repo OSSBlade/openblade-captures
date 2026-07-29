@@ -77,11 +77,11 @@
       "readback": "0D/82 paired thermal channels; 0D/87 component levels"
     },
     "fans": {
-      "status": "PartialProductionAdmission",
+      "status": "ProductionAdmitted",
       "automatic": "ProductionAdmitted",
       "rpmQuery": "ProductionAdmitted: 0D/88 selectors 01 and 02",
       "fixed": {
-        "status": "SetterValidated",
+        "status": "ProductionAdmitted",
         "modeWrites": [
           "0D/02 01010001",
           "0D/02 01020001"
@@ -93,7 +93,12 @@
         "independentReadback": "Typed manual/fixed state plus settled physical RPM at 2000, 3800, and 5000 targets",
         "restored": "Balanced/Automatic"
       },
-      "manualCurve": "NotInvestigated"
+      "manualCurve": {
+        "status": "ProductionAdmittedHostRendered",
+        "deviceState": "Synapse selection captured the same paired manual-state writes used by fixed targets",
+        "implementation": "OpenBlade enters the validated manual state at the exact 5000 RPM ceiling, then renders the saved curve through validated fixed-target writes and fresh host temperature telemetry",
+        "readback": "Host intent only; the device reports the shared manual/fixed state and does not distinguish a persisted curve"
+      }
     },
     "lightingEffects": {
       "status": "CapturedNotAdmitted",

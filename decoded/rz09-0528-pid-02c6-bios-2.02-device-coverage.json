@@ -50,12 +50,12 @@
     },
     "fans": {
       "automatic": "ProductionAdmitted",
-      "fixedMinimum": "SetterValidated",
-      "fixedMaximum": "SetterValidated",
-      "fixedStep": "SetterValidated",
-      "maximum": "SetterValidated",
-      "manualCurveWrites": "NotInvestigated",
-      "manualCurveReadback": "NotInvestigated",
+      "fixedMinimum": "ProductionAdmitted",
+      "fixedMaximum": "ProductionAdmitted",
+      "fixedStep": "ProductionAdmitted",
+      "maximum": "ProductionAdmitted",
+      "manualCurveWrites": "ProductionAdmittedHostRendered",
+      "manualCurveReadback": "HostIntentOnly",
       "rpmQuery": "ProductionAdmitted"
     },
     "battery": {
