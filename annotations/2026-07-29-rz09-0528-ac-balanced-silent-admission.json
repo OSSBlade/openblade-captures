@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "Razer Synapse 4.0.698.98 and OpenBlade.Capture 0.1",
+    "role": "ExactDeviceInteractiveValidation",
+    "openBladeTypedApplyPerformed": true,
+    "openBladeReadbackConfirmed": true
+  },
+  "capturedAtUtc": "2026-07-29T04:45:04.469Z",
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "sha256": "C37066107F567ED19E56329EE5A1FA790DE535A218AE12374C3BBECE6B010833",
+    "byteLength": 2810,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddress",
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "kind": "SettingChange",
+    "subsystem": "AC performance mode",
+    "name": "Balanced to Silent",
+    "value": "Silent",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": true,
+    "applyResult": "Confirmed: Synapse selected Silent and both 0D/02 channel writes were captured and acknowledged.",
+    "readbackResult": "Confirmed: independent exact-device 0D/82 queries returned matching Silent/Automatic state on both channels.",
+    "restorationResult": "A separate capture restored both channels to Balanced/Automatic.",
+    "restorationReadbackResult": "Typed firmware readback, production-port readback, and visible Synapse state all confirmed Balanced/Automatic."
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "CapturedSetter",
+      "summary": "Silent channel 1 was written at 6.854979 seconds.",
+      "commandClassHex": "0D",
+      "commandIdHex": "02",
+      "argumentsHex": "01010500"
+    },
+    {
+      "kind": "CapturedSetter",
+      "summary": "Silent channel 2 was written at 6.884421 seconds.",
+      "commandClassHex": "0D",
+      "commandIdHex": "02",
+      "argumentsHex": "01020500"
+    },
+    {
+      "kind": "CapturedRestoration",
+      "summary": "A separate graceful capture restored channel 1 then channel 2 to Balanced/Automatic.",
+      "sha256": "00B866C6B426807FBBB7F8FB73B09634AD2F8109850BF6BD951F6F298E894A32",
+      "byteLength": 2810,
+      "commands": [
+        "0D/02:01010000",
+        "0D/02:01020000"
+      ]
+    },
+    {
+      "kind": "TypedReadback",
+      "summary": "0D/82 independently distinguished Balanced/Automatic 00 from Silent/Automatic 05 on both channels and returned to 00 after restoration.",
+      "balanced": [
+        "01010000",
+        "01020000"
+      ],
+      "silent": [
+        "01010500",
+        "01020500"
+      ]
+    },
+    {
+      "kind": "OpenBladeReversibleValidation",
+      "summary": "The exact production port refused non-Balanced baselines, applied Silent, read back Silent/Automatic, restored Balanced in finally, and read back Balanced/Automatic."
+    },
+    {
+      "kind": "ProductionReadback",
+      "summary": "Three repeated exact production-factory probes opened successfully and reported Balanced/Automatic."
+    }
+  ],
+  "productionAdmission": {
+    "performancePresets": [
+      "Balanced",
+      "Silent"
+    ],
+    "fanModes": [
+      "Automatic"
+    ],
+    "identityScope": "RZ09-0528, BIOS 2.02, USB 1532:02C6, HID usage 0001:0002, 91-byte feature reports"
+  },
+  "limitations": [
+    "Performance, Custom, battery-side presets, fixed fan speed, manual fan curves, and fan RPM queries remain unavailable pending exact-device evidence.",
+    "The two earlier sandbox-token sessions produced no PCAP and are preserved only as failed-session records.",
+    "CPU Voltage Optimizer was not changed.",
+    "Keyboard lighting remains off at the operator's request.",
+    "Raw PCAPs and unique device identifiers remain private and uncommitted."
+  ],
+  "notes": [
+    "Final visible and typed state was Plugged In, Balanced, Auto (Default).",
+    "Battery optimizer remained 80 percent and temporary full charge remained off."
+  ]
+}

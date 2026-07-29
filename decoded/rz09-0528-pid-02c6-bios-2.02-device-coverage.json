@@ -28,10 +28,10 @@
     },
     "performance": {
       "ac": {
-        "presets": "NotInvestigated",
+        "presets": "ProductionAdmitted",
         "customCpuLevels": "NotInvestigated",
         "customGpuLevels": "NotInvestigated",
-        "readback": "NotInvestigated"
+        "readback": "ProductionAdmitted"
       },
       "usbC": {
         "powerClasses": "NotInvestigated",
@@ -48,7 +48,7 @@
       }
     },
     "fans": {
-      "automatic": "NotInvestigated",
+      "automatic": "ProductionAdmitted",
       "fixedMinimum": "NotInvestigated",
       "fixedMaximum": "NotInvestigated",
       "fixedStep": "NotInvestigated",
@@ -211,6 +211,7 @@
     }
   },
   "notes": [
+    "AC Balanced, Silent, Automatic fan state, paired setters, typed readback, and restoration are production-admitted.",
     "Battery limit 70 is the only production-admitted charge-limit setter.",
     "Limit 75 was reversibly validated but is not captured or admitted.",
     "Temporary full charge enable, cancel, query, readback, and restoration are production-admitted.",
