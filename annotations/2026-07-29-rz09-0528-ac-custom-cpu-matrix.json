@@ -197,8 +197,8 @@
       },
       "sanitizedLogEvidence": {
         "getCurveOptimizerSuccessMinusOne": 45,
-        "getCurveOptimizerSuccessZero": 3,
-        "setCurveOptimizerMinusOneSuccess": 3,
+        "getCurveOptimizerSuccessZero": 4,
+        "setCurveOptimizerMinusOneSuccess": 4,
         "getPowerLimitSuccessFiftyFive": 1,
         "setPowerLimitSixtySuccess": 8,
         "finding": "Synapse handled a returned curveOptimizer value of 0 by calling SetCurveOptimizerValueAsync(-1), and it repeatedly re-applied the persisted 60 W power limit. A UI refresh is therefore not a read-only validation path."
@@ -226,9 +226,11 @@
         "openBladeSetterExportBound": false,
         "openBladeSetterInvoked": false,
         "probeResult": "GetterRejectedBecauseNamedPipeServerWasClosed",
+        "relaunchGetterReturnedZeroAtUtc": "2026-07-29T20:56:33.782Z",
+        "relaunchRestorationConfirmedAtUtc": "2026-07-29T20:56:34.552Z",
         "synapseRelaunchedAndUiConfirmedAtUtc": "2026-07-29T20:57:00.239Z",
         "confirmedFinalUiState": "Plugged In; Balanced; Automatic fans; CPU Voltage Optimizer On at -1.000",
-        "finding": "Closing the last Synapse clients terminated the RzAMDOverClock server module and its named-pipe server even though the generic RzDLLService process remained. A later exact getter client could not reconnect and issued no setting command. OpenBlade would need to own privileged server startup and driver lifecycle before this backend can be admitted."
+        "finding": "Closing the last Synapse clients terminated the RzAMDOverClock server module and its named-pipe server even though the generic RzDLLService process remained. A later exact getter client could not reconnect and issued no setting command. On relaunch, Synapse's own getter returned 0 and its saved-value handler successfully restored -1 before the UI was reconfirmed. OpenBlade would need to own privileged server startup and driver lifecycle before this backend can be admitted."
       },
       "admission": "ObservedOnly",
       "admissionBlocker": "OpenBlade still lacks an independently validated, isolated lifecycle. With Synapse active, a getter response can trigger its persisted-value setter; with Synapse absent, the last client disconnect terminates the CPU server module and closes its named pipe. The capture probe hard-blocks while RazerAppEngine is active and never starts the privileged service or driver lifecycle."
