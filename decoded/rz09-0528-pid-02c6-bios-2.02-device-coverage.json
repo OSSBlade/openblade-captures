@@ -211,7 +211,7 @@
     }
   },
   "notes": [
-    "AC Balanced, Silent, Automatic fan state, paired setters, typed readback, and restoration are production-admitted.",
+    "AC Balanced, Silent, Performance, Automatic fan state, paired setters, typed readback, and restoration are production-admitted.",
     "Battery limit 70 is the only production-admitted charge-limit setter.",
     "Limit 75 was reversibly validated but is not captured or admitted.",
     "Temporary full charge enable, cancel, query, readback, and restoration are production-admitted.",
