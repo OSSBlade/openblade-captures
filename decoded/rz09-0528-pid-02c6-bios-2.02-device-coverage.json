@@ -55,7 +55,7 @@
       "maximum": "NotInvestigated",
       "manualCurveWrites": "NotInvestigated",
       "manualCurveReadback": "NotInvestigated",
-      "rpmQuery": "NotInvestigated"
+      "rpmQuery": "ProductionAdmitted"
     },
     "battery": {
       "protectionOff": "NotInvestigated",
@@ -214,6 +214,7 @@
     "AC Balanced, Silent, Performance, Automatic fan state, paired setters, typed readback, and restoration are production-admitted.",
     "AC Custom selection and saved CPU Medium (raw 02) are captured; GPU Low, Medium, and High are setter-validated but Custom remains unadmitted until the exact CPU range is safely validated.",
     "CPU preset controls were disabled while CPU Voltage Optimizer was enabled, so the optimizer was preserved and CPU Low/High were not inferred.",
+    "Fan RPM selectors 1 and 2 were queried three times through the exact-device factory, then successfully read through the production service routing.",
     "Battery limit 70 is the only production-admitted charge-limit setter.",
     "Limit 75 was reversibly validated but is not captured or admitted.",
     "Temporary full charge enable, cancel, query, readback, and restoration are production-admitted.",
