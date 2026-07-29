@@ -13,6 +13,11 @@
     "usbEnvelopeBytes": 90,
     "reportId": 0
   },
+  "firmware": {
+    "ecVersion": "1.09",
+    "mcuVersion": "1.9.0.0",
+    "mcuQuery": "00/87 00000000"
+  },
   "productionCoverage": {
     "keyboardBrightness": {
       "status": "ProductionAdmitted",
