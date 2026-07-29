@@ -41,8 +41,8 @@
       "usbC": {
         "powerClasses": "Captured",
         "presetsByPowerClass": "Captured",
-        "customCpuLevels": "NotInvestigated",
-        "customGpuLevels": "NotInvestigated",
+        "customCpuLevels": "Absent",
+        "customGpuLevels": "Absent",
         "readback": "NotInvestigated"
       },
       "battery": {
@@ -58,8 +58,8 @@
       "fixedMaximum": "ProductionAdmitted",
       "fixedStep": "ProductionAdmitted",
       "maximum": "ProductionAdmitted",
-      "manualCurveWrites": "ProductionAdmittedHostRendered",
-      "manualCurveReadback": "HostIntentOnly",
+      "manualCurveWrites": "ProductionAdmitted",
+      "manualCurveReadback": "SoftwareOnly",
       "rpmQuery": "ProductionAdmitted"
     },
     "battery": {
@@ -143,7 +143,7 @@
         }
       },
       "effectGetter": "NotInvestigated",
-      "matrixInterfaceDiscovery": "No375ByteFeatureCollection"
+      "matrixInterfaceDiscovery": "Absent"
     },
     "logoLighting": {
       "off": "ProductionAdmitted",
@@ -232,6 +232,7 @@
     "Windows firmware metadata reported EC 1.09; exact 00/87 readback returned MCU 1.9.0.0 and was reconfirmed through the production battery port.",
     "Exact 07/8C adapter-power readback returned 1111 (FullPower280W) and was reconfirmed through the production battery port.",
     "Nine exact-device sessions captured the complete barrel AC, USB-C-only, and battery transition matrix. USB-C-only exposed Balanced/Auto with Performance and Custom unavailable and an inadequate-power warning; battery exposed Battery Saver/Auto with fixed fan unavailable.",
+    "Because Custom is visibly unavailable on USB-C-only power, source-specific Custom CPU and GPU levels are explicitly Absent there rather than uninvestigated. This does not establish their availability or absence on battery.",
     "The transition matrix contains outgoing 07/8C query forms and paired 0D/02 setters but no exact PID 02C6 USB-C response and no independent 0D/82 thermal readback. These power-source capabilities are Captured, not production-admitted.",
     "The production display query reported 2560x1600, fixed 60/240 Hz, Dynamic 48-240 Hz, HDR support, and five SDR color profiles. A bounded Windows-API round trip enabled HDR, confirmed SDR profile controls unavailable, restored HDR off, and reconfirmed the original display state.",
     "Malformed, checksum, command-class, command-id, status, and mid-transaction transport failures are deterministic software-only safety cases. The exact PID 02C6 production path uses the same tested 91-byte actor, poisons ambiguous sessions, and never retries an indeterminate write; no malformed report was injected into the physical laptop.",
@@ -243,6 +244,7 @@
     "Keyboard lighting is off and the quick effect is Static by operator request, not as production readback evidence.",
     "Seven Synapse quick effects are Captured UI/transition discoveries and represented by OpenBlade as observed-only capabilities. Their parameter subfeatures, effect getter, and write path remain unadmitted.",
     "A read-only exact PID scan found ten HID collections, including the 91-byte control collection and a 51-byte usage 0059:0001 collection, but no 375-byte feature collection; PID 02E0's matrix writer cannot be reused.",
+    "Manual fan curves are production-admitted host rendering over the exact fixed-target primitive; persisted curve intent readback is SoftwareOnly, while physical fan RPM retains its separate production-admitted query.",
     "Active Synapse Spectrum traffic can produce rejected TransactionMismatch failures.",
     "The exact production port admits only the validated 07/8C response 1111 (FullPower280W). Shared decoder value 0711 remains PID 02E0 evidence and is filtered to Unknown for PID 02C6 until exact-device readback exists."
   ]

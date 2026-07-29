@@ -163,4 +163,20 @@ foreach ($leaf in $leafStatuses) {
         "$($leaf.Path) must default to NotInvestigated for a new model."
 }
 
+$decodedPath = Join-Path $repository 'decoded'
+$coverageDocuments = @(Get-ChildItem -LiteralPath $decodedPath `
+    -Filter '*-device-coverage.json' -File)
+Assert-True ($coverageDocuments.Count -gt 0) `
+    'The repository must retain at least one concrete device-coverage document.'
+foreach ($coverageDocument in $coverageDocuments) {
+    $coverage = Get-Content -LiteralPath $coverageDocument.FullName -Raw |
+        ConvertFrom-Json
+    Assert-True ($coverage.schemaVersion -eq $template.schemaVersion) `
+        "$($coverageDocument.Name) does not use the current coverage schema."
+    foreach ($leaf in @(Get-LeafStatuses -Value $coverage.capabilities -Path '')) {
+        Assert-True ([string]$leaf.Status -cin $allowedStatuses) `
+            "$($coverageDocument.Name): $($leaf.Path) contains unsupported status '$($leaf.Status)'."
+    }
+}
+
 Write-Host 'Device-coverage template regression tests passed.'
