@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "Razer Synapse 4.0.698.98 and OpenBlade.Capture 0.1",
+    "role": "ExactDeviceInteractiveValidation",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeReadbackConfirmed": true
+  },
+  "capturedAtUtc": "2026-07-29T04:56:43.233Z",
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "sha256": "3BE069758F782A32BB49C6991E33431210489BB370E21A40DD7B43096FDF0062",
+    "byteLength": 3554,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddress",
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "kind": "SettingChange",
+    "subsystem": "AC custom performance",
+    "name": "Balanced to Custom with saved component levels",
+    "value": "Custom; CPU Medium; GPU Low",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": true,
+    "applyResult": "Confirmed: Synapse selected Custom and emitted paired 0D/02 Custom/Automatic writes followed by 0D/07 CPU 02 and GPU 00 writes.",
+    "readbackResult": "Confirmed: independent exact-device 0D/82 queries returned Custom/Automatic and 0D/87 returned CPU 02 and GPU 00.",
+    "restorationResult": "Confirmed visually and by typed readback: the final profile was restored to Balanced/Automatic with saved CPU 02 and GPU 00.",
+    "restorationReadbackResult": "Confirmed: exact-device 0D/82 returned both Balanced/Automatic channel values after capture ended."
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "CapturedSetter",
+      "summary": "Custom/Automatic selected on both thermal channels.",
+      "commands": [
+        "0D/02:01010400",
+        "0D/02:01020400"
+      ]
+    },
+    {
+      "kind": "CapturedSetter",
+      "summary": "Synapse reapplied the saved component levels when Custom was selected.",
+      "commands": [
+        "0D/07:010102",
+        "0D/07:010200"
+      ]
+    },
+    {
+      "kind": "GpuLevelTransitions",
+      "summary": "GPU Low, Medium, and High were independently captured and read back; a clean High-to-Low restoration was also captured.",
+      "levels": {
+        "low": "0D/07:010200",
+        "medium": "0D/07:010201",
+        "high": "0D/07:010202"
+      },
+      "captures": [
+        {
+          "name": "GPU Low to Medium",
+          "sha256": "519E5D8F537CECB476A410B8054EAAFE5BD114E32449C89E627398D3F341B1DD",
+          "byteLength": 1808
+        },
+        {
+          "name": "GPU Medium to High",
+          "sha256": "8090EB5404294DFC7C43CAA5D01EAA792299365501C1804D833DE1DE4E5DC8CB",
+          "byteLength": 2066
+        },
+        {
+          "name": "GPU High to Low restoration",
+          "sha256": "3CF425CCC20B841113C4A7DE2FF0A0ADCC6047C33AD77F964F630FFCDAF17096",
+          "byteLength": 2066
+        }
+      ]
+    },
+    {
+      "kind": "TypedReadback",
+      "summary": "0D/87 mapped visible GPU Low, Medium, and High to 00, 01, and 02. CPU 02 visibly mapped to Medium on PID 02C6."
+    },
+    {
+      "kind": "NegativeControls",
+      "summary": "The CPU Medium-to-Low click produced no transaction because CPU preset controls were disabled while CPU Voltage Optimizer was enabled. Three timeout-bound sessions ended before their delayed clicks and contain no setting transaction.",
+      "captureSha256": [
+        "D3AA759ACC548DB76844BA5EEA43535676B48F68CC378837970E86A7698C110F",
+        "5C81C7004EA3CC4EE4E4F3F030C38C1173A4E1F8A60C43E573237371E2BB7128",
+        "838913F2B6DA6A7E74204AB17E697B8AAA6FFEF12A14EEE84C77B6AF8C17443C"
+      ]
+    }
+  ],
+  "productionAdmission": {
+    "customMode": false,
+    "customCpuLevels": false,
+    "customGpuLevels": false,
+    "identityScope": "RZ09-0528, BIOS 2.02, USB 1532:02C6, HID usage 0001:0002, 91-byte feature reports"
+  },
+  "limitations": [
+    "Custom is not production-admitted because CPU Low and High could not be exercised while CPU Voltage Optimizer remained enabled.",
+    "PID 02C6 CPU level 02 visibly means Medium; the PID 02E0 CPU mapping must not be reused.",
+    "CPU Voltage Optimizer and GPU Overclock were not changed.",
+    "Raw PCAPs and unique device identifiers remain private and uncommitted."
+  ],
+  "notes": [
+    "Final visible and typed state was Plugged In, Balanced, Auto (Default), with saved CPU 02 and GPU 00.",
+    "Keyboard lighting remained off at the operator's request."
+  ]
+}
