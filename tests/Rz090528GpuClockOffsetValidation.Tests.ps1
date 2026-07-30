@@ -52,6 +52,16 @@ Assert-True ($source -match 'Start-Process') `
     'The wrapper must relaunch Synapse when it started as running.'
 Assert-True ($source -match 'Get-FileHash -Algorithm SHA256') `
     'The wrapper must hash the private validation output.'
+Assert-True ($source -match '\[switch\]\$IncludeSpecialKeyProbe') `
+    'The wrapper must offer the same isolated window to the special-key retry.'
+Assert-True (
+    $source -match [regex]::Escape(
+        'probe-rz09-0528-02c6-special-keys')) `
+    'The optional retry must use the exact PID 02C6 special-key probe.'
+Assert-True ($source -match "'60'") `
+    'The optional special-key retry must remain time bounded.'
+Assert-True ($source -match 'specialKeySha256=') `
+    'The wrapper must hash the private special-key output separately.'
 Assert-True (
     $source -match 'exit 3' -and
     $source -match 'restoration-failed') `

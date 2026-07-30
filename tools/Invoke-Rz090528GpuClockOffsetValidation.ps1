@@ -1,7 +1,8 @@
 param(
     [string]$OutputDirectory = (
         'C:\OpenBlade\openblade-captures\raw\RZ09-0528\' +
-        ('{0}-gpu-clock-offset-round-trip' -f (Get-Date -Format 'yyyyMMdd-HHmmss')))
+        ('{0}-gpu-clock-offset-round-trip' -f (Get-Date -Format 'yyyyMMdd-HHmmss'))),
+    [switch]$IncludeSpecialKeyProbe
 )
 
 $ErrorActionPreference = 'Stop'
@@ -12,6 +13,7 @@ $capture = Join-Path $workspace (
     'net10.0-windows10.0.26100.0\OpenBlade.Capture.exe')
 $stateFile = Join-Path $OutputDirectory 'state.txt'
 $outputFile = Join-Path $OutputDirectory 'validation-output.txt'
+$specialKeyOutputFile = Join-Path $OutputDirectory 'special-key-output.txt'
 $confirmation = 'RZ09-0528:1532:02C6:GPU-OFFSETS:RESTORE'
 $expectedServiceExecutables = @{
     'OpenBlade' = 'C:\Program Files\OpenBlade\OpenBlade.Service.exe'
@@ -165,6 +167,18 @@ try {
         $confirmation 2>&1 |
         Tee-Object -FilePath $outputFile
     $validationExitCode = $LASTEXITCODE
+    if ($IncludeSpecialKeyProbe) {
+        Write-Host ''
+        Write-Host 'Special-key isolation probe starts now for 60 seconds.'
+        Write-Host 'Press Fn+Page Up, Fn+Page Down, Fn+P, Page Up, and Page Down.'
+        & $capture `
+            'probe-rz09-0528-02c6-special-keys' `
+            '60' `
+            $specialKeyOutputFile
+        if ($LASTEXITCODE -ne 0 -and $validationExitCode -eq 0) {
+            $validationExitCode = $LASTEXITCODE
+        }
+    }
 }
 catch {
     $failure = $_
@@ -215,8 +229,15 @@ finally {
         }
     }
 
-    $hash = if (Test-Path -LiteralPath $outputFile -PathType Leaf) {
+    $validationHash = if (Test-Path -LiteralPath $outputFile -PathType Leaf) {
         (Get-FileHash -Algorithm SHA256 -LiteralPath $outputFile).Hash
+    }
+    else {
+        'Unavailable'
+    }
+    $specialKeyHash = if (
+        Test-Path -LiteralPath $specialKeyOutputFile -PathType Leaf) {
+        (Get-FileHash -Algorithm SHA256 -LiteralPath $specialKeyOutputFile).Hash
     }
     else {
         'Unavailable'
@@ -233,7 +254,9 @@ finally {
     else {
         "finished exit=$validationExitCode"
     }
-    "$result outputSha256=$hash $([DateTimeOffset]::Now.ToString('O'))" |
+    "$result validationSha256=$validationHash " +
+        "specialKeySha256=$specialKeyHash " +
+        "$([DateTimeOffset]::Now.ToString('O'))" |
         Set-Content -LiteralPath $stateFile -Encoding utf8
 }
 
