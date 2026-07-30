@@ -78,6 +78,7 @@ $requiredPaths = @(
     'fans.fixedStep',
     'fans.manualCurveWrites',
     'fans.rpmQuery',
+    'sensors.cpuTemperature',
     'battery.protectionOff',
     'battery.advertisedLimits',
     'battery.temporaryFullChargeQuery',

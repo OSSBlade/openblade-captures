@@ -57,6 +57,9 @@
       "manualCurveReadback": "NotInvestigated",
       "rpmQuery": "NotInvestigated"
     },
+    "sensors": {
+      "cpuTemperature": "NotInvestigated"
+    },
     "battery": {
       "protectionOff": "NotInvestigated",
       "advertisedLimits": "NotInvestigated",

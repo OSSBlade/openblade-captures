@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02",
+    "ec": "1.09"
+  },
+  "source": {
+    "kind": "WindowsPerformanceCounter",
+    "readOnly": true,
+    "uniqueIdentifiersIncluded": false
+  },
+  "discovery": {
+    "counterSet": "Thermal Zone Information",
+    "counter": "High Precision Temperature",
+    "exactInstance": "\\_SB.PCI0.SBRG.EC0.TZRZ",
+    "rawTenthsKelvin": 3182,
+    "convertedCelsius": 45,
+    "olderModelInstanceRetained": "\\_SB.PC00.LPCB.EC0.TZRZ",
+    "unrelatedInstanceRejected": "\\_TZ.TZ01"
+  },
+  "productionValidation": {
+    "serviceVersion": "0.1.0+3449fc71",
+    "deviceVerified": true,
+    "publishedCpuTemperatureCelsius": 45,
+    "trayDisplayedCpuTemperatureCelsius": 45,
+    "coverageStatus": "ProductionAdmitted"
+  },
+  "constraints": [
+    "The model-specific TZRZ candidates are explicit and ordered; wildcard or first-instance selection is prohibited.",
+    "The unrelated TZ01 instance must never be used as a fallback.",
+    "Temperature conversion remains tenths Kelvin to Celsius with the production 0-115 C plausibility bound."
+  ],
+  "privacy": {
+    "rawCounterEnumerationCommitted": false,
+    "serialNumbersRetained": false,
+    "devicePathsRetained": false,
+    "userIdentifiersRetained": false
+  }
+}

@@ -62,6 +62,9 @@
       "manualCurveReadback": "SoftwareOnly",
       "rpmQuery": "ProductionAdmitted"
     },
+    "sensors": {
+      "cpuTemperature": "ProductionAdmitted"
+    },
     "battery": {
       "protectionOff": "ProductionAdmitted",
       "advertisedLimits": "ProductionAdmitted",
@@ -228,6 +231,7 @@
     "After all RazerAppEngine clients exited, the CPU server module and named pipe terminated even though the generic RzDLLService process remained. A Synapse-absent getter was rejected without a setting write; Synapse was relaunched and Plugged In/Balanced/Automatic/optimizer -1.000 was visually reconfirmed.",
     "Synapse exposes exact-model GPU offset policy ranges of core -1000..400 MHz and memory -1000..3000 MHz, narrower than the queried NVML driver ranges; GPU Overclock was restored Off without changing offsets.",
     "Fan RPM selectors 1 and 2 were queried three times through the exact-device factory, then successfully read through the production service routing.",
+    "The exact Windows Razer EC thermal zone is \\_SB.PCI0.SBRG.EC0.TZRZ. A read-only high-precision sample of 3182 converted to 45 C, and installed service build 0.1.0+3449fc71 independently published CPU 45 C after upgrade; the unrelated \\_TZ.TZ01 zone is never used as a fallback.",
     "Fixed Fan Speed selected the paired manual state, validated 2000/3800/5000 RPM targets with payload byte RPM/100, and restored Balanced/Automatic twice; the exact maximum is 5000 RPM, not PID 02E0's 5400 RPM.",
     "Startup-animation getter 0F/98 returned enabled through both the exact discriminator and the exact production service port.",
     "Exact read-only getters returned FunctionKeys (02/86 0100), GamingMode false (00/88 00000000), and Driver device mode (00/84 0300); all were reconfirmed through production ports.",
