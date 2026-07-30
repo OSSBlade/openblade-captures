@@ -192,6 +192,14 @@ Assert-True (
 Assert-True (
     $annotation.liveDecoderValidation.postProbeReadback.gamingMode -eq $false) `
     'Gaming mode must remain restored off.'
+Assert-True (
+    $annotation.liveDecoderValidation.postProbeReadback.microphoneMuteReadback.state `
+        -ceq 'Unmuted') `
+    'The independently restored microphone state changed.'
+Assert-True (
+    $annotation.liveDecoderValidation.postProbeReadback.microphoneMuteReadback.settingsWritten `
+        -eq $false) `
+    'The microphone restoration readback must remain query-only.'
 
 foreach ($leaf in @(
         'functionLayerReports',

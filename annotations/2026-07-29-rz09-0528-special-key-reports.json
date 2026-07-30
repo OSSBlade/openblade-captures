@@ -227,6 +227,12 @@
       "keyboardBrightnessRaw": 129,
       "keyboardBrightnessPercent": 51,
       "logoMode": "Static",
+      "microphoneMuteReadback": {
+        "source": "WindowsCoreAudioDefaultCaptureEndpoint",
+        "defaultEndpointCount": 1,
+        "state": "Unmuted",
+        "settingsWritten": false
+      },
       "success": true,
       "settingsWritten": false
     }
