@@ -244,6 +244,7 @@
     "The production display query reported 2560x1600, fixed 60/240 Hz, Dynamic 48-240 Hz, HDR support, and five SDR color profiles. A bounded Windows-API round trip enabled HDR, confirmed SDR profile controls unavailable, restored HDR off, and reconfirmed the original display state.",
     "Malformed, checksum, command-class, command-id, status, and mid-transaction transport failures are deterministic software-only safety cases. The exact PID 02C6 production path uses the same tested 91-byte actor, poisons ambiguous sessions, and never retries an indeterminate write; no malformed report was injected into the physical laptop.",
     "A read-only NVML query selected the NVIDIA GeForce RTX 5090 Laptop GPU, read zero current offsets, and reported core -1000..1000 MHz and memory -2000..6000 MHz ranges; production remains gated on exact Custom-mode admission.",
+    "A fully isolated exact-device GPU offset validator requested the adjacent pair core +1 MHz and memory +1 MHz from a zero baseline. NVIDIA did not confirm the requested pair, and the validator independently restored and re-read 0/0. This negative control leaves gpuClockOffsets QueryValidated and the GPU overclock write path ObservedOnly; the unowned Synapse GPU Overclock toggle is not assumed to be the cause.",
     "Limits 50 through 80 in five-percent steps and protection-off completed exact-device typed apply/readback/restore validation and are production-admitted.",
     "External-change detection and explicit scoped reclaim are SoftwareOnly service-runtime behaviors with deterministic drift, latch, readback, and reclaim tests. They do not claim a new physical Synapse action capture.",
     "Temporary full charge enable, cancel, query, readback, and restoration are production-admitted.",
@@ -255,6 +256,7 @@
     "A read-only exact PID scan found ten HID collections, including the 91-byte control collection and a 51-byte usage 0059:0001 collection, but no 375-byte feature collection; PID 02E0's matrix writer cannot be reused.",
     "Manual fan curves are production-admitted host rendering over the exact fixed-target primitive; persisted curve intent readback is SoftwareOnly, while physical fan RPM retains its separate production-admitted query.",
     "Active Synapse Spectrum traffic can produce rejected TransactionMismatch failures.",
-    "The exact production port admits only the validated 07/8C response 1111 (FullPower280W). Shared decoder value 0711 remains PID 02E0 evidence and is filtered to Unknown for PID 02C6 until exact-device readback exists."
+    "The exact production port admits only the validated 07/8C response 1111 (FullPower280W). Shared decoder value 0711 remains PID 02E0 evidence and is filtered to Unknown for PID 02C6 until exact-device readback exists.",
+    "Two controller-isolated 60-second special-key retries received zero physical input, including one window with Synapse, both verified Razer controller services, and OpenBlade inactive. They are failed zero-input sessions and do not advance the captured special-key leaves or justify production actions/suppression."
   ]
 }

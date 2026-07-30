@@ -22,7 +22,8 @@
     "Completion-message typing occurred after each correlated action and is excluded from the evidence.",
     "A production-decoder probe in Driver mode decoded M3, M4, and M5 and preserved ordinary Page Up/Page Down delivery, but two operator-correlated Fn+Page Up, Fn+Page Down, and Fn+P retries exposed only Fn make/release on the target MI_01 stream.",
     "Synapse independently confirmed that the physical Fn key is the non-remappable Razer Hypershift key and that Page Up retains its default Page Up assignment in the Hypershift mapping view, so the missing live reports are not attributed to the operator using the wrong modifier.",
-    "A later 60-second Synapse-isolated attempt received no keyboard input at all. It is retained as a failed zero-input session and provides no evidence for or against Synapse filtering."
+    "A later 60-second Synapse-isolated attempt received no keyboard input at all. It is retained as a failed zero-input session and provides no evidence for or against Synapse filtering.",
+    "A second 60-second attempt isolated Synapse, both verified Razer controller services, and OpenBlade in the same elevated window. It also received zero Raw Input messages and is retained as another failed zero-input session; it does not advance or contradict the captured USBPcap report identities."
   ],
   "liveDecoderValidation": {
     "status": "PartialNegativeControl",
@@ -134,6 +135,24 @@
         "byteLength": 213
       },
       "interpretation": "No requested physical input reached the probe, so this attempt cannot distinguish a Synapse filter from the existing production-path discrepancy."
+    },
+    "combinedIsolationAttempt": {
+      "status": "FailedZeroInput",
+      "durationSeconds": 60,
+      "synapseInactive": true,
+      "razerElevationServiceInactive": true,
+      "razerGameManagerServiceInactive": true,
+      "openBladeServiceInactive": true,
+      "rawInputMessages": 0,
+      "targetInputMessages": 0,
+      "deviceIdentityFailures": 0,
+      "externalStateRestored": true,
+      "privateOutput": {
+        "committed": false,
+        "sha256": "75E937B1DB7D14DD23E0D8F2FB720260D79E17CE77CD1D7C9DFCE0BF47E056E4",
+        "byteLength": 213
+      },
+      "interpretation": "No physical key input reached the probe. The complete controller isolation therefore supplies no evidence about whether those controllers suppress M1, M2, or Fn+P."
     }
   },
   "admission": {
@@ -141,7 +160,8 @@
     "productionAccess": "ObservedOnly",
     "blockedBy": [
       "The PID 02C6 live decoder has not observed M1, M2, or Fn+P on the production target stream despite two correctly performed Hypershift retries.",
-      "The discrepancy between earlier USBPcap reports and current Windows Raw Input delivery must be explained before enabling actions or suppression."
+      "The discrepancy between earlier USBPcap reports and current Windows Raw Input delivery must be explained before enabling actions or suppression.",
+      "Both controller-isolated retries received zero physical input and cannot be used to infer transport behavior."
     ]
   },
   "privacy": {

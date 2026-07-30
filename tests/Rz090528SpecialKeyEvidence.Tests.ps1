@@ -104,6 +104,41 @@ Assert-True (
     $annotation.liveDecoderValidation.hidInputAccessProbe.privacy.uniqueIdentifiersRetained `
         -eq $false) `
     'The HID access probe must not retain unique identifiers.'
+Assert-True (
+    $annotation.liveDecoderValidation.combinedIsolationAttempt.status -ceq (
+        'FailedZeroInput')) `
+    'The combined isolation retry must remain a failed zero-input session.'
+Assert-True (
+    $annotation.liveDecoderValidation.combinedIsolationAttempt.durationSeconds -eq 60) `
+    'The combined isolation retry must remain time bounded.'
+foreach ($controller in @(
+        'synapseInactive',
+        'razerElevationServiceInactive',
+        'razerGameManagerServiceInactive',
+        'openBladeServiceInactive')) {
+    Assert-True (
+        $annotation.liveDecoderValidation.combinedIsolationAttempt.$controller `
+            -eq $true) `
+        "Combined isolation state '$controller' changed."
+}
+Assert-True (
+    $annotation.liveDecoderValidation.combinedIsolationAttempt.rawInputMessages -eq 0) `
+    'The combined zero-input retry must not acquire synthetic input evidence.'
+Assert-True (
+    $annotation.liveDecoderValidation.combinedIsolationAttempt.targetInputMessages -eq 0) `
+    'The combined retry must not claim target input.'
+Assert-True (
+    $annotation.liveDecoderValidation.combinedIsolationAttempt.externalStateRestored `
+        -eq $true) `
+    'The combined retry must retain external-state restoration.'
+Assert-True (
+    $annotation.liveDecoderValidation.combinedIsolationAttempt.privateOutput.sha256 `
+        -match '^[0-9A-F]{64}$') `
+    'The combined retry hash is malformed.'
+Assert-True (
+    $annotation.liveDecoderValidation.combinedIsolationAttempt.privateOutput.committed `
+        -eq $false) `
+    'The combined retry output must remain private.'
 
 foreach ($leaf in @(
         'functionLayerReports',

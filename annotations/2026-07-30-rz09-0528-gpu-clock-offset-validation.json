@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "evidenceProvenance": {
+    "controller": "OpenBlade exact-device validation runner",
+    "role": "ReversibleValidationNegativeControl",
+    "openBladeTypedApplyPerformed": true,
+    "openBladeReadbackConfirmed": false,
+    "openBladeRestorationConfirmed": true
+  },
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02",
+    "gpu": "NVIDIA GeForce RTX 5090 Laptop GPU"
+  },
+  "isolationGuards": {
+    "confirmationMatched": true,
+    "exactHost": true,
+    "exactDevice": true,
+    "synapseInactive": true,
+    "openBladeServiceInactive": true,
+    "recheckedImmediatelyBeforeMutation": true
+  },
+  "validation": {
+    "policy": "SaveSetReadbackRestore",
+    "baseline": {
+      "coreMHz": 0,
+      "memoryMHz": 0
+    },
+    "requested": {
+      "coreMHz": 1,
+      "memoryMHz": 1
+    },
+    "appliedState": "Unavailable",
+    "restoredState": {
+      "coreMHz": 0,
+      "memoryMHz": 0
+    },
+    "applied": false,
+    "readBack": false,
+    "restored": true,
+    "success": false,
+    "classification": "ReadbackNotConfirmedRestored",
+    "failure": "NVIDIA did not confirm the requested adjacent offsets; the validator restored and independently re-read the saved zero offsets."
+  },
+  "externalRestoration": {
+    "openBladeServiceRunning": true,
+    "razerElevationServiceRunning": true,
+    "razerGameManagerServiceRunning": true,
+    "synapseRelaunched": true,
+    "openBladeServiceProcessCount": 1,
+    "openBladeTrayProcessCount": 1,
+    "openBladeSessionAgentProcessCount": 1,
+    "synapseAppEngineProcessCount": 9,
+    "keyboardBrightnessRaw": 129,
+    "keyboardBrightnessPercentDecoded": 51,
+    "keyboardBrightnessQuerySucceeded": true
+  },
+  "privateEvidence": {
+    "committed": false,
+    "validationOutput": {
+      "sha256": "5FE36A86CF45CDB2D9FEB949116D42B30EBDAA743B2910CB9C37C0C119DDEC48",
+      "byteLength": 1050
+    },
+    "wrapperState": {
+      "sha256": "8A7991ED7D69E27B681E75A7F4BA35F607A12B56DA2F479A54C7D43BC51C90D7",
+      "byteLength": 218,
+      "exitCode": 2
+    }
+  },
+  "admission": {
+    "gpuClockOffsets": "QueryValidated",
+    "gpuOverclockAccess": "ObservedOnly",
+    "advancedByThisSession": false,
+    "blockedBy": [
+      "The requested adjacent offset pair was not independently read back.",
+      "The separate Synapse GPU Overclock toggle lifecycle is not owned or restored by OpenBlade."
+    ],
+    "nextSafeExperiment": "With an operator present, visibly enable the Synapse GPU Overclock toggle, preserve its baseline, repeat the bounded adjacent-offset validation, and restore both offsets and the toggle. Do not infer that the disabled toggle caused this failure."
+  },
+  "privacy": {
+    "rawOutputsCommitted": false,
+    "serialNumbersRetained": false,
+    "devicePathsRetained": false,
+    "uniqueIdentifiersRetained": false
+  }
+}
