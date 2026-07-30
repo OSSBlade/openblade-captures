@@ -41,6 +41,12 @@ Assert-True ($annotation.installerValidation.servicePreserved -eq $true) `
     'The same-version replacement must preserve the service.'
 Assert-True ($coverage.capabilities.conflicts.windowsDynamicLightingDelegation -ceq
     'ProductionAdmitted') 'Windows lighting delegation coverage regressed.'
+Assert-True ($coverage.capabilities.lifecycle.serviceRestart -ceq
+    'ProductionAdmitted') 'The validated service-restart lifecycle regressed.'
+foreach ($leaf in @('coldBoot', 'signIn', 'sleepResume', 'deviceReconnect')) {
+    Assert-True ($coverage.capabilities.lifecycle.$leaf -ceq 'NotInvestigated') `
+        "Unvalidated lifecycle leaf '$leaf' was silently advanced."
+}
 Assert-True (
     $evidence.annotations -contains
         '2026-07-29-rz09-0528-windows-lighting-handoff-validation.json') `
