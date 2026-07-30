@@ -74,11 +74,12 @@ try {
     }
 
     Write-Host ''
-    Write-Host 'OpenBlade isolated RZ09-0528 / PID 02C6 Driver Mode validation'
+    Write-Host 'OpenBlade isolated RZ09-0528 / PID 02C6 device-mode validation'
     Write-Host 'The keyboard effect may temporarily turn off.'
-    Write-Host 'When prompted, hold Fn and verify the extended function layer.'
+    Write-Host 'The validator applies the mode opposite the exact starting baseline.'
+    Write-Host 'When prompted, hold Fn and verify the expected function-layer behavior.'
     Write-Host 'Type YES only when the behavior is correct.'
-    Write-Host 'Normal Mode and all stopped services are restored in the finally block.'
+    Write-Host 'The exact starting mode and all stopped services are restored before exit.'
     Write-Host ''
 
     & $capture `

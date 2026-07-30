@@ -159,8 +159,8 @@
       "gamingModeGetter": "ProductionAdmitted",
       "startupAnimation": "ProductionAdmitted",
       "startupAnimationGetter": "ProductionAdmitted",
-      "normalDeviceMode": "NotInvestigated",
-      "driverDeviceMode": "NotInvestigated",
+      "normalDeviceMode": "SetterValidated",
+      "driverDeviceMode": "SetterValidated",
       "deviceModeGetter": "ProductionAdmitted"
     },
     "specialKeys": {
@@ -244,6 +244,7 @@
     "Temporary full charge enable, cancel, query, readback, and restoration are production-admitted.",
     "Logo Off, Static, and Breathing completed exact selector-00 production apply/readback/restore validation; final logo state is Static.",
     "Startup animation, function-key primary, and Gaming-mode setters were captured in both directions, independently read back, restored, and production-admitted; PID 02C6 function-key setter arguments are 0000/0001, not PID 02E0's 0100/0101.",
+    "An isolated OpenBlade round trip applied Normal device mode from a Driver baseline, independently read Normal, received operator confirmation of expected function-layer behavior, restored Driver, and independently read Driver. Both setters are SetterValidated but remain outside the production mutation gate.",
     "Keyboard lighting is off and the quick effect is Static by operator request, not as production readback evidence.",
     "Seven Synapse quick effects are Captured UI/transition discoveries and represented by OpenBlade as observed-only capabilities. Their parameter subfeatures, effect getter, and write path remain unadmitted.",
     "A read-only exact PID scan found ten HID collections, including the 91-byte control collection and a 51-byte usage 0059:0001 collection, but no 375-byte feature collection; PID 02E0's matrix writer cannot be reused.",

@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "evidenceProvenance": {
     "controller": "OpenBlade exact-device validation runner",
-    "role": "NegativeControl",
-    "openBladeTypedApplyPerformed": false,
-    "openBladeVisualParityConfirmed": false
+    "role": "ReversibleValidationWithNegativeControls",
+    "openBladeTypedApplyPerformed": true,
+    "openBladeVisualParityConfirmed": true
   },
   "device": {
     "modelNumber": "RZ09-0528",
@@ -17,18 +17,18 @@
     "The first elevated attempt failed closed on competing controller processes before reading or writing device mode.",
     "The wrapper was tightened to stop the exact known RazerAppEngine controller processes after stopping the named services.",
     "The isolated retry read Driver as its baseline and failed closed because the reversible validator requires Normal as the starting state.",
-    "Neither attempt issued a device-mode setter or required device-mode restoration.",
-    "OpenBlade, Razer Elevation Service, and Razer Game Manager Service 3 were running after both attempts."
+    "The validator was generalized to use the opposite exact baseline as its candidate, permitting a safe Driver-to-Normal-to-Driver round trip without assuming the laptop starts in Normal mode.",
+    "The third attempt applied Normal, independently read Normal, received operator confirmation of the expected function-layer behavior, restored Driver, and independently read Driver.",
+    "OpenBlade, Razer Elevation Service, and Razer Game Manager Service 3 were running after all three attempts."
   ],
   "admission": {
-    "normalDeviceMode": "NotInvestigated",
-    "driverDeviceMode": "NotInvestigated",
+    "normalDeviceMode": "SetterValidated",
+    "driverDeviceMode": "SetterValidated",
     "deviceModeGetter": "ProductionAdmitted",
-    "productionMutation": "Blocked",
-    "blockedBy": [
-      "A reversible Normal-to-Driver apply/readback/operator-check/restore round trip has not completed.",
-      "The isolated exact device currently reports Driver mode rather than the validator's required Normal baseline.",
-      "Normal-mode special-key parity remains uncaptured."
+    "productionMutation": "SetterValidated",
+    "pending": [
+      "The exact-model production capability gate and public mutation surface must be reviewed and enabled separately.",
+      "Production mutation must retain exact tuple gating, competing-controller refusal, typed acknowledgement, readback, and rollback behavior."
     ]
   },
   "privacy": {

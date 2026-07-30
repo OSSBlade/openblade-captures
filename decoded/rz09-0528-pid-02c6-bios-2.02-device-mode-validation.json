@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "NegativeControlNoWrite",
+  "status": "ReversibleRoundTripCaptured",
   "device": {
     "modelNumber": "RZ09-0528",
     "vendorIdHex": "1532",
@@ -45,12 +45,38 @@
         "RazerElevationService": "Running",
         "RazerGameManagerService3": "Running"
       }
+    },
+    {
+      "role": "IsolatedReversibleRoundTrip",
+      "validationOutputSha256": "964E683D4D98DB0E8CF41A17F3986A15C7C314933A614672841E21C00352D9AA",
+      "validationOutputByteLength": 1574,
+      "stateSha256": "D26C681265B1620D287FD53CA3F12C306B00F54DB666965CF887CE8E15D9D705",
+      "stateByteLength": 150,
+      "result": {
+        "baselineMode": "Driver",
+        "candidateMode": "Normal",
+        "restoredMode": "Driver",
+        "applyAttempted": true,
+        "applyAcknowledged": true,
+        "candidateConfirmed": true,
+        "visualCheckConfirmed": true,
+        "restoreAttempted": true,
+        "restoreAcknowledged": true,
+        "restored": true,
+        "manualRecoveryRequired": false,
+        "failure": "none"
+      },
+      "servicesAfterAttempt": {
+        "OpenBlade": "Running",
+        "RazerElevationService": "Running",
+        "RazerGameManagerService3": "Running"
+      }
     }
   ],
   "interpretation": {
-    "admission": "Neither attempt validates a device-mode setter. Normal and Driver mode remain unadmitted for production mutation on PID 02C6.",
-    "baseline": "After isolating the known OpenBlade and Razer controller processes, the exact getter reported Driver mode. This is authoritative readback of the starting state, not proof that OpenBlade or Synapse caused it.",
-    "restoration": "No write was attempted in either session, so no device-mode restoration was required. All stopped services were running when each wrapper finished."
+    "admission": "The isolated third attempt validates both exact setters through a Driver-to-Normal candidate apply and a Normal-to-Driver restoration with typed acknowledgements, independent readback, and operator-confirmed function-layer behavior. The validation command explicitly remains non-production, so this is SetterValidated evidence rather than ProductionAdmitted mutation.",
+    "baseline": "After isolating the known OpenBlade and Razer controller processes, the exact getter reported Driver mode in both isolated sessions. This is authoritative readback of the starting state, not proof that OpenBlade or Synapse caused it.",
+    "restoration": "The successful round trip restored the exact Driver baseline and all stopped services. The two earlier negative controls issued no writes; all three wrappers finished with OpenBlade, Razer Elevation Service, and Razer Game Manager Service 3 running."
   },
   "privacy": {
     "rawSessionsCommitted": false,
