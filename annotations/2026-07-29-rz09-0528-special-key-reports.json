@@ -21,7 +21,8 @@
     "Fn+P emits 01001300 while the Fn state remains active.",
     "Completion-message typing occurred after each correlated action and is excluded from the evidence.",
     "A production-decoder probe in Driver mode decoded M3, M4, and M5 and preserved ordinary Page Up/Page Down delivery, but two operator-correlated Fn+Page Up, Fn+Page Down, and Fn+P retries exposed only Fn make/release on the target MI_01 stream.",
-    "Synapse independently confirmed that the physical Fn key is the non-remappable Razer Hypershift key and that Page Up retains its default Page Up assignment in the Hypershift mapping view, so the missing live reports are not attributed to the operator using the wrong modifier."
+    "Synapse independently confirmed that the physical Fn key is the non-remappable Razer Hypershift key and that Page Up retains its default Page Up assignment in the Hypershift mapping view, so the missing live reports are not attributed to the operator using the wrong modifier.",
+    "A later 60-second Synapse-isolated attempt received no keyboard input at all. It is retained as a failed zero-input session and provides no evidence for or against Synapse filtering."
   ],
   "liveDecoderValidation": {
     "status": "PartialNegativeControl",
@@ -51,6 +52,22 @@
       "committed": false,
       "sha256": "E78DB68D50DC4409A2A2E354206CA3D3397E84C16E84AEA4A5ED9A5436C1BCF0",
       "byteLength": 1658
+    },
+    "synapseIsolationAttempt": {
+      "status": "FailedZeroInput",
+      "durationSeconds": 60,
+      "verifiedAppEngineProcessCountBeforeStop": 11,
+      "verifiedAppEngineProcessCountAfterStop": 0,
+      "rawInputMessages": 0,
+      "targetInputMessages": 0,
+      "deviceIdentityFailures": 0,
+      "synapseRelaunched": true,
+      "privateOutput": {
+        "committed": false,
+        "sha256": "75E937B1DB7D14DD23E0D8F2FB720260D79E17CE77CD1D7C9DFCE0BF47E056E4",
+        "byteLength": 213
+      },
+      "interpretation": "No requested physical input reached the probe, so this attempt cannot distinguish a Synapse filter from the existing production-path discrepancy."
     }
   },
   "admission": {
