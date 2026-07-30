@@ -108,8 +108,8 @@
       "customGpuLevels": "ProductionAdmitted: Low 00, Medium 01, High 02",
       "validCombinations": "RZ09-0528 CPU High permits GPU Low only; other observed CPU levels retain the normal GPU choices",
       "productionRoundTrip": "Low/Low, High/Low, and Medium/High applied and independently read back; every run restored Balanced/Automatic. Timed Low/Low repeat 2026-07-29T19:38:18.338Z through 2026-07-29T19:38:20.138Z.",
-      "cpuPowerLimitWatts": "Captured UI capability: 45..95 W in 1 W steps; Synapse RzAMDOverClock/RzDLLService backend identified. A getter-only OpenBlade request returned 55 W but active Synapse immediately restored its persisted 60 W; after Synapse exited, its CPU server module and named pipe terminated and a later getter was rejected. No lifecycle or readback is admitted.",
-      "cpuVoltageOptimizer": "Captured UI capability: visible range -30..-1, restored On at -1.000; Synapse RzAMDOverClock/RzDLLService backend identified, refresh can reapply values, and colliding 0D/07 writes are not optimizer protocol",
+      "cpuPowerLimitWatts": "Captured UI capability: 45..95 W in 1 W steps; Synapse RzAMDOverClock/RzDLLService backend identified. A getter-only OpenBlade request returned 55 W but active Synapse immediately restored its persisted 60 W; after Synapse exited, its CPU server module and named pipe terminated and a later getter was rejected. Elevated live inventory verified the exact-hash client in a RazerAppEngine main/utility role and the exact-hash server DLL in RzDLLService. No lifecycle or readback is admitted.",
+      "cpuVoltageOptimizer": "Captured UI capability: visible range -30..-1, restored On at -1.000; Synapse RzAMDOverClock/RzDLLService backend identified, refresh can reapply values, and colliding 0D/07 writes are not optimizer protocol. Elevated live inventory verified exact client/server module ownership but did not invoke a getter or setter.",
       "gpuOverclockPolicy": "Captured UI capability: core -1000..400 MHz, memory -1000..3000 MHz; offsets unchanged and toggle restored Off",
       "readback": "0D/82 paired thermal channels; 0D/87 component levels"
     },
@@ -175,6 +175,7 @@
     "2026-07-29-rz09-0528-ac-custom-cpu-matrix.json",
     "2026-07-30-rz09-0528-cpu-tuning-backend-static-analysis.json",
     "2026-07-30-rz09-0528-cpu-tuning-preconnect-lifecycle-negative.json",
+    "2026-07-30-rz09-0528-cpu-tuning-module-ownership.json",
     "2026-07-29-rz09-0528-ac-fixed-fan-validation.json",
     "2026-07-29-rz09-0528-keyboard-behavior-setters.json",
     "2026-07-29-rz09-0528-logo-lighting-setters.json",
