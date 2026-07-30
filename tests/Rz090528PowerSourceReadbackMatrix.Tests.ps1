@@ -21,7 +21,8 @@ $errors = $null
 Assert-True ($errors.Count -eq 0) `
     'The power-source matrix wrapper must parse in Windows PowerShell 5.1.'
 Assert-True (
-    $source -match [regex]::Escape("Model -cne 'RZ09-0528'") -and
+    $source -match [regex]::Escape(
+        "Model -cne 'Blade 16 - RZ09-0528'") -and
     $source -match [regex]::Escape("SMBIOSBIOSVersion -cne '2.02'")) `
     'The power-source matrix must be gated to the exact host and BIOS.'
 Assert-True (

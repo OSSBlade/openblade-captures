@@ -110,7 +110,7 @@ if (-not $principal.IsInRole(
 
 $system = Get-CimInstance Win32_ComputerSystem
 $bios = Get-CimInstance Win32_BIOS
-if ($system.Model -cne 'RZ09-0528' -or
+if ($system.Model -cne 'Blade 16 - RZ09-0528' -or
     $bios.SMBIOSBIOSVersion -cne '2.02') {
     throw 'This module inventory is restricted to RZ09-0528 BIOS 2.02.'
 }

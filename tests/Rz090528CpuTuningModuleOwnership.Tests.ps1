@@ -23,7 +23,8 @@ Assert-True ($errors.Count -eq 0) `
 Assert-True ($source -match 'WindowsBuiltInRole\]::Administrator') `
     'The module inventory must require an elevated token.'
 Assert-True (
-    $source -match [regex]::Escape("Model -cne 'RZ09-0528'") -and
+    $source -match [regex]::Escape(
+        "Model -cne 'Blade 16 - RZ09-0528'") -and
     $source -match [regex]::Escape("SMBIOSBIOSVersion -cne '2.02'")) `
     'The module inventory must be gated to the exact host and BIOS.'
 Assert-True ($source -match 'Get-AuthenticodeSignature') `
