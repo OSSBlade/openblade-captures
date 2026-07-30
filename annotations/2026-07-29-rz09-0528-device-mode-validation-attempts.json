@@ -22,13 +22,22 @@
     "OpenBlade, Razer Elevation Service, and Razer Game Manager Service 3 were running after all three attempts."
   ],
   "admission": {
-    "normalDeviceMode": "SetterValidated",
-    "driverDeviceMode": "SetterValidated",
+    "normalDeviceMode": "ProductionAdmitted",
+    "driverDeviceMode": "ProductionAdmitted",
     "deviceModeGetter": "ProductionAdmitted",
-    "productionMutation": "SetterValidated",
+    "productionMutation": "ProductionAdmitted",
+    "implementation": {
+      "repository": "openblade-core",
+      "commit": "3707c49",
+      "typedAcknowledgement": true,
+      "independentReadback": true,
+      "ownedTransitionRestoration": true,
+      "preservesPreExistingDriverMode": true,
+      "closesInvalidatedSession": true
+    },
     "pending": [
-      "The exact-model production capability gate and public mutation surface must be reviewed and enabled separately.",
-      "Production mutation must retain exact tuple gating, competing-controller refusal, typed acknowledgement, readback, and rollback behavior."
+      "The special-key decoder remains ObservedOnly until its production input matrix is exercised independently.",
+      "Future mode changes must retain exact tuple gating, competing-controller refusal, typed acknowledgement, readback, and rollback behavior."
     ]
   },
   "privacy": {

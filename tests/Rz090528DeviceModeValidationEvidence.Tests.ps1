@@ -90,17 +90,29 @@ foreach ($attempt in $fixture.attempts) {
         'Razer Game Manager service restoration evidence changed.'
 }
 
-Assert-True ($annotation.admission.productionMutation -ceq 'SetterValidated') `
-    'Device-mode mutation must remain setter-validated but not production-admitted.'
+Assert-True ($annotation.admission.productionMutation -ceq 'ProductionAdmitted') `
+    'Device-mode production admission must not regress.'
 Assert-True (
     $coverage.capabilities.keyboardBehavior.normalDeviceMode -ceq
-        'SetterValidated') 'Normal mode setter validation must not regress.'
+        'ProductionAdmitted') 'Normal mode admission must not regress.'
 Assert-True (
     $coverage.capabilities.keyboardBehavior.driverDeviceMode -ceq
-        'SetterValidated') 'Driver mode setter validation must not regress.'
+        'ProductionAdmitted') 'Driver mode admission must not regress.'
 Assert-True (
     $coverage.capabilities.keyboardBehavior.deviceModeGetter -ceq
         'ProductionAdmitted') 'The already-admitted getter must not regress.'
+Assert-True ($annotation.admission.implementation.commit -ceq '3707c49') `
+    'The reviewed production implementation provenance changed.'
+foreach ($requiredSafety in @(
+        'typedAcknowledgement',
+        'independentReadback',
+        'ownedTransitionRestoration',
+        'preservesPreExistingDriverMode',
+        'closesInvalidatedSession')) {
+    Assert-True (
+        $annotation.admission.implementation.$requiredSafety -eq $true) `
+        "Production safety property '$requiredSafety' must remain true."
+}
 Assert-True ($fixture.privacy.rawSessionsCommitted -eq $false) `
     'Raw validation sessions must remain private.'
 Assert-True (

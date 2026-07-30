@@ -159,8 +159,8 @@
       "gamingModeGetter": "ProductionAdmitted",
       "startupAnimation": "ProductionAdmitted",
       "startupAnimationGetter": "ProductionAdmitted",
-      "normalDeviceMode": "SetterValidated",
-      "driverDeviceMode": "SetterValidated",
+      "normalDeviceMode": "ProductionAdmitted",
+      "driverDeviceMode": "ProductionAdmitted",
       "deviceModeGetter": "ProductionAdmitted"
     },
     "specialKeys": {
