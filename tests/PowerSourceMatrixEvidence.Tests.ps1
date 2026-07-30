@@ -6,6 +6,8 @@ $repository = Split-Path -Parent $PSScriptRoot
 $fixturePath = Join-Path $repository 'decoded\rz09-0528-pid-02c6-bios-2.02-power-source-matrix.json'
 $annotationPath = Join-Path $repository 'annotations\2026-07-29-rz09-0528-power-source-matrix.json'
 $acRecheckPath = Join-Path $repository 'annotations\2026-07-30-rz09-0528-ac-power-readback-recheck.json'
+$readbackPath = Join-Path $repository (
+    'annotations\2026-07-30-rz09-0528-power-source-readback-admission.json')
 $coveragePath = Join-Path $repository 'decoded\rz09-0528-pid-02c6-bios-2.02-device-coverage.json'
 
 function Assert-True {
@@ -22,6 +24,7 @@ function Assert-True {
 $fixture = Get-Content -LiteralPath $fixturePath -Raw | ConvertFrom-Json
 $annotation = Get-Content -LiteralPath $annotationPath -Raw | ConvertFrom-Json
 $acRecheck = Get-Content -LiteralPath $acRecheckPath -Raw | ConvertFrom-Json
+$readback = Get-Content -LiteralPath $readbackPath -Raw | ConvertFrom-Json
 $coverage = Get-Content -LiteralPath $coveragePath -Raw | ConvertFrom-Json
 
 Assert-True ($fixture.status -ceq 'CapturedNotAdmitted') `
@@ -121,26 +124,65 @@ Assert-True ($acRecheck.admission.batteryReadback -ceq 'NotInvestigated') `
 Assert-True ($acRecheck.privacy.rawOutputCommitted -eq $false) `
     'The transient readback output must remain uncommitted.'
 
+Assert-True ($readback.privateEvidence.successfulSummary.sha256 -ceq
+    '3C2113C1C3AAE82D5EF578B964D167989CE4E506339331F467AE41DCDF2810D0') `
+    'The successful exact-device matrix summary hash changed.'
+Assert-True ($readback.privateEvidence.successfulSummary.byteLength -eq 10799) `
+    'The successful exact-device matrix summary length changed.'
+Assert-True (@($readback.privateEvidence.failedAttempts).Count -eq 2) `
+    'Both failed direct-readback attempts must remain preserved.'
+Assert-True (@($readback.matrix | Where-Object {
+        $_.samplesIdentical -ne $true
+    }).Count -eq 0) `
+    'Every direct readback state must retain three identical samples.'
+Assert-True ((@($readback.matrix | ForEach-Object {
+        "$($_.label):$($_.windowsPowerLineStatus):" +
+            "$($_.adapterPowerPayloadHex):" +
+            "$($_.thermal1PayloadHex):$($_.thermal2PayloadHex)"
+    }) -join ',') -ceq (
+        'full-ac-baseline:Online:1111:01010200:01020200,' +
+        'battery:Offline:0011:01010300:01020300,' +
+        'usb-c:Online:0711:01010000:01020000,' +
+        'full-ac-restored:Online:1111:01010200:01020200')) `
+    'The exact source and thermal readback matrix changed.'
+Assert-True ($readback.evidenceProvenance.openBladeServiceRestored -eq $true) `
+    'The successful matrix must preserve exact service restoration.'
+Assert-True ($readback.admission.adapterUsbCReadback -ceq
+    'ProductionAdmitted') `
+    'Exact PID 02C6 USB-C adapter readback must remain admitted.'
+Assert-True ($readback.admission.batterySourceReadback -ceq
+    'ProductionAdmitted') `
+    'Exact battery source readback must remain admitted.'
+
 foreach ($status in @(
-    $coverage.capabilities.performance.usbC.powerClasses,
     $coverage.capabilities.performance.usbC.presetsByPowerClass,
     $coverage.capabilities.performance.battery.presets,
-    $coverage.capabilities.power.usbCPowerClasses,
-    $coverage.capabilities.power.battery,
     $coverage.capabilities.power.acToUsbC,
-    $coverage.capabilities.power.usbCToAc,
-    $coverage.capabilities.power.acToBattery,
     $coverage.capabilities.power.batteryToAc,
-    $coverage.capabilities.power.usbCToBattery,
-    $coverage.capabilities.power.batteryToUsbC
+    $coverage.capabilities.power.usbCToBattery
 )) {
     Assert-True ([string]$status -ceq 'Captured') `
-        'Every observed power-source coverage leaf must be Captured.'
+        'Unvalidated source setters and transitions must remain Captured.'
 }
 
-Assert-True ($coverage.capabilities.performance.usbC.readback -ceq 'NotInvestigated') `
-    'USB-C readback must stay NotInvestigated until an exact reply is captured.'
-Assert-True ($coverage.capabilities.performance.battery.readback -ceq 'NotInvestigated') `
-    'Battery thermal readback must stay NotInvestigated until independently validated.'
+foreach ($status in @(
+    $coverage.capabilities.performance.usbC.powerClasses,
+    $coverage.capabilities.power.usbCPowerClasses,
+    $coverage.capabilities.power.battery
+)) {
+    Assert-True ([string]$status -ceq 'ProductionAdmitted') `
+        'Exact adapter and battery-source readback must remain admitted.'
+}
+
+foreach ($status in @(
+    $coverage.capabilities.performance.usbC.readback,
+    $coverage.capabilities.performance.battery.readback,
+    $coverage.capabilities.power.usbCToAc,
+    $coverage.capabilities.power.acToBattery,
+    $coverage.capabilities.power.batteryToUsbC
+)) {
+    Assert-True ([string]$status -ceq 'QueryValidated') `
+        'Directly read source states and transitions must remain query-validated.'
+}
 
 Write-Host 'RZ09-0528 power-source matrix evidence tests passed.'
