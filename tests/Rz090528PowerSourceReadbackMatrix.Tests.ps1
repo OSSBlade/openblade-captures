@@ -61,8 +61,9 @@ Assert-True (
     $source -match 'physicalStateRestored = \$true') `
     'The successful summary must require restored barrel AC.'
 Assert-True (
-    $source -match 'Get-FileHash -Algorithm SHA256') `
-    'The private outputs and sanitized summary must be hash-pinned.'
+    $source -match '\[Security\.Cryptography\.SHA256\]::Create\(\)' -and
+    $source -notmatch 'Get-FileHash') `
+    'The matrix must use its PowerShell 5.1-safe in-process SHA-256 helper.'
 Assert-True (
     $source -match 'settingChanged = \$false') `
     'The matrix must state that it never changes a setting.'

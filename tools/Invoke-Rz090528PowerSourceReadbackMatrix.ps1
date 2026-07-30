@@ -17,6 +17,21 @@ $summaryFile = Join-Path $OutputDirectory 'matrix-summary.json'
 $failure = $null
 $completedStates = @()
 
+function Get-Sha256Hex {
+    param([Parameter(Mandatory)][string]$LiteralPath)
+
+    $algorithm = [Security.Cryptography.SHA256]::Create()
+    $stream = [IO.File]::OpenRead($LiteralPath)
+    try {
+        return [BitConverter]::ToString(
+            $algorithm.ComputeHash($stream)).Replace('-', '')
+    }
+    finally {
+        $stream.Dispose()
+        $algorithm.Dispose()
+    }
+}
+
 function Get-PowerLineStatus {
     Add-Type -AssemblyName System.Windows.Forms
     return [System.Windows.Forms.SystemInformation]::PowerStatus.PowerLineStatus.ToString()
@@ -124,11 +139,9 @@ function Invoke-ReadOnlyQuery {
         adapterPowerPayloadHex = [string]$adapter[0].responsePayloadHex
         thermal1PayloadHex = [string]$thermal1[0].responsePayloadHex
         thermal2PayloadHex = [string]$thermal2[0].responsePayloadHex
-        outputSha256 = (
-            Get-FileHash -Algorithm SHA256 -LiteralPath $outputFile).Hash
+        outputSha256 = Get-Sha256Hex -LiteralPath $outputFile
         outputBytes = (Get-Item -LiteralPath $outputFile).Length
-        errorSha256 = (
-            Get-FileHash -Algorithm SHA256 -LiteralPath $errorFile).Hash
+        errorSha256 = Get-Sha256Hex -LiteralPath $errorFile
         errorBytes = (Get-Item -LiteralPath $errorFile).Length
     }
 }
@@ -255,7 +268,7 @@ catch {
 }
 finally {
     $summaryHash = if (Test-Path -LiteralPath $summaryFile -PathType Leaf) {
-        (Get-FileHash -Algorithm SHA256 -LiteralPath $summaryFile).Hash
+        Get-Sha256Hex -LiteralPath $summaryFile
     }
     else {
         'Unavailable'
@@ -285,6 +298,6 @@ if ($null -ne $failure) {
 
 Write-Output (
     "SummarySha256=" +
-    (Get-FileHash -Algorithm SHA256 -LiteralPath $summaryFile).Hash)
+    (Get-Sha256Hex -LiteralPath $summaryFile))
 Write-Output "SummaryBytes=$((Get-Item -LiteralPath $summaryFile).Length)"
 Write-Output 'PhysicalStateRestored=True'
