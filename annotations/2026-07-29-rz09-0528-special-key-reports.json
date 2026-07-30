@@ -19,15 +19,46 @@
     "M1 and M2 emit Page Up/Page Down usages while the separate Fn state is active.",
     "M3, M4, and M5 emit exact PID 02C6 prefixes 040A0300, 040AD300, and 040AD400.",
     "Fn+P emits 01001300 while the Fn state remains active.",
-    "Completion-message typing occurred after each correlated action and is excluded from the evidence."
+    "Completion-message typing occurred after each correlated action and is excluded from the evidence.",
+    "A production-decoder probe in Driver mode decoded M3, M4, and M5 and preserved ordinary Page Up/Page Down delivery, but two operator-correlated Fn+Page Up, Fn+Page Down, and Fn+P retries exposed only Fn make/release on the target MI_01 stream.",
+    "Synapse independently confirmed that the physical Fn key is the non-remappable Razer Hypershift key and that Page Up retains its default Page Up assignment in the Hypershift mapping view, so the missing live reports are not attributed to the operator using the wrong modifier."
   ],
+  "liveDecoderValidation": {
+    "status": "PartialNegativeControl",
+    "deviceModeReadback": "Driver",
+    "synapseState": {
+      "mappingLayerInspected": "Hypershift",
+      "fnAssignment": "Razer Hypershift",
+      "fnRemappable": false,
+      "pageUpHypershiftAssignment": "Page Up"
+    },
+    "decoded": [
+      "M3",
+      "M4",
+      "M5"
+    ],
+    "notObservedOnTargetStream": [
+      "M1",
+      "M2",
+      "FnP"
+    ],
+    "ordinaryPassThroughObserved": [
+      "PageUp",
+      "PageDown"
+    ],
+    "m4PerformanceShortcutCollisionObserved": false,
+    "privateOutput": {
+      "committed": false,
+      "sha256": "E78DB68D50DC4409A2A2E354206CA3D3397E84C16E84AEA4A5ED9A5436C1BCF0",
+      "byteLength": 1658
+    }
+  },
   "admission": {
     "coverageStatus": "Captured",
     "productionAccess": "ObservedOnly",
     "blockedBy": [
-      "Exact Normal-mode parity has not been validated.",
-      "The PID 02C6 decoder has not completed reversible live validation.",
-      "PID 02E0 D3 performance-key assumptions conflict with PID 02C6 M4 and must not be reused."
+      "The PID 02C6 live decoder has not observed M1, M2, or Fn+P on the production target stream despite two correctly performed Hypershift retries.",
+      "The discrepancy between earlier USBPcap reports and current Windows Raw Input delivery must be explained before enabling actions or suppression."
     ]
   },
   "privacy": {
