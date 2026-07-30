@@ -26,6 +26,7 @@ $annotation = Get-Content -LiteralPath $annotationPath -Raw | ConvertFrom-Json
 $acRecheck = Get-Content -LiteralPath $acRecheckPath -Raw | ConvertFrom-Json
 $readback = Get-Content -LiteralPath $readbackPath -Raw | ConvertFrom-Json
 $coverage = Get-Content -LiteralPath $coveragePath -Raw | ConvertFrom-Json
+$coverageText = Get-Content -LiteralPath $coveragePath -Raw
 
 Assert-True ($fixture.status -ceq 'CapturedNotAdmitted') `
     'Power-source evidence must remain captured-but-unadmitted.'
@@ -184,5 +185,15 @@ foreach ($status in @(
     Assert-True ([string]$status -ceq 'QueryValidated') `
         'Directly read source states and transitions must remain query-validated.'
 }
+
+Assert-True (-not $coverageText.Contains(
+    'USB-C and battery readback statuses remain uninvestigated')) `
+    'Coverage notes must not contradict the validated three-state readback matrix.'
+Assert-True (-not $coverageText.Contains(
+    'Shared decoder value 0711 remains PID 02E0 evidence')) `
+    'Coverage notes must not describe the exact PID 02C6 USB-C response as foreign evidence.'
+Assert-True ($coverageText.Contains(
+    '1111 (FullPower280W), 0711 (UsbCPower100W), and 0011 (Battery)')) `
+    'Coverage notes must retain the exact-model production source-response mapping.'
 
 Write-Host 'RZ09-0528 power-source matrix evidence tests passed.'

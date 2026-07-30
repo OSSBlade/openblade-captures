@@ -23,6 +23,7 @@ function Assert-True {
 $fixture = Get-Content -Raw -LiteralPath $fixturePath | ConvertFrom-Json
 $annotation = Get-Content -Raw -LiteralPath $annotationPath | ConvertFrom-Json
 $coverage = Get-Content -Raw -LiteralPath $coveragePath | ConvertFrom-Json
+$coverageText = Get-Content -Raw -LiteralPath $coveragePath
 $wrapper = Get-Content -Raw -LiteralPath $wrapperPath
 
 Assert-True ($fixture.status -ceq 'ReversibleRoundTripCaptured') `
@@ -101,6 +102,9 @@ Assert-True (
 Assert-True (
     $coverage.capabilities.keyboardBehavior.deviceModeGetter -ceq
         'ProductionAdmitted') 'The already-admitted getter must not regress.'
+Assert-True (-not $coverageText.Contains(
+    'Both setters are SetterValidated but remain outside the production mutation gate')) `
+    'Coverage notes must not contradict the production-admitted device-mode setters.'
 Assert-True ($annotation.admission.implementation.commit -ceq '3707c49') `
     'The reviewed production implementation provenance changed.'
 foreach ($requiredSafety in @(
