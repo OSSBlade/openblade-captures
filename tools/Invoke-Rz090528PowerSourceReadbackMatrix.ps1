@@ -16,6 +16,9 @@ $stateFile = Join-Path $OutputDirectory 'state.txt'
 $summaryFile = Join-Path $OutputDirectory 'matrix-summary.json'
 $failure = $null
 $completedStates = @()
+$serviceName = 'OpenBlade'
+$serviceInitiallyRunning = $false
+$serviceRestored = $false
 
 function Get-Sha256Hex {
     param([Parameter(Mandatory)][string]$LiteralPath)
@@ -57,6 +60,13 @@ function Confirm-PhysicalState {
     do {
         $powerLineStatus = Get-PowerLineStatus
         if ($powerLineStatus -ceq $ExpectedPowerLineStatus) {
+            Start-Sleep -Seconds 3
+            $powerLineStatus = Get-PowerLineStatus
+            if ($powerLineStatus -cne $ExpectedPowerLineStatus) {
+                throw (
+                    "Windows power-line status for '$Label' changed during " +
+                    'the stabilization interval. Do not capture while between plugs.')
+            }
             return $powerLineStatus
         }
         Start-Sleep -Milliseconds 250
@@ -213,6 +223,26 @@ New-Item -ItemType Directory -Path $OutputDirectory -Force | Out-Null
     Set-Content -LiteralPath $stateFile -Encoding utf8
 
 try {
+    $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue
+    $serviceInitiallyRunning = $null -ne $service -and
+        $service.Status -eq
+            [System.ServiceProcess.ServiceControllerStatus]::Running
+    if ($serviceInitiallyRunning) {
+        $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+        $principal = [Security.Principal.WindowsPrincipal]::new($identity)
+        if (-not $principal.IsInRole(
+                [Security.Principal.WindowsBuiltInRole]::Administrator)) {
+            throw (
+                "The '$serviceName' service is running. Restart this wrapper " +
+                'from an elevated Windows PowerShell 5.1 process so it can ' +
+                'isolate and restore the exact service.')
+        }
+        Stop-Service -Name $serviceName -ErrorAction Stop
+        $service.WaitForStatus(
+            [System.ServiceProcess.ServiceControllerStatus]::Stopped,
+            [TimeSpan]::FromSeconds(15))
+    }
+
     $states = @()
     $states += Capture-State `
         -Label 'full-ac-baseline' `
@@ -267,6 +297,31 @@ catch {
     $failure = $_
 }
 finally {
+    if ($serviceInitiallyRunning) {
+        try {
+            Start-Service -Name $serviceName -ErrorAction Stop
+            $service = Get-Service -Name $serviceName -ErrorAction Stop
+            $service.WaitForStatus(
+                [System.ServiceProcess.ServiceControllerStatus]::Running,
+                [TimeSpan]::FromSeconds(15))
+            $serviceRestored = $true
+        }
+        catch {
+            if ($null -eq $failure) {
+                $failure = $_
+            }
+            else {
+                $failure = [System.Management.Automation.ErrorRecord]::new(
+                    [InvalidOperationException]::new(
+                        "The matrix failed and the '$serviceName' service " +
+                        "could not be restored: $($_.Exception.Message)"),
+                    'PowerMatrixServiceRestoreFailed',
+                    [System.Management.Automation.ErrorCategory]::OperationStopped,
+                    $serviceName)
+            }
+        }
+    }
+
     $summaryHash = if (Test-Path -LiteralPath $summaryFile -PathType Leaf) {
         Get-Sha256Hex -LiteralPath $summaryFile
     }
@@ -280,10 +335,14 @@ finally {
         0
     }
     $result = if ($null -eq $failure) {
-        'finished success=true physicalStateRestored=true'
+        "finished success=true physicalStateRestored=true " +
+            "serviceInitiallyRunning=$serviceInitiallyRunning " +
+            "serviceRestored=$serviceRestored"
     }
     else {
         "failed completedStates=$($completedStates.Count) " +
+            "serviceInitiallyRunning=$serviceInitiallyRunning " +
+            "serviceRestored=$serviceRestored " +
             "$($failure.Exception.GetType().FullName): $($failure.Exception.Message)"
     }
     "$result summarySha256=$summaryHash summaryBytes=$summaryBytes " +

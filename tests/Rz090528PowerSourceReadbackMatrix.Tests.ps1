@@ -50,6 +50,12 @@ Assert-True (
         'Do not capture while between plugs.')) `
     'The matrix must reject the operator transition interval.'
 Assert-True (
+    $source -match 'Start-Sleep -Seconds 3' -and
+    ([regex]::Matches(
+        $source,
+        'Get-PowerLineStatus')).Count -ge 3) `
+    'The matrix must recheck power state after a stabilization interval.'
+Assert-True (
     ([regex]::Matches(
         $source,
         "ExpectedAdapterPayload '1111'")).Count -eq 2) `
@@ -69,8 +75,12 @@ Assert-True (
     'The matrix must state that it never changes a setting.'
 Assert-True ($source -notmatch 'Stop-Process|Start-Process') `
     'The read-only matrix must not change process state.'
-Assert-True ($source -notmatch 'Stop-Service|Start-Service') `
-    'The read-only matrix must not change service state.'
+Assert-True (
+    $source -match "\$serviceName = 'OpenBlade'" -and
+    $source -match 'Stop-Service -Name \$serviceName' -and
+    $source -match 'Start-Service -Name \$serviceName' -and
+    $source -match 'serviceRestored=\$serviceRestored') `
+    'The matrix must isolate and restore only the exact OpenBlade service.'
 Assert-True ($source -notmatch 'Serial|UUID|IdentifyingNumber') `
     'The matrix must not collect unique device identifiers.'
 
