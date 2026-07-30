@@ -9,6 +9,21 @@ $ErrorActionPreference = 'Stop'
 
 $outputFile = Join-Path $OutputDirectory 'module-ownership.json'
 $stateFile = Join-Path $OutputDirectory 'state.txt'
+trap {
+    try {
+        New-Item -ItemType Directory -Path $OutputDirectory -Force |
+            Out-Null
+        $failureMessage = $_.Exception.Message -replace '\s+', ' '
+        "finished success=false error=$failureMessage " +
+            "$([DateTimeOffset]::Now.ToString('O'))" |
+            Set-Content -LiteralPath $stateFile -Encoding utf8
+    }
+    catch {
+        # Preserve the original failure if even private state persistence fails.
+    }
+    exit 1
+}
+
 $expectedComponents = @{
     'RzAMDOverClock_v1.1.15.0.dll' = @{
         Kind = 'Client'

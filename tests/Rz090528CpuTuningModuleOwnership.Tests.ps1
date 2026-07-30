@@ -46,6 +46,10 @@ Assert-True ($source -match 'Get-FileHash\s+`?\s*-Algorithm SHA256') `
     'The module inventory must verify component and private-output hashes.'
 Assert-True ($source -match 'ConvertTo-Json') `
     'The module inventory must emit structured private evidence.'
+Assert-True (
+    $source -match 'finished success=false error=' -and
+    $source -match 'Set-Content -LiteralPath \$stateFile') `
+    'The module inventory must preserve a private failure state.'
 Assert-True ($source -match 'settingChanged = \$false') `
     'The module inventory must state its non-mutating boundary.'
 Assert-True ($source -notmatch 'Stop-Process|Start-Process') `
