@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "evidenceProvenance": {
+    "controller": "Razer Synapse 4",
+    "role": "OracleCapture",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeVisualParityConfirmed": false
+  },
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02",
+    "inputEndpointHex": "82"
+  },
+  "decodedEvidence": "decoded/rz09-0528-pid-02c6-bios-2.02-special-keys.json",
+  "findings": [
+    "The operator corrected the first session as ordinary Page Up, not M1; it is retained as a negative control.",
+    "M1 and M2 emit Page Up/Page Down usages while the separate Fn state is active.",
+    "M3, M4, and M5 emit exact PID 02C6 prefixes 040A0300, 040AD300, and 040AD400.",
+    "Fn+P emits 01001300 while the Fn state remains active.",
+    "Completion-message typing occurred after each correlated action and is excluded from the evidence."
+  ],
+  "admission": {
+    "coverageStatus": "Captured",
+    "productionAccess": "ObservedOnly",
+    "blockedBy": [
+      "Exact Normal-mode parity has not been validated.",
+      "The PID 02C6 decoder has not completed reversible live validation.",
+      "PID 02E0 D3 performance-key assumptions conflict with PID 02C6 M4 and must not be reused."
+    ]
+  },
+  "privacy": {
+    "rawCapturesCommitted": false,
+    "serialNumbersRetained": false,
+    "devicePathsRetained": false,
+    "operatorReplyReportsRetained": false
+  }
+}

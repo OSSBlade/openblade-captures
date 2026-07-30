@@ -164,13 +164,13 @@
       "deviceModeGetter": "ProductionAdmitted"
     },
     "specialKeys": {
-      "functionLayerReports": "NotInvestigated",
-      "performanceKey": "NotInvestigated",
-      "m1PageUp": "NotInvestigated",
-      "m2PageDown": "NotInvestigated",
-      "m3GamingMode": "NotInvestigated",
-      "m4PerformanceMode": "NotInvestigated",
-      "m5MicrophoneMute": "NotInvestigated"
+      "functionLayerReports": "Captured",
+      "performanceKey": "Captured",
+      "m1PageUp": "Captured",
+      "m2PageDown": "Captured",
+      "m3GamingMode": "Captured",
+      "m4PerformanceMode": "Captured",
+      "m5MicrophoneMute": "Captured"
     },
     "display": {
       "windowsVisibleModes": "ProductionAdmitted",

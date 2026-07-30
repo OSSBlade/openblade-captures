@@ -1,0 +1,258 @@
+{
+  "schemaVersion": 1,
+  "status": "CapturedNotAdmitted",
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02",
+    "inputEndpointHex": "82",
+    "reportLength": 16
+  },
+  "captures": [
+    {
+      "action": "PageUpNegativeControl",
+      "sha256": "6790893D01692A6FE224C8F112A23510504A247D4CE4C02FE3042AE5DA00BD92",
+      "byteLength": 2918
+    },
+    {
+      "action": "M1",
+      "sha256": "525789FAB6D15EDEEE33D0CD87E09708AD3C0C3833FA1447C9BACC1D1658AFA7",
+      "byteLength": 7075
+    },
+    {
+      "action": "M2",
+      "sha256": "917C9B6F0F8092725064FA8FAC552153286E4885700A35BE7CDB2967A5E95E64",
+      "byteLength": 7075
+    },
+    {
+      "action": "M3",
+      "sha256": "4FCF081F16DAEF4E1AC884BE9D24647AA453002853FF76E779C84307C480DEC9",
+      "byteLength": 8749
+    },
+    {
+      "action": "M4",
+      "sha256": "BC489C83D2752FE611C69582A28581DED15D66D6DD5C217EF70A229FF0FFF9D2",
+      "byteLength": 9679
+    },
+    {
+      "action": "M5",
+      "sha256": "308CE4ACE2DF91ED8AA6AAB805402EE9673869FD8CF530191FD79A8EABD31F22",
+      "byteLength": 8377
+    },
+    {
+      "action": "FnP",
+      "sha256": "5D151D17F063CF1E161D713A3A0544E90AAF1719A0FF8FB1B08C109BA986C738",
+      "byteLength": 12097
+    }
+  ],
+  "actions": [
+    {
+      "function": "PageUpNegativeControl",
+      "operatorCorrection": "The first action was the key's normal Page Up function, not M1.",
+      "reports": [
+        {
+          "frame": 27,
+          "relativeSeconds": 63.150191,
+          "prefixHex": "01004B00",
+          "meaning": "Page Up pressed without a preceding Fn-layer report"
+        },
+        {
+          "frame": 29,
+          "relativeSeconds": 63.150191,
+          "prefixHex": "01000000",
+          "meaning": "Page Up released"
+        }
+      ]
+    },
+    {
+      "function": "M1",
+      "sharedPhysicalKey": "Page Up",
+      "reports": [
+        {
+          "frame": 35,
+          "relativeSeconds": 9.154884,
+          "prefixHex": "040A0000",
+          "meaning": "Fn pressed"
+        },
+        {
+          "frame": 37,
+          "relativeSeconds": 9.526803,
+          "prefixHex": "01004B00",
+          "meaning": "M1 / Page Up pressed while Fn remains held"
+        },
+        {
+          "frame": 39,
+          "relativeSeconds": 9.594818,
+          "prefixHex": "01000000",
+          "meaning": "M1 / Page Up released"
+        },
+        {
+          "frame": 41,
+          "relativeSeconds": 9.766832,
+          "prefixHex": "04000000",
+          "meaning": "Fn released"
+        }
+      ]
+    },
+    {
+      "function": "M2",
+      "sharedPhysicalKey": "Page Down",
+      "reports": [
+        {
+          "frame": 35,
+          "relativeSeconds": 10.385437,
+          "prefixHex": "040A0000",
+          "meaning": "Fn pressed"
+        },
+        {
+          "frame": 37,
+          "relativeSeconds": 10.684475,
+          "prefixHex": "01004E00",
+          "meaning": "M2 / Page Down pressed while Fn remains held"
+        },
+        {
+          "frame": 39,
+          "relativeSeconds": 10.750467,
+          "prefixHex": "01000000",
+          "meaning": "M2 / Page Down released"
+        },
+        {
+          "frame": 41,
+          "relativeSeconds": 10.883476,
+          "prefixHex": "04000000",
+          "meaning": "Fn released"
+        }
+      ]
+    },
+    {
+      "function": "M3",
+      "sharedPhysicalKey": "Gaming mode",
+      "reports": [
+        {
+          "frame": 67,
+          "relativeSeconds": 18.520973,
+          "prefixHex": "040A0000",
+          "meaning": "Fn pressed"
+        },
+        {
+          "frame": 69,
+          "relativeSeconds": 19.060966,
+          "prefixHex": "040A0300",
+          "meaning": "M3 pressed"
+        },
+        {
+          "frame": 71,
+          "relativeSeconds": 19.125998,
+          "prefixHex": "040A0000",
+          "meaning": "M3 released while Fn remains held"
+        },
+        {
+          "frame": 73,
+          "relativeSeconds": 19.258984,
+          "prefixHex": "04000000",
+          "meaning": "Fn released"
+        }
+      ]
+    },
+    {
+      "function": "M4",
+      "sharedPhysicalKey": "Performance mode",
+      "reports": [
+        {
+          "frame": 63,
+          "relativeSeconds": 19.150463,
+          "prefixHex": "040A0000",
+          "meaning": "Fn pressed"
+        },
+        {
+          "frame": 65,
+          "relativeSeconds": 19.803502,
+          "prefixHex": "040AD300",
+          "meaning": "M4 pressed"
+        },
+        {
+          "frame": 67,
+          "relativeSeconds": 19.8645,
+          "prefixHex": "040A0000",
+          "meaning": "M4 released while Fn remains held"
+        },
+        {
+          "frame": 69,
+          "relativeSeconds": 20.013495,
+          "prefixHex": "04000000",
+          "meaning": "Fn released"
+        }
+      ]
+    },
+    {
+      "function": "M5",
+      "sharedPhysicalKey": "Microphone mute",
+      "reports": [
+        {
+          "frame": 49,
+          "relativeSeconds": 12.427012,
+          "prefixHex": "040A0000",
+          "meaning": "Fn pressed"
+        },
+        {
+          "frame": 51,
+          "relativeSeconds": 12.808995,
+          "prefixHex": "040AD400",
+          "meaning": "M5 pressed"
+        },
+        {
+          "frame": 53,
+          "relativeSeconds": 12.870993,
+          "prefixHex": "040A0000",
+          "meaning": "M5 released while Fn remains held"
+        },
+        {
+          "frame": 55,
+          "relativeSeconds": 13.018993,
+          "prefixHex": "04000000",
+          "meaning": "Fn released"
+        }
+      ]
+    },
+    {
+      "function": "FnP",
+      "reports": [
+        {
+          "frame": 63,
+          "relativeSeconds": 20.244451,
+          "prefixHex": "040A0000",
+          "meaning": "Fn pressed"
+        },
+        {
+          "frame": 65,
+          "relativeSeconds": 20.337433,
+          "prefixHex": "01001300",
+          "meaning": "P pressed while Fn remains held"
+        },
+        {
+          "frame": 67,
+          "relativeSeconds": 20.405426,
+          "prefixHex": "01000000",
+          "meaning": "P released"
+        },
+        {
+          "frame": 81,
+          "relativeSeconds": 20.502433,
+          "prefixHex": "04000000",
+          "meaning": "Fn released"
+        }
+      ]
+    }
+  ],
+  "interpretation": {
+    "m1AndM2RequireFnState": "M1 and M2 reuse ordinary Page Up/Page Down usage reports; a decoder must correlate the preceding Fn-layer state rather than treating those usages as dedicated macro reports.",
+    "m4Collision": "PID 02C6 M4 uses 040AD300. Do not copy the PID 02E0 dedicated D3 performance-key assumption into the exact-device decoder.",
+    "admissionBoundary": "The reports were captured with the exact device in its Synapse-managed state. Normal-mode parity and an exact decoder round trip are still required before production admission."
+  },
+  "privacy": {
+    "rawCapturesCommitted": false,
+    "operatorReplyReportsExcluded": true,
+    "uniqueUsbIdentifiersRetained": false
+  }
+}
