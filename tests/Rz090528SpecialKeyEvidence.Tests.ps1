@@ -76,6 +76,34 @@ Assert-True ($annotation.privacy.serialNumbersRetained -eq $false) `
     'Sanitized annotation must not retain serial numbers.'
 Assert-True ($annotation.privacy.devicePathsRetained -eq $false) `
     'Sanitized annotation must not retain device paths.'
+Assert-True (
+    $annotation.liveDecoderValidation.hidInputAccessProbe.status -ceq (
+        'ReadOnlyNegativeControl')) `
+    'The direct HID access result must remain an explicit negative control.'
+Assert-True (
+    $annotation.liveDecoderValidation.hidInputAccessProbe.collectionCount -eq 10) `
+    'The exact HID access probe must retain all ten collections.'
+Assert-True (
+    $annotation.liveDecoderValidation.hidInputAccessProbe.readHandleOpenCount -eq 7) `
+    'The exact HID access probe shared-read count changed.'
+$keyboardCollections = @(
+    $annotation.liveDecoderValidation.hidInputAccessProbe.collections |
+        Where-Object { $_.usage -ceq '0001:0006' })
+Assert-True ($keyboardCollections.Count -eq 2) `
+    'Both exact keyboard top-level collections must remain represented.'
+Assert-True (
+    @($keyboardCollections | Where-Object {
+        $_.readHandleOpened -ne $false -or $_.win32Error -ne 5
+    }).Count -eq 0) `
+    'Both exact keyboard collections must retain the access-denied result.'
+Assert-True (
+    $annotation.liveDecoderValidation.hidInputAccessProbe.privacy.devicePathsRetained `
+        -eq $false) `
+    'The HID access probe must not retain device paths.'
+Assert-True (
+    $annotation.liveDecoderValidation.hidInputAccessProbe.privacy.uniqueIdentifiersRetained `
+        -eq $false) `
+    'The HID access probe must not retain unique identifiers.'
 
 foreach ($leaf in @(
         'functionLayerReports',

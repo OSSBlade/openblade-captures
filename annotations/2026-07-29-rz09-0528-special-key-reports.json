@@ -53,6 +53,72 @@
       "sha256": "E78DB68D50DC4409A2A2E354206CA3D3397E84C16E84AEA4A5ED9A5436C1BCF0",
       "byteLength": 1658
     },
+    "hidInputAccessProbe": {
+      "status": "ReadOnlyNegativeControl",
+      "collectionCount": 10,
+      "readHandleOpenCount": 7,
+      "accessDeniedCount": 3,
+      "collections": [
+        {
+          "collection": "MI_01",
+          "usage": "0001:0080",
+          "readHandleOpened": true
+        },
+        {
+          "collection": "MI_01",
+          "usage": "0001:0000",
+          "readHandleOpened": true
+        },
+        {
+          "collection": "MI_01",
+          "usage": "0001:0000",
+          "readHandleOpened": true
+        },
+        {
+          "collection": "MI_00",
+          "usage": "000C:0001",
+          "readHandleOpened": true
+        },
+        {
+          "collection": "MI_02",
+          "usage": "0001:0002",
+          "readHandleOpened": false,
+          "win32Error": 5
+        },
+        {
+          "collection": "MI_00",
+          "usage": "0001:0080",
+          "readHandleOpened": true
+        },
+        {
+          "collection": "MI_03",
+          "usage": "0059:0001",
+          "readHandleOpened": true
+        },
+        {
+          "collection": "MI_00",
+          "usage": "0001:0006",
+          "readHandleOpened": false,
+          "win32Error": 5
+        },
+        {
+          "collection": "MI_01",
+          "usage": "0001:0006",
+          "readHandleOpened": false,
+          "win32Error": 5
+        },
+        {
+          "collection": "MI_01",
+          "usage": "000C:0001",
+          "readHandleOpened": true
+        }
+      ],
+      "privacy": {
+        "devicePathsRetained": false,
+        "uniqueIdentifiersRetained": false
+      },
+      "interpretation": "Windows denied shared GENERIC_READ handles to both exact keyboard top-level collections. Adjacent collections opened and reverified, but they are not evidence that report-ID-01 keyboard input can be read through those handles. Direct user-mode HID access is therefore not an established replacement for the missing Raw Input events."
+    },
     "synapseIsolationAttempt": {
       "status": "FailedZeroInput",
       "durationSeconds": 60,
