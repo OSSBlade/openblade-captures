@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "evidenceProvenance": {
+    "controller": "OpenBlade read-only static inspection",
+    "role": "ExactVersionKernelBoundaryDiscovery",
+    "nativeLibraryLoaded": false,
+    "driverHandleOpened": false,
+    "ioctlInvoked": false,
+    "backendFunctionInvoked": false,
+    "settingChanged": false
+  },
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02",
+    "processor": "AMD Ryzen AI 9 HX 370 w/ Radeon 890M"
+  },
+  "driverBoundary": {
+    "serviceName": "AMDRyzenMasterDriverV31",
+    "serviceType": "Kernel Driver",
+    "startMode": "Manual",
+    "observedState": "Running",
+    "rootHardwareId": "Root\\AMDRMDRIVER",
+    "deviceName": "\\\\.\\AMDRyzenMasterDriverV31",
+    "infDriverVersion": "3.1.0.0",
+    "components": [
+      {
+        "fileName": "AMDRyzenMasterDriver.sys",
+        "fileVersion": "3.1.0.0",
+        "sha256": "7250DDCB9B04E7E00694C9D5AE3AA2B37CAAE367A4125BB84D8AC0B0DFAB8624",
+        "signatureStatus": "Valid",
+        "signerOrganization": "Advanced Micro Devices"
+      },
+      {
+        "fileName": "Device.dll",
+        "fileVersion": "3.0.1.4580",
+        "sha256": "70B5A3B1B2E6CFA42ECF791A8FE008453F5B5BB521EC9F228DFDBF6739C978D5",
+        "signatureStatus": "Valid",
+        "signerOrganization": "Advanced Micro Devices"
+      },
+      {
+        "fileName": "Platform.dll",
+        "fileVersion": "3.0.1.4580",
+        "sha256": "61584FE630DF8E819A324013B3F1C8178364E608B73A13DFF0827743BC26B5DF",
+        "signatureStatus": "Valid",
+        "signerOrganization": "Advanced Micro Devices"
+      }
+    ],
+    "staticCallChain": [
+      "RzAMDOverClockDLL_v1.1.15.0.dll imports Platform.dll!GetPlatform",
+      "Platform.dll exports SetPPTLimit and imports Device.dll!GetDeviceManager",
+      "Device.dll imports CreateFileW and DeviceIoControl",
+      "Device.dll contains the AMDRyzenMasterDriverV31 device name and driver lifecycle helpers"
+    ],
+    "unmappedIoctlCandidates": [
+      "0x81112F24",
+      "0x81112FF8"
+    ],
+    "cpuFamilySymbolsObserved": [
+      "CStrixCPU::GetCurveOptimizerStatus",
+      "CStrixCPU::SetCurveOptimizerForAllCores",
+      "CStrixCPU::SetPPTLimit"
+    ]
+  },
+  "findings": [
+    "The identified Synapse CPU backend is not a self-contained user-mode protocol. It reaches a demand-start AMD kernel driver through signed AMD helper libraries.",
+    "The server-to-Platform-to-Device import chain and the driver device name establish the ownership boundary without loading a library, opening the driver, or issuing an IOCTL.",
+    "Static strings and call sites expose candidate CPU-family methods and IOCTL values, but do not prove the selected runtime class, structures, signatures, units, authorization, safety, or readback semantics.",
+    "Using the installed Razer/AMD components would make OpenBlade depend on Synapse-delivered binaries and a kernel driver, which violates the product architecture.",
+    "No production backend can be admitted from this evidence. CPU Power Limit and CPU Voltage Optimizer remain first-class ObservedOnly capabilities."
+  ],
+  "admission": {
+    "cpuPowerLimit": "Captured",
+    "cpuVoltageOptimizer": "Captured",
+    "productionAccess": "ObservedOnly",
+    "advancedByThisInspection": false
+  },
+  "privacy": {
+    "binaryCommitted": false,
+    "absolutePathsRetained": false,
+    "serialNumbersRetained": false,
+    "deviceInstanceIdentifiersRetained": false,
+    "processIdentifiersRetained": false
+  }
+}
