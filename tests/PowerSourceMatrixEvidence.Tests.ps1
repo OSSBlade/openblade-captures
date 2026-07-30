@@ -5,6 +5,7 @@ $ErrorActionPreference = 'Stop'
 $repository = Split-Path -Parent $PSScriptRoot
 $fixturePath = Join-Path $repository 'decoded\rz09-0528-pid-02c6-bios-2.02-power-source-matrix.json'
 $annotationPath = Join-Path $repository 'annotations\2026-07-29-rz09-0528-power-source-matrix.json'
+$acRecheckPath = Join-Path $repository 'annotations\2026-07-30-rz09-0528-ac-power-readback-recheck.json'
 $coveragePath = Join-Path $repository 'decoded\rz09-0528-pid-02c6-bios-2.02-device-coverage.json'
 
 function Assert-True {
@@ -20,6 +21,7 @@ function Assert-True {
 
 $fixture = Get-Content -LiteralPath $fixturePath -Raw | ConvertFrom-Json
 $annotation = Get-Content -LiteralPath $annotationPath -Raw | ConvertFrom-Json
+$acRecheck = Get-Content -LiteralPath $acRecheckPath -Raw | ConvertFrom-Json
 $coverage = Get-Content -LiteralPath $coveragePath -Raw | ConvertFrom-Json
 
 Assert-True ($fixture.status -ceq 'CapturedNotAdmitted') `
@@ -95,6 +97,29 @@ Assert-True ($annotation.evidenceProvenance.openBladeReadbackConfirmed -eq $fals
     'The annotation must preserve the no-independent-readback boundary.'
 Assert-True ($annotation.productionAdmission.exactUsbCPowerClassReadback -eq $false) `
     'Exact PID 02C6 USB-C readback must remain unadmitted.'
+Assert-True (@($acRecheck.attempts).Count -eq 3) `
+    'The barrel-AC readback recheck must retain all three attempts.'
+Assert-True (@($acRecheck.attempts | Where-Object {
+        $_.success -ne $true -or
+        $_.adapterPowerHex -cne '1111' -or
+        $_.thermal1Hex -cne '01010200' -or
+        $_.thermal2Hex -cne '01020200' -or
+        $_.sha256 -cne '07683820A140192D209AA1494EB53F4DF4BBBE1E2375528F7418DB35106E9AA6' -or
+        $_.byteLength -ne 822
+    }).Count -eq 0) `
+    'The repeated barrel-AC readbacks must remain identical and successful.'
+Assert-True ($acRecheck.readOnly -eq $true) `
+    'The barrel-AC recheck must remain read-only.'
+Assert-True ($acRecheck.interpretation.settingChanged -eq $false) `
+    'The barrel-AC recheck must not imply a setting change.'
+Assert-True ($acRecheck.admission.advancedByThisSession -eq $false) `
+    'The repeated AC query must not silently advance another capability.'
+Assert-True ($acRecheck.admission.usbCReadback -ceq 'NotInvestigated') `
+    'The AC query must not advance USB-C readback.'
+Assert-True ($acRecheck.admission.batteryReadback -ceq 'NotInvestigated') `
+    'The AC query must not advance battery readback.'
+Assert-True ($acRecheck.privacy.rawOutputCommitted -eq $false) `
+    'The transient readback output must remain uncommitted.'
 
 foreach ($status in @(
     $coverage.capabilities.performance.usbC.powerClasses,
