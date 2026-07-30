@@ -20,7 +20,9 @@
   },
   "power": {
     "fullAc": "ProductionAdmitted: 07/8C returned 1111 (FullPower280W)",
-    "usbCAndBatteryTransitions": "CapturedNotAdmitted: nine exact-device sessions covered all barrel AC, USB-C-only, and battery transitions plus stable baselines. Outgoing 07/8C query forms and 0D/02 source-specific setter pairs were decoded, but no exact PID 02C6 USB-C response or independent 0D/82 readback was captured."
+    "usbC": "ProductionAdmitted: three identical exact-device 07/8C reads returned 0711 (UsbCPower100W) while Windows reported Online; production admission is scoped to PID 02C6.",
+    "battery": "ProductionAdmitted: three identical exact-device 07/8C reads returned 0011 while Windows reported Offline. Windows Offline remains the authoritative production battery classifier.",
+    "transitionReadback": "QueryValidated: the read-only matrix covered barrel AC to battery, battery to USB-C, and USB-C to restored barrel AC. Matching 0D/82 pairs decoded PerformanceAutomatic, BatterySaverAutomatic, BalancedAutomatic, and the restored PerformanceAutomatic state."
   },
   "display": {
     "status": "ProductionAdmitted",
@@ -179,12 +181,13 @@
     "2026-07-29-rz09-0528-ac-fixed-fan-validation.json",
     "2026-07-29-rz09-0528-keyboard-behavior-setters.json",
     "2026-07-29-rz09-0528-logo-lighting-setters.json",
-    "2026-07-29-rz09-0528-power-source-matrix.json"
+    "2026-07-29-rz09-0528-power-source-matrix.json",
+    "2026-07-30-rz09-0528-power-source-readback-admission.json"
   ],
   "safetyNotes": [
     "Never infer firmware readback from visible Synapse state.",
     "OpenBlade service startup can apply its saved OpenBlade-owned Off profile before Windows delegation is enabled. After delegation, reapply the desired external-controller state once and independently read it back; the validated Static 50 percent state survived an OpenBlade service restart.",
-    "Do not admit the generic 0711 USB-C power-class mapping for PID 02C6 until the exact-device 07/8C response is independently read back.",
+    "The 0711 USB-C mapping is admitted only by the exact PID 02C6 production factory after three identical independent reads. Do not generalize it to another model without that model's own evidence.",
     "Never run USBPcap and OpenBlade control concurrently.",
     "Active Synapse host-rendered lighting can race the shared feature response.",
     "Do not broaden PID 02E0 commands or geometry to PID 02C6 without exact-device evidence."
