@@ -16,17 +16,18 @@
   "decodedEvidence": "decoded/rz09-0528-pid-02c6-bios-2.02-special-keys.json",
   "findings": [
     "The operator corrected the first session as ordinary Page Up, not M1; it is retained as a negative control.",
-    "M1 and M2 emit Page Up/Page Down usages while the separate Fn state is active.",
+    "Earlier USBPcap captures contain Page Up/Page Down usages while the separate Fn state is active, but two clean production Raw Input retries exposed only the same generic Fn make/release reports for M1, M2, and Fn+P; those translated actions are not admitted.",
     "M3, M4, and M5 emit exact PID 02C6 prefixes 040A0300, 040AD300, and 040AD400.",
     "Fn+P emits 01001300 while the Fn state remains active.",
     "Completion-message typing occurred after each correlated action and is excluded from the evidence.",
-    "A production-decoder probe in Driver mode decoded M3, M4, and M5 and preserved ordinary Page Up/Page Down delivery, but two operator-correlated Fn+Page Up, Fn+Page Down, and Fn+P retries exposed only Fn make/release on the target MI_01 stream.",
+    "A clean production-decoder probe in Driver mode decoded M3, M4, and M5 as 040A0300, 040AD300, and 040AD400 with 12 target messages and no identity failures. A separate discrimination retry showed only generic Fn make/release for Fn+Page Up, Fn+Page Down, and Fn+P while ordinary Page Up and Page Down still reached the keyboard path.",
+    "A no-Fn retry of the physical Game, Performance, and microphone-mute keys produced zero target Raw Input messages while Synapse remained active. Those normal-layer keys are therefore not attributed to the admitted MI_01 decoder; this does not distinguish firmware ownership from vendor-stack ownership.",
     "Synapse independently confirmed that the physical Fn key is the non-remappable Razer Hypershift key and that Page Up retains its default Page Up assignment in the Hypershift mapping view, so the missing live reports are not attributed to the operator using the wrong modifier.",
     "A later 60-second Synapse-isolated attempt received no keyboard input at all. It is retained as a failed zero-input session and provides no evidence for or against Synapse filtering.",
     "A second 60-second attempt isolated Synapse, both verified Razer controller services, and OpenBlade in the same elevated window. It also received zero Raw Input messages and is retained as another failed zero-input session; it does not advance or contradict the captured USBPcap report identities."
   ],
   "liveDecoderValidation": {
-    "status": "PartialNegativeControl",
+    "status": "PartialProductionAdmission",
     "deviceModeReadback": "Driver",
     "synapseState": {
       "mappingLayerInspected": "Hypershift",
@@ -153,15 +154,103 @@
         "byteLength": 213
       },
       "interpretation": "No physical key input reached the probe. The complete controller isolation therefore supplies no evidence about whether those controllers suppress M1, M2, or Fn+P."
+    },
+    "productionDiscriminationRetry": {
+      "status": "ValidatedNegativeControl",
+      "operatorSequence": [
+        "Fn+PageUp",
+        "Fn+PageDown",
+        "Fn+P",
+        "PageUp",
+        "PageDown"
+      ],
+      "genericFnSequences": 3,
+      "translatedM1Observed": false,
+      "translatedM2Observed": false,
+      "translatedFnPObserved": false,
+      "ordinaryPageUpObserved": true,
+      "ordinaryPageDownObserved": true,
+      "privateOutput": {
+        "committed": false,
+        "sha256": "E59E7AFBEC965F3235CFE66010C1789543CFF99AC5DD8C2E2EE584D2B893B90E",
+        "byteLength": 2085
+      },
+      "interpretation": "The current Windows Raw Input path cannot distinguish M1, M2, or Fn+P on PID 02C6. Ordinary Page Up, Page Down, and P must not be suppressed or translated."
+    },
+    "productionM3M5Validation": {
+      "status": "ProductionAdmitted",
+      "operatorSequence": [
+        "Fn+Game",
+        "Fn+Performance",
+        "Fn+MicrophoneMute"
+      ],
+      "decoded": {
+        "M3": "040A0300",
+        "M4": "040AD300",
+        "M5": "040AD400"
+      },
+      "rawInputMessages": 12,
+      "targetInputMessages": 12,
+      "deviceIdentityFailures": 0,
+      "privateOutput": {
+        "committed": false,
+        "sha256": "F1054AACAECA80459014EC8B6C6B9B8EB7F841C9DC3D3EED47191AC5A27334C2",
+        "byteLength": 1025
+      },
+      "interpretation": "Only M3, M4, and M5 are admitted for actions and suppression on the exact PID 02C6 production decoder."
+    },
+    "normalLayerRetry": {
+      "status": "SynapsePresentZeroTargetInput",
+      "operatorSequence": [
+        "Game",
+        "Performance",
+        "MicrophoneMute"
+      ],
+      "synapseActive": true,
+      "rawInputMessages": 0,
+      "targetInputMessages": 0,
+      "deviceIdentityFailures": 0,
+      "privateOutput": {
+        "committed": false,
+        "sha256": "61D9B97CD3DF2298EF6D0E0181BE1B903D42761D3DD88EFAF38033B271BA48B7",
+        "byteLength": 213
+      },
+      "interpretation": "The zero-input normal-layer result is preserved honestly. It does not prove whether firmware or the running vendor stack owns those actions."
+    },
+    "postProbeReadback": {
+      "source": "ReadOnlyExactProductionAdmissionProbe",
+      "adapterPower": "FullPower280W",
+      "performance": "Performance",
+      "fans": "Automatic",
+      "gamingMode": false,
+      "driverMode": true,
+      "keyboardBrightnessRaw": 129,
+      "keyboardBrightnessPercent": 51,
+      "logoMode": "Static",
+      "success": true,
+      "settingsWritten": false
     }
   },
   "admission": {
-    "coverageStatus": "Captured",
-    "productionAccess": "ObservedOnly",
+    "coverageStatus": "PartialProductionAdmitted",
+    "productionAccess": "ReadWritePartial",
+    "admittedSlots": [
+      "M3",
+      "M4",
+      "M5"
+    ],
+    "capturedNotAdmitted": [
+      "M1",
+      "M2",
+      "FnP",
+      "normalGame",
+      "normalPerformance",
+      "normalMicrophoneMute"
+    ],
     "blockedBy": [
       "The PID 02C6 live decoder has not observed M1, M2, or Fn+P on the production target stream despite two correctly performed Hypershift retries.",
-      "The discrepancy between earlier USBPcap reports and current Windows Raw Input delivery must be explained before enabling actions or suppression.",
-      "Both controller-isolated retries received zero physical input and cannot be used to infer transport behavior."
+      "The discrepancy between earlier USBPcap reports and current Windows Raw Input delivery must be explained before enabling M1, M2, or Fn+P actions or suppression.",
+      "The no-Fn Game, Performance, and microphone-mute keys produced zero target input with Synapse active, so their firmware-versus-vendor ownership remains unresolved."
     ]
   },
   "privacy": {

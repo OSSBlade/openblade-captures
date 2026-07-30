@@ -171,9 +171,9 @@
       "performanceKey": "Captured",
       "m1PageUp": "Captured",
       "m2PageDown": "Captured",
-      "m3GamingMode": "Captured",
-      "m4PerformanceMode": "Captured",
-      "m5MicrophoneMute": "Captured"
+      "m3GamingMode": "ProductionAdmitted",
+      "m4PerformanceMode": "ProductionAdmitted",
+      "m5MicrophoneMute": "ProductionAdmitted"
     },
     "display": {
       "windowsVisibleModes": "ProductionAdmitted",
@@ -261,6 +261,8 @@
     "Manual fan curves are production-admitted host rendering over the exact fixed-target primitive; persisted curve intent readback is SoftwareOnly, while physical fan RPM retains its separate production-admitted query.",
     "Active Synapse Spectrum traffic can produce rejected TransactionMismatch failures.",
     "The exact production port admits only the validated 07/8C response 1111 (FullPower280W). Shared decoder value 0711 remains PID 02E0 evidence and is filtered to Unknown for PID 02C6 until exact-device readback exists.",
-    "Two controller-isolated 60-second special-key retries received zero physical input, including one window with Synapse, both verified Razer controller services, and OpenBlade inactive. They are failed zero-input sessions and do not advance the captured special-key leaves or justify production actions/suppression."
+    "Two controller-isolated 60-second special-key retries received zero physical input, including one window with Synapse, both verified Razer controller services, and OpenBlade inactive. They are failed zero-input sessions and do not advance the captured M1, M2, Fn+P, or normal-layer leaves.",
+    "A clean exact-device production probe decoded Fn+Game, Fn+Performance, and Fn+MicrophoneMute as M3/M4/M5 with prefixes 040A0300/040AD300/040AD400, 12 target messages, and no identity failures. A separate discrimination retry proved M1, M2, and Fn+P expose only indistinguishable generic Fn reports while ordinary Page Up/Page Down pass through. Production admission is therefore deliberately partial: M3-M5 only; M1/M2/Fn+P remain Captured.",
+    "A Synapse-present no-Fn retry of Game, Performance, and microphone mute produced zero target Raw Input messages. The result does not distinguish firmware ownership from vendor-stack ownership. Read-only post-probe production state was barrel AC, Performance/Automatic, Gaming Off, Driver mode, Static logo, and keyboard brightness raw 129 (51 percent)."
   ]
 }

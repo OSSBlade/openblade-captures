@@ -70,8 +70,14 @@ Assert-True (
     $annotation.decodedEvidence -ceq (
         'decoded/rz09-0528-pid-02c6-bios-2.02-special-keys.json')) `
     'Annotation no longer points to the canonical fixture.'
-Assert-True ($annotation.admission.productionAccess -ceq 'ObservedOnly') `
-    'Special keys must remain observed-only before exact live decoder validation.'
+Assert-True ($annotation.admission.productionAccess -ceq 'ReadWritePartial') `
+    'Special-key admission must remain explicitly partial.'
+Assert-True (
+    [string]::Join(
+        '|',
+        @($annotation.admission.admittedSlots | ForEach-Object { [string]$_ })) `
+        -ceq 'M3|M4|M5') `
+    'Only M3, M4, and M5 may be production-admitted.'
 Assert-True ($annotation.privacy.serialNumbersRetained -eq $false) `
     'Sanitized annotation must not retain serial numbers.'
 Assert-True ($annotation.privacy.devicePathsRetained -eq $false) `
@@ -140,16 +146,67 @@ Assert-True (
         -eq $false) `
     'The combined retry output must remain private.'
 
+Assert-True (
+    $annotation.liveDecoderValidation.productionDiscriminationRetry.status -ceq (
+        'ValidatedNegativeControl')) `
+    'The live M1/M2/Fn+P discrimination must remain a negative control.'
+Assert-True (
+    $annotation.liveDecoderValidation.productionDiscriminationRetry.privateOutput.sha256 `
+        -ceq 'E59E7AFBEC965F3235CFE66010C1789543CFF99AC5DD8C2E2EE584D2B893B90E') `
+    'The live discrimination output hash changed.'
+Assert-True (
+    $annotation.liveDecoderValidation.productionDiscriminationRetry.privateOutput.byteLength `
+        -eq 2085) `
+    'The live discrimination output length changed.'
+Assert-True (
+    $annotation.liveDecoderValidation.productionM3M5Validation.status -ceq (
+        'ProductionAdmitted')) `
+    'The exact live M3-M5 validation must remain admitted.'
+Assert-True (
+    $annotation.liveDecoderValidation.productionM3M5Validation.privateOutput.sha256 `
+        -ceq 'F1054AACAECA80459014EC8B6C6B9B8EB7F841C9DC3D3EED47191AC5A27334C2') `
+    'The live M3-M5 output hash changed.'
+Assert-True (
+    $annotation.liveDecoderValidation.productionM3M5Validation.privateOutput.byteLength `
+        -eq 1025) `
+    'The live M3-M5 output length changed.'
+Assert-True (
+    $annotation.liveDecoderValidation.productionM3M5Validation.targetInputMessages -eq 12) `
+    'The live M3-M5 target-message count changed.'
+Assert-True (
+    $annotation.liveDecoderValidation.productionM3M5Validation.deviceIdentityFailures -eq 0) `
+    'The live M3-M5 validation must retain exact device identity.'
+Assert-True (
+    $annotation.liveDecoderValidation.normalLayerRetry.privateOutput.sha256 `
+        -ceq '61D9B97CD3DF2298EF6D0E0181BE1B903D42761D3DD88EFAF38033B271BA48B7') `
+    'The no-Fn retry output hash changed.'
+Assert-True (
+    $annotation.liveDecoderValidation.normalLayerRetry.targetInputMessages -eq 0) `
+    'The Synapse-present no-Fn retry must remain a zero-input result.'
+Assert-True (
+    $annotation.liveDecoderValidation.postProbeReadback.settingsWritten -eq $false) `
+    'The post-probe readback must remain read-only.'
+Assert-True (
+    $annotation.liveDecoderValidation.postProbeReadback.keyboardBrightnessRaw -eq 129) `
+    'The restored keyboard brightness readback changed.'
+Assert-True (
+    $annotation.liveDecoderValidation.postProbeReadback.gamingMode -eq $false) `
+    'Gaming mode must remain restored off.'
+
 foreach ($leaf in @(
         'functionLayerReports',
         'performanceKey',
         'm1PageUp',
-        'm2PageDown',
+        'm2PageDown')) {
+    Assert-True ($coverage.capabilities.specialKeys.$leaf -ceq 'Captured') `
+        "Coverage leaf specialKeys.$leaf must remain Captured."
+}
+foreach ($leaf in @(
         'm3GamingMode',
         'm4PerformanceMode',
         'm5MicrophoneMute')) {
-    Assert-True ($coverage.capabilities.specialKeys.$leaf -ceq 'Captured') `
-        "Coverage leaf specialKeys.$leaf must remain Captured."
+    Assert-True ($coverage.capabilities.specialKeys.$leaf -ceq 'ProductionAdmitted') `
+        "Coverage leaf specialKeys.$leaf must remain ProductionAdmitted."
 }
 
 Write-Host 'RZ09-0528 special-key evidence tests passed.'
