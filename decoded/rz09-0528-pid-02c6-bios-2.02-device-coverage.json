@@ -200,6 +200,7 @@
     },
     "conflicts": {
       "vendorControllerPresent": "SetterValidated",
+      "windowsDynamicLightingDelegation": "ProductionAdmitted",
       "externalChangeDetection": "SoftwareOnly",
       "defaultZeroWritePolicy": "ProductionAdmitted",
       "explicitReclaim": "SoftwareOnly"
@@ -245,7 +246,7 @@
     "Logo Off, Static, and Breathing completed exact selector-00 production apply/readback/restore validation; final logo state is Static.",
     "Startup animation, function-key primary, and Gaming-mode setters were captured in both directions, independently read back, restored, and production-admitted; PID 02C6 function-key setter arguments are 0000/0001, not PID 02E0's 0100/0101.",
     "An isolated OpenBlade round trip applied Normal device mode from a Driver baseline, independently read Normal, received operator confirmation of expected function-layer behavior, restored Driver, and independently read Driver. Both setters are SetterValidated but remain outside the production mutation gate.",
-    "Keyboard lighting is off and the quick effect is Static by operator request, not as production readback evidence.",
+    "The earlier operator-requested Off/Static state is historical. Final state is Plugged In, keyboard brightness On at 50 percent, quick effect Static, and logo Static. Exact 03/83 readback returned raw 128 before and after an OpenBlade service restart while WindowsDynamicLighting delegation was enabled.",
     "Seven Synapse quick effects are Captured UI/transition discoveries and represented by OpenBlade as observed-only capabilities. Their parameter subfeatures, effect getter, and write path remain unadmitted.",
     "A read-only exact PID scan found ten HID collections, including the 91-byte control collection and a 51-byte usage 0059:0001 collection, but no 375-byte feature collection; PID 02E0's matrix writer cannot be reused.",
     "Manual fan curves are production-admitted host rendering over the exact fixed-target primitive; persisted curve intent readback is SoftwareOnly, while physical fan RPM retains its separate production-admitted query.",
