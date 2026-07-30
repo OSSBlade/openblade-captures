@@ -173,6 +173,7 @@
     "2026-07-30-rz09-0528-ac-power-readback-recheck.json",
     "2026-07-29-rz09-0528-ac-custom-partial.json",
     "2026-07-29-rz09-0528-ac-custom-cpu-matrix.json",
+    "2026-07-30-rz09-0528-cpu-tuning-backend-static-analysis.json",
     "2026-07-29-rz09-0528-ac-fixed-fan-validation.json",
     "2026-07-29-rz09-0528-keyboard-behavior-setters.json",
     "2026-07-29-rz09-0528-logo-lighting-setters.json",
