@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "evidenceProvenance": {
+    "controller": "OpenBlade exact-device validation runner",
+    "role": "NegativeControl",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeVisualParityConfirmed": false
+  },
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02"
+  },
+  "decodedEvidence": "decoded/rz09-0528-pid-02c6-bios-2.02-device-mode-validation.json",
+  "findings": [
+    "The first elevated attempt failed closed on competing controller processes before reading or writing device mode.",
+    "The wrapper was tightened to stop the exact known RazerAppEngine controller processes after stopping the named services.",
+    "The isolated retry read Driver as its baseline and failed closed because the reversible validator requires Normal as the starting state.",
+    "Neither attempt issued a device-mode setter or required device-mode restoration.",
+    "OpenBlade, Razer Elevation Service, and Razer Game Manager Service 3 were running after both attempts."
+  ],
+  "admission": {
+    "normalDeviceMode": "NotInvestigated",
+    "driverDeviceMode": "NotInvestigated",
+    "deviceModeGetter": "ProductionAdmitted",
+    "productionMutation": "Blocked",
+    "blockedBy": [
+      "A reversible Normal-to-Driver apply/readback/operator-check/restore round trip has not completed.",
+      "The isolated exact device currently reports Driver mode rather than the validator's required Normal baseline.",
+      "Normal-mode special-key parity remains uncaptured."
+    ]
+  },
+  "privacy": {
+    "rawSessionsCommitted": false,
+    "serialNumbersRetained": false,
+    "devicePathsRetained": false,
+    "uniqueUsbIdentifiersRetained": false
+  }
+}
