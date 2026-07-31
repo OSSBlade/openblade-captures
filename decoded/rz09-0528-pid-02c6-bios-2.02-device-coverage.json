@@ -110,11 +110,11 @@
           "durations": "NotInvestigated",
           "keyMap": "NotInvestigated"
         },
-        "spectrum": {
-          "base": "ProductionAdmitted",
-          "hostColorSequence": "ProductionAdmitted",
-          "frameCadence": "ProductionAdmitted"
-        },
+      "spectrum": {
+        "base": "SetterValidated",
+        "hostColorSequence": "Captured",
+        "frameCadence": "Captured"
+      },
         "starlight": {
           "base": "Captured",
           "singleColor": "NotInvestigated",

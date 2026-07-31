@@ -77,14 +77,16 @@
     }
   ],
   "admission": {
-    "effects": ["Off", "Spectrum", "Static"],
-    "observedOnlyEffects": ["Ripple", "Starlight", "Tidal", "Wave", "Wheel"],
+    "effects": ["Off", "Static"],
+    "setterValidatedButNotAdmitted": ["Spectrum"],
+    "observedOnlyEffects": ["Spectrum", "Ripple", "Starlight", "Tidal", "Wave", "Wheel"],
     "windowsDynamicLightingDelegationRemainsZeroWrite": true
   },
   "limitations": [
     "Successful SetFeature/GetFeature transaction acknowledgement and operator visual confirmation validate the write path; there is no matrix getter and no matrix readback is claimed.",
     "The 102-slot PID 02C6 control-interface protocol is separate from the 85-lamp Windows LampArray interface.",
     "No PID 02E0 report envelope, timing, effect oracle, or device-specific assumption was reused.",
+    "The isolated Spectrum transition did not validate continuous installed-service rendering; later lifecycle evidence keeps Spectrum outside production admission.",
     "Ripple, Starlight, Tidal, Wave, and Wheel remain observed-only until their exact-device parameters and production writes are independently validated."
   ]
 }

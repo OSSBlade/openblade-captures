@@ -140,12 +140,13 @@
       }
     },
     "lightingEffects": {
-      "status": "CapturedNotAdmitted",
+      "status": "PartialProductionAdmission",
       "quickEffectTransitions": "Spectrum, Static, Starlight, Ripple, Tidal, Wave, Wheel",
-      "productionRepresentation": "Observed-only DeviceCapabilities.ObservedLightingEffects with an informational tray card; excluded from writable LightingEffects",
-      "writableKeyboardEffects": "Off only",
-      "limitation": "Observed 00/86, 00/84, and 03/0A traffic did not discriminate effect-specific device payloads",
-      "interfaceDiscovery": "Exact PID scan found no 375-byte feature collection; do not reuse PID 02E0 matrix assumptions"
+      "productionRepresentation": "Off and one-shot Static are writable. Spectrum remains an explicit observed-only capability after its installed continuous renderer faulted; the other captured quick effects also remain observed-only.",
+      "writableKeyboardEffects": "Off and Static",
+      "limitation": "Spectrum's isolated transition succeeded, but installed continuous rendering disabled controls and lost Driver-mode readback within about three seconds. No matrix getter identifies the failing row, latch, cadence, or response.",
+      "interfaceDiscovery": "The exact 91-byte PID 02C6 control interface accepts six 03/0B row writes plus 03/0A 0500 latch. The model still has no PID 02E0-style 375-byte feature collection; do not reuse PID 02E0 report envelopes.",
+      "restoration": "Restarting the exact installed service reapplied the saved Static green 50 percent profile; renderer ownership, Driver mode, CPU temperature, and both fan readings recovered."
     },
     "logoLighting": {
       "status": "ProductionAdmitted",
@@ -167,6 +168,8 @@
     "2026-07-29-rz09-0528-windows-lighting-handoff-validation.json",
     "2026-07-29-rz09-0528-lighting-query-navigation-negative.json",
     "2026-07-29-rz09-0528-lighting-navigation-negative-repeat.json",
+    "2026-07-30-rz09-0528-openblade-matrix-lighting-validation.json",
+    "2026-07-30-rz09-0528-openblade-matrix-lighting-lifecycle.json",
     "2026-07-29-rz09-0528-battery-limit-70-admission.json",
     "2026-07-29-rz09-0528-battery-limit-matrix.json",
     "2026-07-29-rz09-0528-temporary-full-charge-admission.json",
@@ -190,6 +193,7 @@
     "The 0711 USB-C mapping is admitted only by the exact PID 02C6 production factory after three identical independent reads. Do not generalize it to another model without that model's own evidence.",
     "Never run USBPcap and OpenBlade control concurrently.",
     "Active Synapse host-rendered lighting can race the shared feature response.",
+    "An acknowledged isolated Spectrum transition is not installed lifecycle proof. Keep Spectrum observed-only until its continuous renderer survives concurrent service observation and restoration.",
     "Do not broaden PID 02E0 commands or geometry to PID 02C6 without exact-device evidence."
   ]
 }
