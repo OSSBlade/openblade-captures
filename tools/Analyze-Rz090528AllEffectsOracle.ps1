@@ -151,7 +151,6 @@ function Get-ActionWindowSummary {
         [Parameter(Mandatory)] $Frames
     )
 
-    $completed = ConvertTo-RelativeSeconds $Action.completedAtUtc $CaptureStart
     $confirmedProperty = $Action.PSObject.Properties['confirmedAtUtc']
     $confirmed = if ($null -ne $confirmedProperty -and
         $null -ne $confirmedProperty.Value) {
@@ -159,6 +158,17 @@ function Get-ActionWindowSummary {
     }
     else {
         $null
+    }
+    $completedProperty = $Action.PSObject.Properties['completedAtUtc']
+    $completed = if ($null -ne $completedProperty -and
+        $null -ne $completedProperty.Value) {
+        ConvertTo-RelativeSeconds ([string]$completedProperty.Value) $CaptureStart
+    }
+    elseif ($null -ne $confirmed) {
+        $confirmed
+    }
+    else {
+        throw "Operator action '$($Action.id)' has no completed or confirmed timestamp."
     }
     $holdCompletedProperty = $Action.PSObject.Properties['holdCompletedAtUtc']
     $holdCompleted = if ($null -ne $holdCompletedProperty -and
@@ -180,7 +190,22 @@ function Get-ActionWindowSummary {
     else {
         $windowStart = $completed
         $windowEnd = if ($ActionIndex + 1 -lt $Actions.Count) {
-            ConvertTo-RelativeSeconds $Actions[$ActionIndex + 1].startedAtUtc $CaptureStart
+            $next = $Actions[$ActionIndex + 1]
+            $nextStarted = $next.PSObject.Properties['startedAtUtc']
+            $nextConfirmed = $next.PSObject.Properties['confirmedAtUtc']
+            $nextCompleted = $next.PSObject.Properties['completedAtUtc']
+            if ($null -ne $nextStarted -and $null -ne $nextStarted.Value) {
+                ConvertTo-RelativeSeconds ([string]$nextStarted.Value) $CaptureStart
+            }
+            elseif ($null -ne $nextConfirmed -and $null -ne $nextConfirmed.Value) {
+                ConvertTo-RelativeSeconds ([string]$nextConfirmed.Value) $CaptureStart
+            }
+            elseif ($null -ne $nextCompleted -and $null -ne $nextCompleted.Value) {
+                ConvertTo-RelativeSeconds ([string]$nextCompleted.Value) $CaptureStart
+            }
+            else {
+                throw "Operator action '$($next.id)' has no usable timestamp."
+            }
         }
         else {
             ($CaptureEnd.ToUniversalTime() - $CaptureStart.ToUniversalTime()).TotalSeconds
