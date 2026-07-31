@@ -13,6 +13,8 @@ $firePath = Join-Path $repository (
     'decoded\rz09-0528-pid-02c6-bios-2.02-fire-oracle.json')
 $upperAnnotationPath = Join-Path $repository (
     'annotations\2026-07-30-rz09-0528-full-menu-upper-effects-oracle.json')
+$coveragePath = Join-Path $repository (
+    'decoded\rz09-0528-pid-02c6-bios-2.02-device-coverage.json')
 
 function Assert-True {
     param([bool] $Condition, [string] $Message)
@@ -62,6 +64,7 @@ $waveWheel = Get-Content -Raw -LiteralPath $waveWheelPath | ConvertFrom-Json
 $fire = Get-Content -Raw -LiteralPath $firePath | ConvertFrom-Json
 $upperAnnotation =
     Get-Content -Raw -LiteralPath $upperAnnotationPath | ConvertFrom-Json
+$coverage = Get-Content -Raw -LiteralPath $coveragePath | ConvertFrom-Json
 foreach ($document in @($tidal, $waveWheel, $fire)) {
     Assert-True ($document.target.modelNumber -ceq 'RZ09-0528') `
         'Fixture model changed.'
@@ -141,5 +144,15 @@ Assert-True (
 Assert-True (
     $upperAnnotation.sanitizedFixture.sha256 -ceq $fireHash) `
     'The annotation and sanitized Fire fixture hashes diverged.'
+Assert-True (
+    $coverage.capabilities.keyboardLighting.effects.ambientAwareness.matrixFormat
+        -ceq 'Captured' -and
+    $coverage.capabilities.keyboardLighting.effects.ambientAwareness.frameCadence
+        -ceq 'Captured') `
+    'The clean Ambient Awareness matrix evidence was not recorded in coverage.'
+Assert-True (
+    $coverage.capabilities.keyboardLighting.effects.reactive.keyMap -ceq
+        'NotInvestigated') `
+    'The Reactive no-input control must not advance key-map coverage.'
 
 Write-Host 'RZ09-0528 Synapse effect fixture tests passed.'
