@@ -106,7 +106,7 @@
         },
         "ripple": {
           "base": "Captured",
-          "colors": "NotInvestigated",
+          "colors": "Captured",
           "durations": "NotInvestigated",
           "keyMap": "NotInvestigated"
         },
@@ -117,10 +117,10 @@
       },
         "starlight": {
           "base": "Captured",
-          "singleColor": "NotInvestigated",
-          "dualColor": "NotInvestigated",
-          "randomColor": "NotInvestigated",
-          "durations": "NotInvestigated"
+          "singleColor": "Captured",
+          "dualColor": "Captured",
+          "randomColor": "Captured",
+          "durations": "Captured"
         },
         "static": {
           "base": "ProductionAdmitted",
@@ -128,21 +128,21 @@
         },
         "tidal": {
           "base": "Captured",
-          "primaryColor": "NotInvestigated",
-          "secondaryColor": "NotInvestigated",
-          "randomColor": "NotInvestigated",
-          "inwardDirection": "NotInvestigated",
-          "outwardDirection": "NotInvestigated"
+          "primaryColor": "Captured",
+          "secondaryColor": "Captured",
+          "randomColor": "Captured",
+          "inwardDirection": "Captured",
+          "outwardDirection": "Captured"
         },
         "wave": {
           "base": "Captured",
-          "leftDirection": "NotInvestigated",
-          "rightDirection": "NotInvestigated"
+          "leftDirection": "Captured",
+          "rightDirection": "Captured"
         },
         "wheel": {
           "base": "Captured",
-          "leftDirection": "NotInvestigated",
-          "rightDirection": "NotInvestigated"
+          "leftDirection": "Captured",
+          "rightDirection": "Captured"
         }
       },
       "effectGetter": "NotInvestigated",
@@ -259,7 +259,8 @@
     "The exact WDL ownership sequence restarted only the OpenBlade Windows service, verified it returned Running/Automatic, independently re-read keyboard brightness raw 128, and preserved the externally owned Static 50 state. lifecycle.serviceRestart is production-admitted; cold boot, sign-in, sleep/resume, and device reconnect remain uninvestigated.",
     "Three consecutive Windows PowerShell 5.1 exact-device power-source queries on barrel AC produced identical 822-byte outputs: 07/8C returned 1111 and the paired 0D/82 channels returned 01010200/01020200, independently reconfirming FullPower280W and the already admitted Performance/Automatic state. This AC-only recheck changed no setting and did not itself advance USB-C or battery evidence; the later corrected three-state matrix independently validated those states.",
     "Exact PID 02C6 Static and Spectrum host rendering are production-admitted. The exact-build validator acknowledged every six-row 03/0B plus 03/0A latch transition, independently read raw brightness 128, received operator confirmation for Static green and smooth Spectrum, and restored Static green 50 percent. Matrix readback remains unavailable and is not inferred from visual confirmation.",
-    "Ripple, Starlight, Tidal, Wave, and Wheel remain Captured UI/transition discoveries and are represented by OpenBlade as observed-only capabilities. Their parameter subfeatures, effect getter, and production write paths remain unadmitted.",
+    "The corrected address-3 Synapse Quick Effects oracle captured Ripple color selection; Starlight single, dual, random, and all three durations; Tidal fixed/random colors and both directions; Wave both directions; and Wheel both rotations. Sanitized exact-device Tidal and Wave/Wheel templates contain no PCAP hash or unique identifier. These parameter leaves remain Captured until OpenBlade completes guarded on-device lifecycle validation. Ripple key mapping remains NotInvestigated because synthetic key injection produced only idle keepalives; a physical normal-key capture is still required.",
+    "The same exact oracle proves continuous PID 02C6 matrix traffic is SET-only after the initial transition: six 03/0B rows plus 03/0A latch, with no per-frame GET response, at an observed 42-45 ms cadence. This corrects the earlier acknowledged-every-row production assumption without changing the absence of a matrix effect getter.",
     "A read-only exact PID scan found ten HID collections, including the 91-byte control collection and a 51-byte usage 0059:0001 collection, but no 375-byte feature collection; PID 02E0's matrix writer cannot be reused.",
     "Manual fan curves are production-admitted host rendering over the exact fixed-target primitive; persisted curve intent readback is SoftwareOnly, while physical fan RPM retains its separate production-admitted query.",
     "Active Synapse Spectrum traffic can produce rejected TransactionMismatch failures.",
