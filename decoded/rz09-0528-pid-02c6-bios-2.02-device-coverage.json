@@ -111,9 +111,9 @@
           "keyMap": "NotInvestigated"
         },
         "spectrum": {
-          "base": "Captured",
-          "hostColorSequence": "NotInvestigated",
-          "frameCadence": "NotInvestigated"
+          "base": "ProductionAdmitted",
+          "hostColorSequence": "ProductionAdmitted",
+          "frameCadence": "ProductionAdmitted"
         },
         "starlight": {
           "base": "Captured",
@@ -123,8 +123,8 @@
           "durations": "NotInvestigated"
         },
         "static": {
-          "base": "Captured",
-          "colors": "NotInvestigated"
+          "base": "ProductionAdmitted",
+          "colors": "ProductionAdmitted"
         },
         "tidal": {
           "base": "Captured",
@@ -258,7 +258,8 @@
     "The earlier operator-requested Off/Static state is historical. Final state is Plugged In, keyboard brightness On at 50 percent, quick effect Static, and logo Static. Exact 03/83 readback returned raw 128 before and after an OpenBlade service restart while WindowsDynamicLighting delegation was enabled.",
     "The exact WDL ownership sequence restarted only the OpenBlade Windows service, verified it returned Running/Automatic, independently re-read keyboard brightness raw 128, and preserved the externally owned Static 50 state. lifecycle.serviceRestart is production-admitted; cold boot, sign-in, sleep/resume, and device reconnect remain uninvestigated.",
     "Three consecutive Windows PowerShell 5.1 exact-device power-source queries on barrel AC produced identical 822-byte outputs: 07/8C returned 1111 and the paired 0D/82 channels returned 01010200/01020200, independently reconfirming FullPower280W and the already admitted Performance/Automatic state. This AC-only recheck changed no setting and did not itself advance USB-C or battery evidence; the later corrected three-state matrix independently validated those states.",
-    "Seven Synapse quick effects are Captured UI/transition discoveries and represented by OpenBlade as observed-only capabilities. Their parameter subfeatures, effect getter, and write path remain unadmitted.",
+    "Exact PID 02C6 Static and Spectrum host rendering are production-admitted. The exact-build validator acknowledged every six-row 03/0B plus 03/0A latch transition, independently read raw brightness 128, received operator confirmation for Static green and smooth Spectrum, and restored Static green 50 percent. Matrix readback remains unavailable and is not inferred from visual confirmation.",
+    "Ripple, Starlight, Tidal, Wave, and Wheel remain Captured UI/transition discoveries and are represented by OpenBlade as observed-only capabilities. Their parameter subfeatures, effect getter, and production write paths remain unadmitted.",
     "A read-only exact PID scan found ten HID collections, including the 91-byte control collection and a 51-byte usage 0059:0001 collection, but no 375-byte feature collection; PID 02E0's matrix writer cannot be reused.",
     "Manual fan curves are production-admitted host rendering over the exact fixed-target primitive; persisted curve intent readback is SoftwareOnly, while physical fan RPM retains its separate production-admitted query.",
     "Active Synapse Spectrum traffic can produce rejected TransactionMismatch failures.",

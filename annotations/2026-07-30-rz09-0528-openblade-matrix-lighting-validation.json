@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "evidenceProvenance": {
+    "controller": "OpenBlade exact-build validator",
+    "role": "ProductionAdmissionValidation",
+    "openBladeCommit": "0f865225ac7a7f9ccdfe54c65a3157de05111105",
+    "protocolAssemblySha256": "985F50E0B8ABB1687D9844FB74AD7A8AC379813C48E28E17C9AAA7AFC239FDD4",
+    "privateValidationArtifactSha256": "0F93FCAA3F28F9312F53F251031EA7F3AE9E9A468B0B7A14508254F3EA8A69CE"
+  },
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02"
+  },
+  "capturedProtocol": {
+    "sourceCaptureSha256": "8521047904B9A122EE3B36F703F8352B7C0D714BC10F50B6C10527CFDF4D1F17",
+    "rowCommand": "03/0B",
+    "latchCommand": "03/0A 0500",
+    "rowCount": 6,
+    "columnsPerRow": 17,
+    "rowPayloadLength": 55,
+    "rowHeader": "FF <row 0-5> 00 10",
+    "protocolSlotCount": 102,
+    "nonHoleSlotCount": 86,
+    "holeSlots": [0, 17, 31, 34, 48, 51, 64, 65, 68, 70, 81, 82, 85, 89, 92, 93],
+    "spectrumCycleMilliseconds": 34034,
+    "spectrumRowZeroSampleCount": 843
+  },
+  "validation": {
+    "startedAtUtc": "2026-07-31T01:15:42.2403020Z",
+    "completedAtUtc": "2026-07-31T01:15:57.4121071Z",
+    "openBladeServiceIsolated": true,
+    "razerAppEngineIsolated": true,
+    "driverModeEnteredAndReadBack": true,
+    "actions": [
+      {
+        "effect": "Static",
+        "color": "00FF00",
+        "brightnessPercent": 50,
+        "expectedBrightnessRaw": 128,
+        "observedBrightnessRaw": 128,
+        "transitionAcknowledged": true,
+        "rendererOwnership": "Static",
+        "operatorVisuallyConfirmed": true
+      },
+      {
+        "effect": "Spectrum",
+        "brightnessPercent": 50,
+        "expectedBrightnessRaw": 128,
+        "observedBrightnessRaw": 128,
+        "transitionAcknowledged": true,
+        "rendererOwnership": "Spectrum",
+        "operatorVisuallyConfirmed": true
+      }
+    ],
+    "matrixReadbackAvailable": false,
+    "restoration": {
+      "attempted": true,
+      "effect": "Static",
+      "color": "00FF00",
+      "brightnessPercent": 50,
+      "observedBrightnessRaw": 128,
+      "brightnessMatched": true,
+      "rendererOwnershipMatched": true,
+      "operatorVisuallyConfirmed": true
+    },
+    "success": true
+  },
+  "failedAttempts": [
+    {
+      "stage": "elevated wrapper preflight",
+      "failure": "Windows PowerShell 5.1 did not provide Wait-Service.",
+      "hardwareTouched": false,
+      "openBladeServiceStopped": true,
+      "preservedPrivately": true
+    }
+  ],
+  "admission": {
+    "effects": ["Off", "Spectrum", "Static"],
+    "observedOnlyEffects": ["Ripple", "Starlight", "Tidal", "Wave", "Wheel"],
+    "windowsDynamicLightingDelegationRemainsZeroWrite": true
+  },
+  "limitations": [
+    "Successful SetFeature/GetFeature transaction acknowledgement and operator visual confirmation validate the write path; there is no matrix getter and no matrix readback is claimed.",
+    "The 102-slot PID 02C6 control-interface protocol is separate from the 85-lamp Windows LampArray interface.",
+    "No PID 02E0 report envelope, timing, effect oracle, or device-specific assumption was reused.",
+    "Ripple, Starlight, Tidal, Wave, and Wheel remain observed-only until their exact-device parameters and production writes are independently validated."
+  ]
+}
