@@ -5,6 +5,8 @@ $fixturePath = Join-Path $repository (
     'decoded\rz09-0528-pid-02c6-bios-2.02-special-keys.json')
 $annotationPath = Join-Path $repository (
     'annotations\2026-07-29-rz09-0528-special-key-reports.json')
+$mediaRowAnnotationPath = Join-Path $repository (
+    'annotations\2026-07-30-rz09-0528-openblade-media-row-regression.json')
 $coveragePath = Join-Path $repository (
     'decoded\rz09-0528-pid-02c6-bios-2.02-device-coverage.json')
 
@@ -20,6 +22,8 @@ function Assert-True {
 
 $fixture = Get-Content -Raw -LiteralPath $fixturePath | ConvertFrom-Json
 $annotation = Get-Content -Raw -LiteralPath $annotationPath | ConvertFrom-Json
+$mediaRowAnnotation = Get-Content -Raw -LiteralPath $mediaRowAnnotationPath |
+    ConvertFrom-Json
 $coverage = Get-Content -Raw -LiteralPath $coveragePath | ConvertFrom-Json
 
 Assert-True ($fixture.schemaVersion -eq 1) 'Special-key fixture schema changed.'
@@ -216,5 +220,42 @@ foreach ($leaf in @(
     Assert-True ($coverage.capabilities.specialKeys.$leaf -ceq 'ProductionAdmitted') `
         "Coverage leaf specialKeys.$leaf must remain ProductionAdmitted."
 }
+
+Assert-True (
+    $mediaRowAnnotation.evidenceProvenance.mediaRowFixCommit -ceq (
+        '029e7a65d9c819f76a5e3de5f169f69939fd66ef')) `
+    'Installed media-row evidence no longer points to the production fix.'
+Assert-True (
+    $mediaRowAnnotation.regression.functionKeyBehavior -ceq 'FunctionKeys') `
+    'Physical media-row acceptance must retain the operator function-key mode.'
+Assert-True (
+    $mediaRowAnnotation.physicalAcceptance.operatorConfirmedMediaKeysResponsive `
+        -eq $true) `
+    'Physical media-row acceptance must retain the operator confirmation.'
+Assert-True (
+    [string]::Join(
+        '|',
+        @($mediaRowAnnotation.physicalAcceptance.testedActions |
+            ForEach-Object { [string]$_.input })) -ceq 'Fn+F1|Fn+F2|Fn+F3') `
+    'The accepted physical media-key set changed.'
+Assert-True (
+    $mediaRowAnnotation.physicalAcceptance.syntheticInputUsed -eq $false) `
+    'Physical media-row acceptance must not become synthetic input evidence.'
+Assert-True (
+    $mediaRowAnnotation.discardedProbe.status -ceq (
+        'FailedZeroInputNonInteractiveSession')) `
+    'The discarded console probe must remain an honest failed probe.'
+Assert-True (
+    $mediaRowAnnotation.discardedProbe.usedAsDeviceEvidence -eq $false) `
+    'The zero-input console probe must not be promoted to device evidence.'
+Assert-True (
+    $mediaRowAnnotation.restoration.settingsChangedForAcceptance -eq $false) `
+    'Physical media-row acceptance must remain a no-setting-change pass.'
+Assert-True (
+    $mediaRowAnnotation.restoration.brightnessPercent -eq 50) `
+    'The final visible keyboard brightness changed.'
+Assert-True (
+    $mediaRowAnnotation.privacy.uniqueUsbIdentifiersRetained -eq $false) `
+    'Media-row acceptance must not retain unique USB identifiers.'
 
 Write-Host 'RZ09-0528 special-key evidence tests passed.'
