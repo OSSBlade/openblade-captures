@@ -81,17 +81,21 @@
       "brightnessQuery": "ProductionAdmitted",
       "effects": {
         "ambientAwareness": {
-          "base": "NotInvestigated",
-          "screenRegions": "NotInvestigated",
+          "base": "Captured",
+          "screenRegions": "Captured",
           "matrixFormat": "NotInvestigated",
           "frameCadence": "NotInvestigated"
         },
+        "audioMeter": {
+          "base": "Captured",
+          "colorBoost": "Captured"
+        },
         "breathing": {
-          "base": "NotInvestigated",
-          "singleColor": "NotInvestigated",
-          "dualColor": "NotInvestigated",
-          "randomColor": "NotInvestigated",
-          "durations": "NotInvestigated"
+          "base": "Captured",
+          "singleColor": "Captured",
+          "dualColor": "Captured",
+          "randomColor": "Captured",
+          "durations": "Absent"
         },
         "customMatrix": {
           "setupCommand": "NotInvestigated",
@@ -99,10 +103,13 @@
           "frameCadence": "NotInvestigated"
         },
         "reactive": {
-          "base": "NotInvestigated",
-          "colors": "NotInvestigated",
-          "durations": "NotInvestigated",
+          "base": "Captured",
+          "colors": "Captured",
+          "durations": "Captured",
           "keyMap": "NotInvestigated"
+        },
+        "fire": {
+          "base": "Captured"
         },
         "ripple": {
           "base": "Captured",
@@ -260,6 +267,7 @@
     "Three consecutive Windows PowerShell 5.1 exact-device power-source queries on barrel AC produced identical 822-byte outputs: 07/8C returned 1111 and the paired 0D/82 channels returned 01010200/01020200, independently reconfirming FullPower280W and the already admitted Performance/Automatic state. This AC-only recheck changed no setting and did not itself advance USB-C or battery evidence; the later corrected three-state matrix independently validated those states.",
     "Exact PID 02C6 Static and Spectrum host rendering are production-admitted. The exact-build validator acknowledged every six-row 03/0B plus 03/0A latch transition, independently read raw brightness 128, received operator confirmation for Static green and smooth Spectrum, and restored Static green 50 percent. Matrix readback remains unavailable and is not inferred from visual confirmation.",
     "The corrected address-3 Synapse Quick Effects oracle captured Ripple color selection; Starlight single, dual, random, and all three durations; Tidal fixed/random colors and both directions; Wave both directions; and Wheel both rotations. Sanitized exact-device Tidal and Wave/Wheel templates contain no PCAP hash or unique identifier. These parameter leaves remain Captured until OpenBlade completes guarded on-device lifecycle validation. Ripple key mapping remains NotInvestigated because synthetic key injection produced only idle keepalives; a physical normal-key capture is still required.",
+    "A later Computer Use correction scrolled to the actual top of the Quick Effects menu and confirmed that the earlier visible subset was incomplete. The full menu also contains Ambient Awareness with five screen-region choices, Audio Meter with Color Boost, Breathing with one/two/random colors and no duration control, Fire with no parameters, and Reactive with color plus Short/Medium/Long. These UI observations are Captured and must never be silently dropped merely because their transport oracle was not in the first address-3 run.",
     "The same exact oracle proves continuous PID 02C6 matrix traffic is SET-only after the initial transition: six 03/0B rows plus 03/0A latch, with no per-frame GET response, at an observed 42-45 ms cadence. This corrects the earlier acknowledged-every-row production assumption without changing the absence of a matrix effect getter.",
     "A read-only exact PID scan found ten HID collections, including the 91-byte control collection and a 51-byte usage 0059:0001 collection, but no 375-byte feature collection; PID 02E0's matrix writer cannot be reused.",
     "Manual fan curves are production-admitted host rendering over the exact fixed-target primitive; persisted curve intent readback is SoftwareOnly, while physical fan RPM retains its separate production-admitted query.",
