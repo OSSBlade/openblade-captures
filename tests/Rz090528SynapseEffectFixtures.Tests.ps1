@@ -151,7 +151,7 @@ Assert-True (
     $ambientCoverage.frameCadence -ceq 'Captured') `
     'The clean Ambient Awareness matrix evidence was not recorded in coverage.'
 Assert-True (
-    $coverage.capabilities.keyboardLighting.effects.reactive.keyMap -ceq 'NotInvestigated') `
-    'The Reactive no-input control must not advance key-map coverage.'
+    $coverage.capabilities.keyboardLighting.effects.reactive.keyMap -ceq 'Captured') `
+    'The later physical-key oracle must advance Reactive key-map coverage without rewriting the earlier no-input control.'
 
 Write-Host 'RZ09-0528 Synapse effect fixture tests passed.'
