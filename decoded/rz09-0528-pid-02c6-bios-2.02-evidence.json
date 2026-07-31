@@ -140,13 +140,13 @@
       }
     },
     "lightingEffects": {
-      "status": "PartialProductionAdmission",
-      "quickEffectTransitions": "Spectrum, Static, Starlight, Ripple, Tidal, Wave, Wheel",
-      "productionRepresentation": "Off and one-shot Static are writable. Spectrum remains an explicit observed-only capability after its installed continuous renderer faulted; the other captured quick effects also remain observed-only.",
-      "writableKeyboardEffects": "Off and Static",
-      "limitation": "Spectrum's isolated transition succeeded, but installed continuous rendering disabled controls and lost Driver-mode readback within about three seconds. No matrix getter identifies the failing row, latch, cadence, or response.",
+      "status": "ProductionEffectBasesAdmitted",
+      "quickEffectTransitions": "Ambient Awareness, Audio Meter, Breathing, Fire, Reactive, Ripple, Spectrum Cycling, Starlight, Static, Tidal, Wave, Wheel",
+      "productionRepresentation": "Off and all twelve visible non-Off Synapse effect bases are writable. Effect-specific parameter combinations remain represented explicitly and retain their individual evidence status.",
+      "writableKeyboardEffects": "Off, Ambient Awareness, Audio Meter, Breathing, Fire, Reactive, Ripple, Spectrum Cycling, Starlight, Static, Tidal, Wave, Wheel",
+      "limitation": "No matrix or effect getter exists. Installed lifecycle validation is not reinterpreted as firmware readback, and parameter combinations remain Captured until their own installed round trips.",
       "interfaceDiscovery": "The exact 91-byte PID 02C6 control interface accepts six 03/0B row writes plus 03/0A 0500 latch. The model still has no PID 02E0-style 375-byte feature collection; do not reuse PID 02E0 report envelopes.",
-      "restoration": "Restarting the exact installed service reapplied the saved Static green 50 percent profile; renderer ownership, Driver mode, CPU temperature, and both fan readings recovered."
+      "restoration": "Installed build 0.1.0+5466d9cd641b6875ed618e46d364f223d419fc2f saved Static green 50 percent and Static logo back to the AC profile after the full effect lifecycle."
     },
     "logoLighting": {
       "status": "ProductionAdmitted",
@@ -170,6 +170,7 @@
     "2026-07-29-rz09-0528-lighting-navigation-negative-repeat.json",
     "2026-07-30-rz09-0528-openblade-matrix-lighting-validation.json",
     "2026-07-30-rz09-0528-openblade-matrix-lighting-lifecycle.json",
+    "2026-07-30-rz09-0528-openblade-full-lighting-lifecycle.json",
     "2026-07-29-rz09-0528-battery-limit-70-admission.json",
     "2026-07-29-rz09-0528-battery-limit-matrix.json",
     "2026-07-29-rz09-0528-temporary-full-charge-admission.json",
@@ -193,7 +194,7 @@
     "The 0711 USB-C mapping is admitted only by the exact PID 02C6 production factory after three identical independent reads. Do not generalize it to another model without that model's own evidence.",
     "Never run USBPcap and OpenBlade control concurrently.",
     "Active Synapse host-rendered lighting can race the shared feature response.",
-    "An acknowledged isolated Spectrum transition is not installed lifecycle proof. Keep Spectrum observed-only until its continuous renderer survives concurrent service observation and restoration.",
+    "An acknowledged isolated Spectrum transition is not installed lifecycle proof. Spectrum advanced only after the exact fixed build kept the installed UI and service healthy through a 12-second continuous-renderer hold and restored the saved Static profile.",
     "Do not broaden PID 02E0 commands or geometry to PID 02C6 without exact-device evidence."
   ]
 }

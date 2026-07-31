@@ -3,6 +3,8 @@ $ErrorActionPreference = 'Stop'
 $repository = Split-Path $PSScriptRoot -Parent
 $annotationPath = Join-Path $repository (
     'annotations\2026-07-30-rz09-0528-openblade-matrix-lighting-lifecycle.json')
+$fullLifecyclePath = Join-Path $repository (
+    'annotations\2026-07-30-rz09-0528-openblade-full-lighting-lifecycle.json')
 $isolatedPath = Join-Path $repository (
     'annotations\2026-07-30-rz09-0528-openblade-matrix-lighting-validation.json')
 $coveragePath = Join-Path $repository (
@@ -18,6 +20,8 @@ function Assert-True {
 }
 
 $annotation = Get-Content -Raw -LiteralPath $annotationPath | ConvertFrom-Json
+$fullLifecycle = Get-Content -Raw -LiteralPath $fullLifecyclePath |
+    ConvertFrom-Json
 $isolated = Get-Content -Raw -LiteralPath $isolatedPath | ConvertFrom-Json
 $coverage = Get-Content -Raw -LiteralPath $coveragePath | ConvertFrom-Json
 $evidence = Get-Content -Raw -LiteralPath $evidencePath | ConvertFrom-Json
@@ -64,15 +68,61 @@ Assert-True (
         'ProductionAdmitted') 'Static color admission regressed.'
 Assert-True (
     $coverage.capabilities.keyboardLighting.effects.spectrum.base -ceq
-        'SetterValidated') 'Spectrum setter validation was lost.'
+        'ProductionAdmitted') 'Spectrum production admission was lost.'
 foreach ($leaf in @('hostColorSequence', 'frameCadence')) {
     Assert-True (
         $coverage.capabilities.keyboardLighting.effects.spectrum.$leaf -ceq
             'Captured') "Spectrum $leaf must remain captured."
 }
+Assert-True ($fullLifecycle.device.modelNumber -ceq 'RZ09-0528') `
+    'Full lighting lifecycle model changed.'
+Assert-True ($fullLifecycle.device.productIdHex -ceq '02C6') `
+    'Full lighting lifecycle PID changed.'
+Assert-True (
+    $fullLifecycle.evidenceProvenance.openBladeCommit -ceq
+        '5466d9cd641b6875ed618e46d364f223d419fc2f') `
+    'Full lighting lifecycle build changed.'
+Assert-True (
+    $fullLifecycle.effectLifecycle.spectrumRegressionHoldSeconds -ge 10) `
+    'Spectrum regression hold no longer clears the historical failure window.'
+Assert-True (
+    $fullLifecycle.effectLifecycle.spectrumUiResponsiveAfterHold -eq $true) `
+    'Spectrum UI responsiveness was not retained.'
+Assert-True (
+    $fullLifecycle.effectLifecycle.spectrumServiceRunningAfterHold -eq $true) `
+    'Spectrum installed-service health was not retained.'
+Assert-True (
+    $fullLifecycle.effectLifecycle.reactive.operatorConfirmedOnlyOriginKeyLit `
+        -eq $true) 'Installed Reactive physical-origin evidence was lost.'
+Assert-True (
+    $fullLifecycle.effectLifecycle.ripple.operatorConfirmedWaveOriginAtKey `
+        -eq $true) 'Installed Ripple physical-origin evidence was lost.'
+Assert-True (
+    $fullLifecycle.admission.productionEffectBases.Count -eq 12) `
+    'Unexpected admitted non-Off effect-base count.'
+Assert-True (
+    $fullLifecycle.admission.parameterLeavesRemainCaptured -eq $true) `
+    'Full lifecycle must not overstate parameter admission.'
+Assert-True (
+    $fullLifecycle.admission.matrixReadbackAvailable -eq $false) `
+    'Full lifecycle must not infer matrix readback.'
+Assert-True (
+    $fullLifecycle.restoration.effect -ceq 'Static' -and
+    $fullLifecycle.restoration.brightnessPercent -eq 50 -and
+    $fullLifecycle.restoration.color -ceq '47E10C' -and
+    $fullLifecycle.restoration.logoMode -ceq 'Static' -and
+    $fullLifecycle.restoration.savedToProfile -eq $true) `
+    'Final Static green 50 percent / Static logo restoration changed.'
+Assert-True (
+    $fullLifecycle.isolation.synapseProcessCount -eq 0 -and
+    $fullLifecycle.isolation.openBladeServiceState -ceq 'Running' -and
+    $fullLifecycle.isolation.sessionAgentProcessCount -eq 1 -and
+    $fullLifecycle.isolation.trayProcessCount -eq 1) `
+    'Installed controller isolation or process health changed.'
 foreach ($fileName in @(
         '2026-07-30-rz09-0528-openblade-matrix-lighting-validation.json',
-        '2026-07-30-rz09-0528-openblade-matrix-lighting-lifecycle.json')) {
+        '2026-07-30-rz09-0528-openblade-matrix-lighting-lifecycle.json',
+        '2026-07-30-rz09-0528-openblade-full-lighting-lifecycle.json')) {
     Assert-True ($evidence.annotations -contains $fileName) `
         "The evidence index dropped $fileName."
 }

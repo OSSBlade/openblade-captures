@@ -81,17 +81,17 @@
       "brightnessQuery": "ProductionAdmitted",
       "effects": {
         "ambientAwareness": {
-          "base": "Captured",
+          "base": "ProductionAdmitted",
           "screenRegions": "Captured",
           "matrixFormat": "Captured",
           "frameCadence": "Captured"
         },
         "audioMeter": {
-          "base": "Captured",
+          "base": "ProductionAdmitted",
           "colorBoost": "Captured"
         },
         "breathing": {
-          "base": "Captured",
+          "base": "ProductionAdmitted",
           "singleColor": "Captured",
           "dualColor": "Captured",
           "randomColor": "Captured",
@@ -103,27 +103,27 @@
           "frameCadence": "NotInvestigated"
         },
         "reactive": {
-          "base": "Captured",
+          "base": "ProductionAdmitted",
           "colors": "Captured",
           "durations": "Captured",
           "keyMap": "Captured"
         },
         "fire": {
-          "base": "Captured"
+          "base": "ProductionAdmitted"
         },
         "ripple": {
-          "base": "Captured",
+          "base": "ProductionAdmitted",
           "colors": "Captured",
           "durations": "Absent",
           "keyMap": "Captured"
         },
       "spectrum": {
-        "base": "SetterValidated",
+        "base": "ProductionAdmitted",
         "hostColorSequence": "Captured",
         "frameCadence": "Captured"
       },
         "starlight": {
-          "base": "Captured",
+          "base": "ProductionAdmitted",
           "singleColor": "Captured",
           "dualColor": "Captured",
           "randomColor": "Captured",
@@ -134,7 +134,7 @@
           "colors": "ProductionAdmitted"
         },
         "tidal": {
-          "base": "Captured",
+          "base": "ProductionAdmitted",
           "primaryColor": "Captured",
           "secondaryColor": "Captured",
           "randomColor": "Captured",
@@ -142,12 +142,12 @@
           "outwardDirection": "Captured"
         },
         "wave": {
-          "base": "Captured",
+          "base": "ProductionAdmitted",
           "leftDirection": "Captured",
           "rightDirection": "Captured"
         },
         "wheel": {
-          "base": "Captured",
+          "base": "ProductionAdmitted",
           "leftDirection": "Captured",
           "rightDirection": "Captured"
         }
@@ -271,6 +271,7 @@
     "The clean upper-effect address-3 oracle in capture revision c5fa12d correlated all five Ambient Awareness regions, Audio Meter, Breathing single/dual/random, Fire, and a Reactive no-input control with 2,425 complete frames and zero checksum failures. Ambient Awareness used the same six-row 03/0B plus 03/0A 0500 matrix stream at roughly 42-46 ms, so its matrixFormat and frameCadence advance to Captured. Audio Meter Color Boost is exactly 1 through 4 in 0.25 steps with default 1. Breathing is a seven-second uniform cycle with approximately 2.0-second rise, 1.5-second full hold, 2.0-second fall, and 1.5-second off. The sanitized 171-frame Fire oracle is SHA-256 874C99039C8204950D233EA7ECE6560985CDC6325D576F82D9F12FA841B25128 and contains no raw hash or unique identifier. The Reactive window has no operator-confirmed key press and does not advance its keyMap.",
     "The same exact oracle proves continuous PID 02C6 matrix traffic is SET-only after the initial transition: six 03/0B rows plus 03/0A latch, with no per-frame GET response, at an observed 42-45 ms cadence. This corrects the earlier acknowledged-every-row production assumption without changing the absence of a matrix effect getter.",
     "A clean physical-key oracle reconstructed 816 complete PID 02C6 frames with zero checksum failures. Operator-correlated J presses placed Reactive and Ripple at matrix slot 59; Reactive Short, Medium, and Long remained active for approximately 404, 1403, and 1879 ms, and the J-origin Ripple traversed all 86 active slots. The operator separately reported that every effect looked visually correct and the final Static green 50 percent / Static logo state was restored. This visual observation is not treated as matrix readback. The exact read-only LampArray geometry independently projects 85 lamps into the six captured matrix rows and exposes Right Alt at slot 91 rather than PID 02E0 slot 94. Reactive and Ripple keyMap advance to Captured; Ripple durations is Absent because Synapse exposes no duration control.",
+    "Installed exact build 0.1.0+5466d9cd641b6875ed618e46d364f223d419fc2f applied Ambient Awareness, Audio Meter, Breathing, Fire, Reactive, Ripple, Spectrum Cycling, Starlight, Static, Tidal, Wave, and Wheel while Synapse was absent. The UI stayed responsive, the service remained Running with exactly one Session Agent and tray, Spectrum survived a 12-second regression hold beyond the earlier three-second failure window, and the operator confirmed physical J origin behavior for Reactive and Ripple. These effect bases advance to ProductionAdmitted. Parameter combinations, the rest of the key map, and the absent matrix/effect getter do not advance. Static green 50 percent and Static logo were saved back to the AC profile.",
     "A read-only exact PID scan found ten HID collections, including the 91-byte control collection and a 51-byte usage 0059:0001 collection, but no 375-byte feature collection; PID 02E0's matrix writer cannot be reused.",
     "Manual fan curves are production-admitted host rendering over the exact fixed-target primitive; persisted curve intent readback is SoftwareOnly, while physical fan RPM retains its separate production-admitted query.",
     "Active Synapse Spectrum traffic can produce rejected TransactionMismatch failures.",
