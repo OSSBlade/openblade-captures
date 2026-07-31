@@ -144,15 +144,14 @@ Assert-True (
 Assert-True (
     $upperAnnotation.sanitizedFixture.sha256 -ceq $fireHash) `
     'The annotation and sanitized Fire fixture hashes diverged.'
+$ambientCoverage =
+    $coverage.capabilities.keyboardLighting.effects.ambientAwareness
 Assert-True (
-    $coverage.capabilities.keyboardLighting.effects.ambientAwareness.matrixFormat
-        -ceq 'Captured' -and
-    $coverage.capabilities.keyboardLighting.effects.ambientAwareness.frameCadence
-        -ceq 'Captured') `
+    $ambientCoverage.matrixFormat -ceq 'Captured' -and
+    $ambientCoverage.frameCadence -ceq 'Captured') `
     'The clean Ambient Awareness matrix evidence was not recorded in coverage.'
 Assert-True (
-    $coverage.capabilities.keyboardLighting.effects.reactive.keyMap -ceq
-        'NotInvestigated') `
+    $coverage.capabilities.keyboardLighting.effects.reactive.keyMap -ceq 'NotInvestigated') `
     'The Reactive no-input control must not advance key-map coverage.'
 
 Write-Host 'RZ09-0528 Synapse effect fixture tests passed.'
