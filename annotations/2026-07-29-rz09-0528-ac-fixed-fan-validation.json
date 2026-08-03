@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "Razer Synapse 4.0.698.98 and OpenBlade.Capture 0.1",
+    "role": "ExactDeviceInteractiveValidation",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeReadbackConfirmed": true
+  },
+  "capturedAtUtc": "2026-07-29T17:28:57.885Z",
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02",
+    "ec": "1.09",
+    "mcu": "1.9.0.0"
+  },
+  "capture": {
+    "sha256": "3CC1A7BFA37F28E657F7421AD9E5D6E3CE2CF9B9E0B54153138AA05D79C74174",
+    "byteLength": 31166,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddress",
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "kind": "SettingChange",
+    "subsystem": "AC fan control",
+    "name": "Automatic to Fixed Fan Speed",
+    "value": "Fixed 3800 RPM",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": true,
+    "applyResult": "Confirmed: Synapse selected Fixed Fan Speed at 3800 RPM and emitted paired manual-state and fan-target writes.",
+    "readbackResult": "Confirmed: the exact production thermal query returned manual/fixed state and three settled RPM samples reached 3700/3600, 3700/3600, and 3700/3700 for the 3800 RPM target.",
+    "restorationResult": "Confirmed: separate graceful captures restored both thermal channels from fixed 3800 RPM and fixed 5000 RPM to Automatic.",
+    "restorationReadbackResult": "Confirmed: exact typed and production readback returned Balanced/Automatic; visible Synapse returned to Auto (Default)."
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "CapturedSetter",
+      "summary": "Fixed mode selected at 18.348566 and 18.359144 seconds; the visible saved target was 3800 RPM.",
+      "commands": [
+        "0D/02:01010001",
+        "0D/02:01020001",
+        "0D/01:010126",
+        "0D/01:010226"
+      ]
+    },
+    {
+      "kind": "CapturedSetter",
+      "summary": "The LOW endpoint displayed 2000 RPM and emitted the exact minimum targets at 18.212075 and 18.227457 seconds.",
+      "sha256": "76D05486D8CC7D4B4E31B1CDAAA683914B4BCBFB0EF4C0C8B3A07BA58DA4D76C",
+      "byteLength": 12715,
+      "commands": [
+        "0D/01:010114",
+        "0D/01:010214"
+      ]
+    },
+    {
+      "kind": "CapturedSetter",
+      "summary": "The HIGH endpoint displayed 5000 RPM and emitted the exact maximum targets at 17.429671 and 17.439198 seconds.",
+      "sha256": "120CBFCB431CFFFB9800F6E316D700A78E15A314BD53E7CA277F914F0C05C131",
+      "byteLength": 6272,
+      "commands": [
+        "0D/01:010132",
+        "0D/01:010232"
+      ]
+    },
+    {
+      "kind": "CapturedRestoration",
+      "summary": "Fixed 3800 RPM was restored to Automatic in a separate graceful capture.",
+      "sha256": "2A3E4EE550DEB2DFA01FF5321DEEF195584BB27F62021393FF4C9F00EFD994C8",
+      "byteLength": 8137,
+      "commands": [
+        "0D/02:01010000",
+        "0D/02:01020000"
+      ]
+    },
+    {
+      "kind": "CapturedRestoration",
+      "summary": "Fixed 5000 RPM was restored to Automatic in a separate graceful capture.",
+      "sha256": "BAE7151839CE97BEC9BC23883D1AAE35E9EDA73D40A12DF33320BE07E13D22E5",
+      "byteLength": 8509,
+      "commands": [
+        "0D/02:01010000",
+        "0D/02:01020000"
+      ]
+    },
+    {
+      "kind": "TypedReadback",
+      "summary": "The exact two-channel production query distinguished manual/fixed state from restored Balanced/Automatic. Settled RPM was 1900/1900 three times at the 2000 target and 4900/4900 three times at the 5000 target."
+    }
+  ],
+  "productionAdmission": {
+    "status": "Candidate",
+    "fixedSpeedRangeRpm": {
+      "minimum": 2000,
+      "maximum": 5000,
+      "step": 100
+    },
+    "fanModes": [
+      "Automatic"
+    ],
+    "identityScope": "RZ09-0528, BIOS 2.02, USB 1532:02C6, HID usage 0001:0002, 91-byte feature reports"
+  },
+  "limitations": [
+    "Manual Fan Curve was not exercised and remains unadmitted.",
+    "The protocol reads fixed and maximum targets back as the same manual fan state; RPM queries provide the independent physical response.",
+    "Two broad fixed-state discriminator attempts and two RPM samples failed under Synapse polling contention; they were not reclassified as successful evidence.",
+    "The exact maximum is 5000 RPM and must not inherit the PID 02E0 maximum of 5400 RPM.",
+    "CPU Voltage Optimizer was not changed.",
+    "Keyboard lighting remains off at the operator's request.",
+    "Raw PCAPs and unique device identifiers remain private and uncommitted."
+  ],
+  "notes": [
+    "All five successful sessions targeted the visually reverified USBPcap2 device address 3 and ended through the sentinel-driven graceful-stop path.",
+    "Final visible and typed state was Plugged In, Balanced, Auto (Default)."
+  ]
+}

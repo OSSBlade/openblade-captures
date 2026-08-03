@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "evidenceProvenance": {
+    "controller": "OpenBlade read-only Windows API probe",
+    "role": "DirectReadOnlyEnumeration",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeReadbackConfirmed": false
+  },
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02"
+  },
+  "action": {
+    "kind": "ReadOnlyApiDiscovery",
+    "api": "Windows.Devices.Lights.LampArray",
+    "targetFilter": "Exact VID/PID only"
+  },
+  "result": {
+    "exactDeviceCount": 1,
+    "kind": "Keyboard",
+    "lampCount": 85,
+    "connected": true,
+    "enabled": true,
+    "availableToUnpackagedBackgroundProbe": false,
+    "supportsVirtualKeys": true,
+    "geometryAndVirtualKeysSha256": "C82E71D69DCAADDCB8530C0744B7B3240CC2E9C8FEF6CDAF1AB16B76F7A6A450"
+  },
+  "privacy": {
+    "deviceInformationIdIncluded": false,
+    "deviceNameIncluded": false,
+    "hidInstanceSuffixIncluded": false,
+    "serialNumberIncluded": false
+  },
+  "productionAdmission": {
+    "discovery": "QueryValidated",
+    "lightingWrites": false,
+    "backgroundOwnership": false
+  },
+  "limitations": [
+    "The probe did not call SetColor, SetColorsForIndices, SetBrightnessLevel, or any effect API.",
+    "The exact array was unavailable to the unpackaged background probe, so application identity and Dynamic Lighting priority must be solved before production admission.",
+    "This OS-native interface does not validate the older model's raw 375-byte matrix protocol."
+  ]
+}

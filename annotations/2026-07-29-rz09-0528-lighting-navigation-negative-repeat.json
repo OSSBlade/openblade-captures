@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "Razer Synapse 4.0.698.98",
+    "role": "OracleCapture",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeReadbackConfirmed": false
+  },
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02"
+  },
+  "capture": {
+    "sha256": "DB7294556B0C2AC16E850D58BB9F032872FE0165B22B262B54D103E508A6C19B",
+    "byteLength": 439,
+    "transactionCount": 3,
+    "controller": "\\\\.\\USBPcap2",
+    "deviceAddressReverifiedBeforeCapture": 3,
+    "stopMode": "Graceful",
+    "rawCaptureCommitted": false
+  },
+  "action": {
+    "kind": "ReadOnlyQueryDiscovery",
+    "name": "Navigate from Battery to Lighting",
+    "expectedCandidate": "03/83 010500"
+  },
+  "result": {
+    "candidateCount": 0,
+    "deviceCommandEnvelopeCount": 0,
+    "visibleLightingState": "Brightness off with saved value 19, logo Static, keyboard Static after later operator-authorized restoration."
+  },
+  "limitations": [
+    "This repeat is another negative control and does not establish that Synapse lacks a brightness getter.",
+    "Visual page hydration is not firmware readback.",
+    "Brightness production readback remains based on the separate exact-device OpenBlade query evidence, not this trace."
+  ]
+}

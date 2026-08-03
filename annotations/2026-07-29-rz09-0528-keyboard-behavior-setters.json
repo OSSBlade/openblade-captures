@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "Razer Synapse 4.0.698.98",
+    "role": "OracleCapture",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeReadbackConfirmed": false
+  },
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02"
+  },
+  "capture": {
+    "controller": "\\\\.\\USBPcap2",
+    "deviceAddressReverifiedBeforeEveryCapture": 3,
+    "captureMode": "DeviceAddress",
+    "stopMode": "Graceful",
+    "rawCaptureCommitted": false
+  },
+  "sanitizedEvidence": [
+    {
+      "control": "StartupAnimation",
+      "transition": "on->off",
+      "command": "0F/18",
+      "argumentsHex": "0001",
+      "captureSha256": "9F9DE67F1F97776774338CC000961292946B7BEBF03447FE63973108502F0E81"
+    },
+    {
+      "control": "StartupAnimation",
+      "transition": "off->on restoration",
+      "command": "0F/18",
+      "argumentsHex": "0000",
+      "captureSha256": "28AC2F60961B8CCFCD018FACF63EDE2390F511A6665D00A20A766951BBC7D55F"
+    },
+    {
+      "control": "FunctionKeyPrimary",
+      "transition": "function->multimedia",
+      "command": "02/06",
+      "argumentsHex": "0001",
+      "repeatCount": 2,
+      "captureSha256": "A792E7E4E1F02C91EA90366DD88753407E5039AA3436E1ED9533DA4F9DB5B9E8"
+    },
+    {
+      "control": "FunctionKeyPrimary",
+      "transition": "multimedia->function restoration",
+      "command": "02/06",
+      "argumentsHex": "0000",
+      "repeatCount": 2,
+      "captureSha256": "C82672AAA166B30A196AAE9B90F8B29357B15421F534049C459D659DE56C37CF"
+    },
+    {
+      "control": "GamingMode",
+      "transition": "off->on",
+      "command": "00/08",
+      "argumentsHex": "01000000",
+      "captureSha256": "AB5C81514A7E91321A17F52CF78249F82164A08714F54005370CD80F3D673C37"
+    },
+    {
+      "control": "GamingMode",
+      "transition": "on->off restoration",
+      "command": "00/08",
+      "argumentsHex": "00000000",
+      "captureSha256": "1A95FD94FC84E0ABEB35D11FBA41622EF646050C310E71FCC85FB230F6EB376A"
+    }
+  ],
+  "exactDeviceDifference": "PID 02C6 function-key setters use 0000/0001. Do not copy the PID 02E0 0100/0101 setter arguments. The existing exact-device getter still returns 0100/0101.",
+  "validation": {
+    "operatorConfirmed": true,
+    "visibleApplyConfirmed": true,
+    "restorationResult": "Startup animation on, Function keys primary, Gaming Mode off.",
+    "independentReadbackAvailable": "Exact-device getters 0F/98, 02/86, and 00/88 were independently admitted earlier.",
+    "subsequentOpenBladeValidation": [
+      "StartupAnimation: True -> False -> True; Success=True",
+      "FunctionKeyPrimary: FunctionKeys -> MultimediaKeys -> FunctionKeys; Success=True",
+      "GamingMode: False -> True -> False; Success=True"
+    ]
+  },
+  "limitations": [
+    "The USBPcap captures establish setter bytes; independent readback comes from the subsequent exact-device OpenBlade round trips."
+  ]
+}

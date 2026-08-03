@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "status": "ReversibleRoundTripCaptured",
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02"
+  },
+  "attempts": [
+    {
+      "role": "CompetingControllerNegativeControl",
+      "validationOutputSha256": "49F8088762CED4E598B9818472611F89CAB34E5B048FA7FC1C940B7083B59F14",
+      "validationOutputByteLength": 1202,
+      "stateSha256": "A8EC4134159CD419C5E0B408316178966AF220BBDEFC18E82FDC8B2B497A5316",
+      "stateByteLength": 150,
+      "result": {
+        "baselineMode": null,
+        "applyAttempted": false,
+        "restoreAttempted": false,
+        "manualRecoveryRequired": false,
+        "failure": "conflict"
+      },
+      "servicesAfterAttempt": {
+        "OpenBlade": "Running",
+        "RazerElevationService": "Running",
+        "RazerGameManagerService3": "Running"
+      }
+    },
+    {
+      "role": "IsolatedBaselineNegativeControl",
+      "validationOutputSha256": "599ED81D16A8AFA147D47A570C8E87ABCD62B74A76D9F79F6D3D9EDBBD74933B",
+      "validationOutputByteLength": 1228,
+      "stateSha256": "6898EB2F38AFF10F053881895AB7B47EF145EC56007E95C5D83B018224084793",
+      "stateByteLength": 150,
+      "result": {
+        "baselineMode": "Driver",
+        "applyAttempted": false,
+        "restoreAttempted": false,
+        "manualRecoveryRequired": false,
+        "failure": "baselineNotNormal"
+      },
+      "servicesAfterAttempt": {
+        "OpenBlade": "Running",
+        "RazerElevationService": "Running",
+        "RazerGameManagerService3": "Running"
+      }
+    },
+    {
+      "role": "IsolatedReversibleRoundTrip",
+      "validationOutputSha256": "964E683D4D98DB0E8CF41A17F3986A15C7C314933A614672841E21C00352D9AA",
+      "validationOutputByteLength": 1574,
+      "stateSha256": "D26C681265B1620D287FD53CA3F12C306B00F54DB666965CF887CE8E15D9D705",
+      "stateByteLength": 150,
+      "result": {
+        "baselineMode": "Driver",
+        "candidateMode": "Normal",
+        "restoredMode": "Driver",
+        "applyAttempted": true,
+        "applyAcknowledged": true,
+        "candidateConfirmed": true,
+        "visualCheckConfirmed": true,
+        "restoreAttempted": true,
+        "restoreAcknowledged": true,
+        "restored": true,
+        "manualRecoveryRequired": false,
+        "failure": "none"
+      },
+      "servicesAfterAttempt": {
+        "OpenBlade": "Running",
+        "RazerElevationService": "Running",
+        "RazerGameManagerService3": "Running"
+      }
+    }
+  ],
+  "interpretation": {
+    "admission": "The isolated third attempt validates both exact setters through a Driver-to-Normal candidate apply and a Normal-to-Driver restoration with typed acknowledgements, independent readback, and operator-confirmed function-layer behavior. The validation command explicitly remains non-production, so this is SetterValidated evidence rather than ProductionAdmitted mutation.",
+    "baseline": "After isolating the known OpenBlade and Razer controller processes, the exact getter reported Driver mode in both isolated sessions. This is authoritative readback of the starting state, not proof that OpenBlade or Synapse caused it.",
+    "restoration": "The successful round trip restored the exact Driver baseline and all stopped services. The two earlier negative controls issued no writes; all three wrappers finished with OpenBlade, Razer Elevation Service, and Razer Game Manager Service 3 running."
+  },
+  "privacy": {
+    "rawSessionsCommitted": false,
+    "serialNumbersRetained": false,
+    "devicePathsRetained": false,
+    "uniqueUsbIdentifiersRetained": false
+  }
+}

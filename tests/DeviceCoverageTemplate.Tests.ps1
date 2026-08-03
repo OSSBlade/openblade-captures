@@ -78,12 +78,15 @@ $requiredPaths = @(
     'fans.fixedStep',
     'fans.manualCurveWrites',
     'fans.rpmQuery',
+    'sensors.cpuTemperature',
     'battery.protectionOff',
     'battery.advertisedLimits',
     'battery.temporaryFullChargeQuery',
     'keyboardLighting.off',
     'keyboardLighting.brightnessRange',
     'keyboardLighting.effectGetter',
+    'keyboardLighting.matrixInterfaceDiscovery',
+    'keyboardLighting.lampArrayInterfaceDiscovery',
     'keyboardLighting.effects.ambientAwareness.screenRegions',
     'keyboardLighting.effects.ambientAwareness.frameCadence',
     'keyboardLighting.effects.breathing.singleColor',
@@ -161,6 +164,22 @@ foreach ($leaf in $leafStatuses) {
         "$($leaf.Path) contains an unsupported coverage status."
     Assert-True ([string]$leaf.Status -ceq 'NotInvestigated') `
         "$($leaf.Path) must default to NotInvestigated for a new model."
+}
+
+$decodedPath = Join-Path $repository 'decoded'
+$coverageDocuments = @(Get-ChildItem -LiteralPath $decodedPath `
+    -Filter '*-device-coverage.json' -File)
+Assert-True ($coverageDocuments.Count -gt 0) `
+    'The repository must retain at least one concrete device-coverage document.'
+foreach ($coverageDocument in $coverageDocuments) {
+    $coverage = Get-Content -LiteralPath $coverageDocument.FullName -Raw |
+        ConvertFrom-Json
+    Assert-True ($coverage.schemaVersion -eq $template.schemaVersion) `
+        "$($coverageDocument.Name) does not use the current coverage schema."
+    foreach ($leaf in @(Get-LeafStatuses -Value $coverage.capabilities -Path '')) {
+        Assert-True ([string]$leaf.Status -cin $allowedStatuses) `
+            "$($coverageDocument.Name): $($leaf.Path) contains unsupported status '$($leaf.Status)'."
+    }
 }
 
 Write-Host 'Device-coverage template regression tests passed.'

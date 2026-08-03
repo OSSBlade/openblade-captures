@@ -118,18 +118,31 @@ function Get-Fingerprint {
     ) -join '|'
 }
 
-function Get-Counts {
+function Get-TransactionIndex {
     param([Parameter(Mandatory)][object[]]$Transactions)
+
     $counts = @{}
+    $representatives = @{}
     foreach ($transaction in $Transactions) {
         $fingerprint = Get-Fingerprint -Transaction $transaction
         $counts[$fingerprint] = 1 + [int]$counts[$fingerprint]
+        if (-not $representatives.ContainsKey($fingerprint)) {
+            $representatives[$fingerprint] = $transaction
+        }
     }
-    $counts
+
+    # Keep one representative while counting. Searching the complete capture again
+    # for every distinct fingerprint makes noisy lighting captures quadratic.
+    [pscustomobject]@{
+        Counts = $counts
+        Representatives = $representatives
+    }
 }
 
-$baselineCounts = Get-Counts -Transactions @($baseline.transactions)
-$actionCounts = Get-Counts -Transactions @($action.transactions)
+$baselineIndex = Get-TransactionIndex -Transactions @($baseline.transactions)
+$actionIndex = Get-TransactionIndex -Transactions @($action.transactions)
+$baselineCounts = $baselineIndex.Counts
+$actionCounts = $actionIndex.Counts
 $differences = [Collections.Generic.List[object]]::new()
 foreach ($fingerprint in @($baselineCounts.Keys + $actionCounts.Keys | Sort-Object -Unique)) {
     $baselineCount = [int]$baselineCounts[$fingerprint]
@@ -137,20 +150,16 @@ foreach ($fingerprint in @($baselineCounts.Keys + $actionCounts.Keys | Sort-Obje
     if ($baselineCount -eq $actionCount) {
         continue
     }
-    $representative = @($action.transactions | Where-Object {
-        (Get-Fingerprint -Transaction $_) -eq $fingerprint
-    } | Select-Object -First 1)
-    if ($representative.Count -eq 0) {
-        $representative = @($baseline.transactions | Where-Object {
-            (Get-Fingerprint -Transaction $_) -eq $fingerprint
-        } | Select-Object -First 1)
+    $representative = $actionIndex.Representatives[$fingerprint]
+    if ($null -eq $representative) {
+        $representative = $baselineIndex.Representatives[$fingerprint]
     }
     [void]$differences.Add([ordered]@{
         fingerprint = $fingerprint
         baselineCount = $baselineCount
         actionCount = $actionCount
         delta = $actionCount - $baselineCount
-        representative = $representative[0]
+        representative = $representative
     })
 }
 

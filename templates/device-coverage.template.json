@@ -57,6 +57,9 @@
       "manualCurveReadback": "NotInvestigated",
       "rpmQuery": "NotInvestigated"
     },
+    "sensors": {
+      "cpuTemperature": "NotInvestigated"
+    },
     "battery": {
       "protectionOff": "NotInvestigated",
       "advertisedLimits": "NotInvestigated",
@@ -134,7 +137,9 @@
           "rightDirection": "NotInvestigated"
         }
       },
-      "effectGetter": "NotInvestigated"
+      "effectGetter": "NotInvestigated",
+      "matrixInterfaceDiscovery": "NotInvestigated",
+      "lampArrayInterfaceDiscovery": "NotInvestigated"
     },
     "logoLighting": {
       "off": "NotInvestigated",

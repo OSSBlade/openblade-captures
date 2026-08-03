@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "evidenceProvenance": {
+    "controller": "OpenBlade.Capture exact-device query",
+    "role": "ReadOnlyRepeatedReadback",
+    "windowsPowerShellVersion": "5.1",
+    "openBladeTypedApplyPerformed": false,
+    "visualStateUsedAsFirmwareReadback": false
+  },
+  "capturedAtLocal": "2026-07-30T01:35:07.1319714-07:00",
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02"
+  },
+  "command": "query-rz09-0528-02c6-power-source",
+  "readOnly": true,
+  "attempts": [
+    {
+      "attempt": 1,
+      "success": true,
+      "adapterPowerHex": "1111",
+      "thermal1Hex": "01010200",
+      "thermal2Hex": "01020200",
+      "sha256": "07683820A140192D209AA1494EB53F4DF4BBBE1E2375528F7418DB35106E9AA6",
+      "byteLength": 822
+    },
+    {
+      "attempt": 2,
+      "success": true,
+      "adapterPowerHex": "1111",
+      "thermal1Hex": "01010200",
+      "thermal2Hex": "01020200",
+      "sha256": "07683820A140192D209AA1494EB53F4DF4BBBE1E2375528F7418DB35106E9AA6",
+      "byteLength": 822
+    },
+    {
+      "attempt": 3,
+      "success": true,
+      "adapterPowerHex": "1111",
+      "thermal1Hex": "01010200",
+      "thermal2Hex": "01020200",
+      "sha256": "07683820A140192D209AA1494EB53F4DF4BBBE1E2375528F7418DB35106E9AA6",
+      "byteLength": 822
+    }
+  ],
+  "interpretation": {
+    "adapterPower": "FullPower280W",
+    "performanceFanState": "Performance/Automatic",
+    "mappingBasis": "The exact-device AC performance admission independently established 01010200 and 01020200 as the paired Performance/Automatic thermal readback.",
+    "actualPowerState": "Barrel AC full power",
+    "settingChanged": false,
+    "restorationRequired": false
+  },
+  "admission": {
+    "acAdapterReadback": "ProductionAdmitted",
+    "acPerformanceReadback": "ProductionAdmitted",
+    "advancedByThisSession": false,
+    "usbCReadback": "NotInvestigated",
+    "batteryReadback": "NotInvestigated",
+    "reason": "This is a repeatability and Windows PowerShell 5.1 compatibility recheck on barrel AC only."
+  },
+  "limitations": [
+    "The current visible Synapse page was not used or inferred because Computer Use did not return a trustworthy Synapse window handle.",
+    "No USB-C-only or battery-only exact query was performed in this session.",
+    "The repeated output does not admit source-event candidate reports as feature-query replies."
+  ],
+  "privacy": {
+    "rawOutputCommitted": false,
+    "serialNumbersRetained": false,
+    "devicePathsRetained": false,
+    "uniqueIdentifiersRetained": false
+  }
+}

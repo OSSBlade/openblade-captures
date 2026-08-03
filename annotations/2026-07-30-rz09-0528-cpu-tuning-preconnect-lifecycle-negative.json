@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "evidenceProvenance": {
+    "controller": "OpenBlade exact-device getter-only lifecycle validator",
+    "role": "PreconnectThenIsolateNegativeControl",
+    "elevatedWindowsPowerShell51": true,
+    "settingChanged": false,
+    "setterExportBound": false,
+    "setterExportInvoked": false
+  },
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02"
+  },
+  "backend": {
+    "name": "RzAMDOverClock/RzDLLService",
+    "clientVersion": "1.1.15.0",
+    "serverVersion": "1.1.15.0",
+    "serviceVersion": "1.0.29.0",
+    "exactComponentHashesVerified": true
+  },
+  "isolation": {
+    "exactHostVerified": true,
+    "synapseInstallationPathVerified": true,
+    "synapseRazerSignatureVerified": true,
+    "clientRegisteredWhileSynapseLive": true,
+    "readyHandshakeReceived": true,
+    "onlyPreverifiedSynapseProcessIdsStopped": true,
+    "synapseInactiveBeforeGetter": true,
+    "serviceStopped": false
+  },
+  "validation": {
+    "policy": "PreconnectThenIsolateGetterOnly",
+    "powerLimitGetterAccepted": true,
+    "powerLimitCallbackReceived": false,
+    "curveOptimizerGetterIssued": false,
+    "success": false,
+    "classification": "PreconnectedIsolatedGetterCallbackTimeoutRestored",
+    "failure": "The exact power-limit getter accepted the request after isolation, but no GetPowerLimitValue callback arrived before the bounded timeout."
+  },
+  "externalRestoration": {
+    "synapseRelaunchedFromVerifiedPath": true,
+    "synapseAppEngineProcessCount": 10,
+    "adapterReplyHex": "1111",
+    "barrelAcFullPower280WConfirmed": true,
+    "keyboardBrightnessRaw": 129,
+    "keyboardBrightnessPercentDecoded": 51,
+    "keyboardBrightnessQuerySucceeded": true
+  },
+  "privateEvidence": {
+    "committed": false,
+    "validationOutput": {
+      "sha256": "3C09B3F9EC464CB9C935049E165B3672FACF3567D874B0C1CA894C9FE002C4C6",
+      "byteLength": 277
+    },
+    "validationError": {
+      "sha256": "F01A374E9C81E3DB89B3A42940C4D6A5447684986A1296E42BF13F196EED6295",
+      "byteLength": 5
+    },
+    "wrapperState": {
+      "sha256": "FDFF631606F1EEACE62E13D2E99288813211609D45BD1B23B14E91A6120DBF2B",
+      "byteLength": 209,
+      "exitCode": 2
+    }
+  },
+  "admission": {
+    "cpuPowerLimit": "Captured",
+    "cpuVoltageOptimizer": "Captured",
+    "productionAccess": "ObservedOnly",
+    "advancedByThisSession": false,
+    "blockedBy": [
+      "The power-limit getter produced no independently decoded callback.",
+      "The curve-optimizer getter was not reached.",
+      "OpenBlade does not yet own backend startup, crash recovery, or conflict exclusion."
+    ],
+    "nextSafeExperiment": "Determine the exact signed service/module ownership lifecycle without invoking a setter. Do not start the tuning service or driver, weaken the Synapse guard, or infer a value from Synapse UI or logs."
+  },
+  "privacy": {
+    "rawOutputsCommitted": false,
+    "serialNumbersRetained": false,
+    "devicePathsRetained": false,
+    "uniqueIdentifiersRetained": false
+  }
+}

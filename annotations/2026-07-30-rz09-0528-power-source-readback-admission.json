@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "evidenceProvenance": {
+    "controller": "OpenBlade exact-device power-source readback matrix",
+    "elevatedWindowsPowerShell51": true,
+    "deviceQueriesReadOnly": true,
+    "settingChanged": false,
+    "sampleCountPerState": 3,
+    "openBladeServiceTemporarilyIsolated": true,
+    "openBladeServiceRestored": true
+  },
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "windowsSmbiosModel": "Blade 16 - RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02"
+  },
+  "matrix": [
+    {
+      "label": "full-ac-baseline",
+      "windowsPowerLineStatus": "Online",
+      "adapterPowerPayloadHex": "1111",
+      "thermal1PayloadHex": "01010200",
+      "thermal2PayloadHex": "01020200",
+      "samplesIdentical": true
+    },
+    {
+      "label": "battery",
+      "windowsPowerLineStatus": "Offline",
+      "adapterPowerPayloadHex": "0011",
+      "thermal1PayloadHex": "01010300",
+      "thermal2PayloadHex": "01020300",
+      "samplesIdentical": true
+    },
+    {
+      "label": "usb-c",
+      "windowsPowerLineStatus": "Online",
+      "adapterPowerPayloadHex": "0711",
+      "thermal1PayloadHex": "01010000",
+      "thermal2PayloadHex": "01020000",
+      "samplesIdentical": true
+    },
+    {
+      "label": "full-ac-restored",
+      "windowsPowerLineStatus": "Online",
+      "adapterPowerPayloadHex": "1111",
+      "thermal1PayloadHex": "01010200",
+      "thermal2PayloadHex": "01020200",
+      "samplesIdentical": true
+    }
+  ],
+  "decoded": {
+    "adapterPower": {
+      "0011": "NoExternalAdapterBattery",
+      "0711": "UsbCPower100W",
+      "1111": "FullPower280W"
+    },
+    "thermalModePairs": {
+      "01010000+01020000": "BalancedAutomatic",
+      "01010200+01020200": "PerformanceAutomatic",
+      "01010300+01020300": "BatterySaverAutomatic"
+    },
+    "physicalStateRestored": true
+  },
+  "privateEvidence": {
+    "committed": false,
+    "successfulSummary": {
+      "sha256": "3C2113C1C3AAE82D5EF578B964D167989CE4E506339331F467AE41DCDF2810D0",
+      "byteLength": 10799
+    },
+    "failedAttempts": [
+      {
+        "stateSha256": "E2C2BE4A2B1CA000EF6FADB26B54E0DBA25067BA160DED2F15BC3DA88D867178",
+        "stateByteLength": 376,
+        "completedStates": 0,
+        "reason": "The initial Windows PowerShell 5.1 run completed its first read-only query but failed while hashing because the wrapper relied on Get-FileHash. The wrapper now uses an in-process SHA-256 implementation."
+      },
+      {
+        "stateSha256": "363E5FF720DE617AEAE8AE5ECE7C2BA93A0E42D59ACAEEB166210BFC546DEFB3",
+        "stateByteLength": 219,
+        "completedStates": 1,
+        "reason": "The second run completed the full-AC baseline and one battery sample, then encountered a protocol failure while the installed OpenBlade service was also reading the feature-report channel. The wrapper now isolates and restores only that exact service and rechecks power state after a three-second stabilization interval."
+      }
+    ]
+  },
+  "admission": {
+    "adapterUsbCReadback": "ProductionAdmitted",
+    "batterySourceReadback": "ProductionAdmitted",
+    "thermalModeReadbackOnUsbC": "QueryValidated",
+    "thermalModeReadbackOnBattery": "QueryValidated",
+    "implementation": "The exact PID 02C6 production battery factory now admits UsbCPower100W in addition to FullPower280W. Windows Offline remains the authoritative battery classifier; the exact 0011 response is supporting device evidence.",
+    "notGeneralizedToOtherModels": true
+  },
+  "privacy": {
+    "rawOutputsCommitted": false,
+    "processIdsRetained": false,
+    "serialNumbersRetained": false,
+    "devicePathsRetained": false,
+    "uniqueIdentifiersRetained": false
+  }
+}

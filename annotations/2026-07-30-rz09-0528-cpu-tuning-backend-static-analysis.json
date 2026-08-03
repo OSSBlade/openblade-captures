@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "evidenceProvenance": {
+    "controller": "OpenBlade read-only static inspection",
+    "role": "ExactVersionBackendDiscovery",
+    "nativeLibraryLoaded": false,
+    "backendFunctionInvoked": false,
+    "settingChanged": false
+  },
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02"
+  },
+  "backend": {
+    "name": "RzAMDOverClock/RzDLLService",
+    "clientVersion": "1.1.15.0",
+    "serverVersion": "1.1.15.0",
+    "serviceVersion": "1.0.29.0",
+    "verifiedComponentHashes": {
+      "clientSha256": "9F0EE89C1E003D2990880BABC7612FA76D0259A716B955FBC0A7D34D5DE8A418",
+      "serverSha256": "7966CF2F6DEAF18A277ACAFED433063AFEC7DB9F5C4275729601AAB40B54EB9E",
+      "serviceSha256": "C7D47D88CDA40EC9CC84ABBBBF4B8EBAD13F5113A2DDDADEADF8A8AD6CE87436"
+    },
+    "clientApiSymbols": [
+      "DeviceInit",
+      "DeviceTerminate",
+      "IsAPPServerRunning",
+      "SetServerDLLPath",
+      "SetExternalDLLPath",
+      "SetNodeFFIEvent",
+      "RegisterFFIEvent",
+      "UnRegisterFFIEvent",
+      "GetPowerLimitValueAsync",
+      "SetPowerLimitValueAsync",
+      "GetCurveOptimizerValueAsync",
+      "SetCurveOptimizerValueAsync",
+      "CloseAPPServer"
+    ],
+    "serverEmbeddedSymbols": [
+      "RzAMDOverClockDLL::EnableCPUVoltageOptimizer",
+      "RzAMDOverClockDLL::ResetVoltageOffset",
+      "RzAMDOverClockDLL::SetPowerLimitValue",
+      "RzAMDOverClockDLL::SetCurveOptimizerValue"
+    ],
+    "lifecycleStrings": [
+      "RzDLLServiceNeedCheckAndRestartForAMD",
+      "RzAMDOverClock::IsAPPServerRunning",
+      "RzAMDOverClock::CloseAPPServer"
+    ]
+  },
+  "findings": [
+    "The exact client contains distinct asynchronous getter and setter symbols for both CPU Power Limit and Curve Optimizer.",
+    "Enable/disable is a separate discovered feature surface: server symbols name EnableCPUVoltageOptimizer and ResetVoltageOffset, while the captured client getter represents disabled optimizer state as zero.",
+    "The client exposes DeviceInit/DeviceTerminate plus RegisterFFIEvent/UnRegisterFFIEvent and server-state/close symbols; this supports an explicit client-ownership experiment rather than treating the generic service process as sufficient.",
+    "No StartAPPServer client symbol was found in the inspected symbol set. A restart-related lifecycle string exists, but its semantics and authorization requirements are not inferred."
+  ],
+  "nextSafeExperiment": {
+    "name": "PreconnectThenIsolate",
+    "steps": [
+      "Verify the exact signed and hashed backend components.",
+      "Connect and register an OpenBlade client while Synapse still owns a live backend, without issuing a getter or setter.",
+      "Stop only preverified Synapse controller process IDs while keeping the OpenBlade client registered.",
+      "Recheck that Synapse is inactive, then issue getter-only requests.",
+      "Unregister and terminate the OpenBlade client, and restore Synapse from a finally path."
+    ],
+    "successBoundary": "The getter must return exact in-policy values after Synapse exits while the OpenBlade client remains registered.",
+    "setterBoundary": "Even a successful keep-alive getter does not admit setters; setter validation still requires save, set, independent readback, unconditional restore, and readback of the restored state."
+  },
+  "admission": {
+    "cpuPowerLimit": "Captured",
+    "cpuVoltageOptimizer": "Captured",
+    "productionAccess": "ObservedOnly",
+    "advancedByThisInspection": false
+  },
+  "privacy": {
+    "binaryCommitted": false,
+    "serialNumbersRetained": false,
+    "devicePathsRetained": false,
+    "uniqueIdentifiersRetained": false
+  }
+}

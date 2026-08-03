@@ -2,16 +2,13 @@
 param()
 
 $ErrorActionPreference = 'Stop'
-$tests = @(
-    'Test-CaptureEvidence.Tests.ps1',
-    'Compare-CaptureTransactions.Tests.ps1',
-    'DeviceCoverageTemplate.Tests.ps1'
-)
+$tests = @(Get-ChildItem -LiteralPath $PSScriptRoot `
+    -Filter '*.Tests.ps1' -File |
+    Sort-Object Name)
 
 foreach ($test in $tests) {
-    $path = Join-Path $PSScriptRoot $test
-    Write-Host "Running $test"
-    & $path
+    Write-Host "Running $($test.Name)"
+    & $test.FullName
 }
 
 Write-Host 'All capture-toolkit regression tests passed.'

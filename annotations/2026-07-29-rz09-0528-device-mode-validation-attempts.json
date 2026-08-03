@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "evidenceProvenance": {
+    "controller": "OpenBlade exact-device validation runner",
+    "role": "ReversibleValidationWithNegativeControls",
+    "openBladeTypedApplyPerformed": true,
+    "openBladeVisualParityConfirmed": true
+  },
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02"
+  },
+  "decodedEvidence": "decoded/rz09-0528-pid-02c6-bios-2.02-device-mode-validation.json",
+  "findings": [
+    "The first elevated attempt failed closed on competing controller processes before reading or writing device mode.",
+    "The wrapper was tightened to stop the exact known RazerAppEngine controller processes after stopping the named services.",
+    "The isolated retry read Driver as its baseline and failed closed because the reversible validator requires Normal as the starting state.",
+    "The validator was generalized to use the opposite exact baseline as its candidate, permitting a safe Driver-to-Normal-to-Driver round trip without assuming the laptop starts in Normal mode.",
+    "The third attempt applied Normal, independently read Normal, received operator confirmation of the expected function-layer behavior, restored Driver, and independently read Driver.",
+    "OpenBlade, Razer Elevation Service, and Razer Game Manager Service 3 were running after all three attempts."
+  ],
+  "admission": {
+    "normalDeviceMode": "ProductionAdmitted",
+    "driverDeviceMode": "ProductionAdmitted",
+    "deviceModeGetter": "ProductionAdmitted",
+    "productionMutation": "ProductionAdmitted",
+    "implementation": {
+      "repository": "openblade-core",
+      "commit": "3707c49",
+      "typedAcknowledgement": true,
+      "independentReadback": true,
+      "ownedTransitionRestoration": true,
+      "preservesPreExistingDriverMode": true,
+      "closesInvalidatedSession": true
+    },
+    "pending": [
+      "The special-key decoder remains ObservedOnly until its production input matrix is exercised independently.",
+      "Future mode changes must retain exact tuple gating, competing-controller refusal, typed acknowledgement, readback, and rollback behavior."
+    ]
+  },
+  "privacy": {
+    "rawSessionsCommitted": false,
+    "serialNumbersRetained": false,
+    "devicePathsRetained": false,
+    "uniqueUsbIdentifiersRetained": false
+  }
+}

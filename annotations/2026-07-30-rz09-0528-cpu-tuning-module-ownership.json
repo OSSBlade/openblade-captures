@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "evidenceProvenance": {
+    "controller": "OpenBlade exact-device read-only module inventory",
+    "role": "LivePerformancePageModuleOwnership",
+    "elevatedWindowsPowerShell51": true,
+    "computerUsePageObserved": "Synapse Blade 16 Performance",
+    "settingChanged": false,
+    "processChanged": false,
+    "serviceChanged": false
+  },
+  "device": {
+    "modelNumber": "RZ09-0528",
+    "windowsSmbiosModel": "Blade 16 - RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02"
+  },
+  "backend": {
+    "name": "RzAMDOverClock/RzDLLService",
+    "clientVersion": "1.1.15.0",
+    "serverVersion": "1.1.15.0",
+    "serviceVersion": "1.0.29.0",
+    "exactComponentHashesVerified": true,
+    "matchedComponentProcessCount": 2,
+    "ownership": [
+      {
+        "processKind": "RazerAppEngine",
+        "sanitizedRole": "main-or-utility",
+        "components": [
+          {
+            "kind": "Client",
+            "fileName": "RzAMDOverClock_v1.1.15.0.dll",
+            "sha256": "9F0EE89C1E003D2990880BABC7612FA76D0259A716B955FBC0A7D34D5DE8A418"
+          }
+        ]
+      },
+      {
+        "processKind": "RzDLLService",
+        "sanitizedRole": "cpu-tuning-backend",
+        "components": [
+          {
+            "kind": "ServiceHost",
+            "fileName": "RzDLLService_v1.0.29.0.exe",
+            "sha256": "C7D47D88CDA40EC9CC84ABBBBF4B8EBAD13F5113A2DDDADEADF8A8AD6CE87436"
+          },
+          {
+            "kind": "Server",
+            "fileName": "RzAMDOverClockDLL_v1.1.15.0.dll",
+            "sha256": "7966CF2F6DEAF18A277ACAFED433063AFEC7DB9F5C4275729601AAB40B54EB9E"
+          }
+        ]
+      }
+    ]
+  },
+  "visibleState": {
+    "powerSource": "Plugged In",
+    "selectedMode": "Performance",
+    "cpuVoltageOptimizer": "On",
+    "visibleOffset": "-1.000",
+    "fanControl": "Auto (Default)",
+    "operatorChangedDuringInventory": false
+  },
+  "privateEvidence": {
+    "committed": false,
+    "successfulInventory": {
+      "sha256": "5C6EEC3A78BAF71855AE9A551A58AF29EA5C00395C2D378BF5821B949798492A",
+      "byteLength": 6208,
+      "processCount": 12
+    },
+    "failedExactGateAttempt": {
+      "stateSha256": "57F0B3F130016F50470740AA1069CD7C9FB63F5B80AEC811EC854E22133328E4",
+      "stateByteLength": 127,
+      "reason": "The first preserved run rejected the shortened model token. Windows reports the exact SMBIOS model as Blade 16 - RZ09-0528; the exact gate and both focused tests were corrected before the successful rerun."
+    },
+    "initialUnrecordedFailure": {
+      "exitCode": 1,
+      "rawOutputCreated": false,
+      "reason": "The original tool exited before creating its private output directory. Failure-state persistence was added and committed before any retry."
+    }
+  },
+  "admission": {
+    "cpuPowerLimit": "Captured",
+    "cpuVoltageOptimizer": "Captured",
+    "productionAccess": "ObservedOnly",
+    "advancedByThisSession": false,
+    "finding": "Exact live client/server ownership is now verified, but ownership does not establish a safe independent getter callback, setter semantics, privileged backend startup, or conflict exclusion.",
+    "nextSafeExperiment": "Design an exact-version backend owner that can start and stop the signed service/module lifecycle without Synapse, fail closed on conflicts, and complete getter-only callbacks before any setter experiment. Do not infer readback from the Synapse UI or this module inventory."
+  },
+  "privacy": {
+    "rawOutputsCommitted": false,
+    "processIdsRetained": false,
+    "serialNumbersRetained": false,
+    "devicePathsRetained": false,
+    "uniqueIdentifiersRetained": false
+  }
+}

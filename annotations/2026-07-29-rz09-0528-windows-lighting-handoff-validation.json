@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "evidenceProvenance": {
+    "controller": "Razer Synapse 4.0.698.98, OpenBlade 0.1.0+ca45ac9a, and OpenBlade.Capture",
+    "role": "ExactDeviceOwnershipHandoffValidation",
+    "packetCapturePerformed": false,
+    "visualStateUsedAsFirmwareReadback": false
+  },
+  "validatedAtLocal": "2026-07-29T23:11:55.0136569-07:00",
+  "device": {
+    "model": "Razer Blade 16",
+    "modelNumber": "RZ09-0528",
+    "vendorIdHex": "1532",
+    "productIdHex": "02C6",
+    "bios": "2.02"
+  },
+  "operatorCorrelatedSequence": [
+    {
+      "order": 1,
+      "action": "Synapse Plugged In lighting was set to Brightness On, slider 50, Quick Effect Static, and logo Static.",
+      "independentReadback": {
+        "command": "03/83",
+        "requestArgumentsHex": "010500",
+        "rawValue": 128,
+        "decodedPercent": 50,
+        "success": true
+      }
+    },
+    {
+      "order": 2,
+      "action": "OpenBlade was installed and started while its prior OpenBlade-owned lighting profile still requested Off.",
+      "independentReadback": {
+        "command": "03/83",
+        "requestArgumentsHex": "010500",
+        "rawValue": 0,
+        "decodedPercent": 0,
+        "success": true
+      },
+      "interpretation": "The Synapse page still displayed On/50/Static, proving that visible cached UI alone was not current firmware state."
+    },
+    {
+      "order": 3,
+      "action": "The visible OpenBlade switch was enabled for Windows Dynamic Lighting ownership.",
+      "openBladeUi": {
+        "toggle": "On",
+        "status": "Windows Dynamic Lighting owns the keyboard. OpenBlade will not change keyboard brightness, effects, or lighting power policies.",
+        "openBladeKeyboardControls": "Disabled"
+      }
+    },
+    {
+      "order": 4,
+      "action": "Synapse brightness was deliberately toggled Off and then On to reapply the visible 50 percent Static state after delegation.",
+      "independentReadback": {
+        "command": "03/83",
+        "requestArgumentsHex": "010500",
+        "rawValue": 128,
+        "decodedPercent": 50,
+        "success": true
+      }
+    },
+    {
+      "order": 5,
+      "action": "The OpenBlade Windows service was restarted and reached Running/Automatic.",
+      "completedBeforeLocal": "2026-07-29T23:11:55.0136569-07:00",
+      "independentReadback": {
+        "command": "03/83",
+        "requestArgumentsHex": "010500",
+        "rawValue": 128,
+        "decodedPercent": 50,
+        "success": true
+      }
+    }
+  ],
+  "finalState": {
+    "powerPage": "Plugged In",
+    "synapseBrightnessToggle": "On",
+    "synapseBrightnessPercent": 50,
+    "synapseQuickEffect": "Static",
+    "synapseLogoMode": "Static",
+    "openBladeKeyboardLightingControlMode": "WindowsDynamicLighting",
+    "openBladeService": "Running",
+    "firmwareBrightnessRaw": 128,
+    "firmwareBrightnessPercent": 50,
+    "restorationConfirmed": true
+  },
+  "installerValidation": {
+    "installedBuild": "0.1.0+ca45ac9a",
+    "sameVersionReplacementFrom": "0.1.0+e8b4d5a0",
+    "servicePreserved": true,
+    "ownershipMarkerAdvanced": true,
+    "installerExitCode": 0
+  },
+  "limitations": [
+    "This validates OpenBlade's persisted service-side write suppression and a Static 50 percent state across one service restart.",
+    "It does not claim that Synapse or Windows issued a particular packet during the ownership toggle.",
+    "No raw packet capture, serial number, device path, or unique USB identifier is retained."
+  ]
+}
