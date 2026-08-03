@@ -230,7 +230,7 @@ For effects or controls with multiple variants, capture every variant rather
 than assuming a bit flag. For host-rendered effects, capture both the setup
 command and enough frame traffic to establish matrix format and cadence.
 
-### Exact-model helpers and the RZ09-0528 example
+### Model-specific helpers and evidence ledgers
 
 Model-named scripts are frozen to the identity, interfaces, controller
 ownership, expected files, and safety boundary of their reviewed sessions.
@@ -239,38 +239,32 @@ exact model and accepted firmware, and use a new ignored output directory. Do
 not loosen a hard-coded identity, address, path, signature, or hash check to
 make the helper run on another machine.
 
-The RZ09-0528 helpers fall into four different evidence classes:
+A retained helper usually belongs to one of these classes:
 
-1. `Start-Rz090528*OracleCapture.ps1` captures Synapse lighting behavior with
-   OpenBlade stopped. Resolve the USBPcap address again, keep the PCAP local,
-   and preserve the operator-action and capture-state files used by the
-   matching `Analyze-*` or `Export-*` script.
-2. `Invoke-Rz090528PowerSourceReadbackMatrix.ps1` performs repeated read-only
-   queries across operator-confirmed barrel AC, battery, USB-C, and restored AC
-   states. It isolates the exact installed OpenBlade service to prevent
-   competing reads and must restore the service before exit.
-3. `Invoke-Rz090528DeviceModeValidation.ps1` and
-   `Invoke-Rz090528GpuClockOffsetValidation.ps1` perform bounded reversible
-   writes. Run them only under their reviewed confirmation and restoration
-   contract; a rejected apply or successful restoration is still negative
-   evidence, not setter admission.
-4. The CPU tuning ownership and lifecycle helpers inspect a verified Synapse
-   backend. Their committed sessions establish module ownership and a bounded
-   getter timeout. They do not authorize a kernel driver, a Synapse dependency,
-   or a CPU tuning setter in OpenBlade.
+1. An oracle-capture wrapper isolates OpenBlade, resolves the USBPcap address,
+   keeps the PCAP local, and preserves operator-action and capture-state files.
+2. An analyzer or exporter turns a local capture into a bounded, sanitized
+   fixture without weakening identity, timing, checksum, or geometry checks.
+3. A read-only matrix repeats typed queries across operator-confirmed power or
+   lifecycle states while preventing competing reads and restoring any service
+   it temporarily isolates.
+4. A reversible validator saves exact-device state, applies one bounded value,
+   reads it independently, and restores it. A rejected apply or successful
+   restoration can still be negative evidence rather than setter admission.
+5. An ownership or lifecycle inspector may establish which signed, hash-pinned
+   vendor component owns a backend. Ownership, a getter timeout, or static
+   analysis does not authorize a kernel driver, vendor dependency, or setter.
 
-For this model, the coverage matrix is
-[`decoded/rz09-0528-pid-02c6-bios-2.02-device-coverage.json`](decoded/rz09-0528-pid-02c6-bios-2.02-device-coverage.json),
-with a condensed ledger in
-[`decoded/rz09-0528-pid-02c6-bios-2.02-evidence.json`](decoded/rz09-0528-pid-02c6-bios-2.02-evidence.json).
-The latest lighting work separates effect-base admission from parameter and
-readback claims: installed lifecycle checks admit the visible effect bases,
-while parameter leaves keep their own statuses and no visual check becomes an
-effect getter or matrix readback. The key evidence is similarly partial. M3,
-M4, and M5 have exact production reports; M1, M2, and Fn+P remain `Captured`
-because they expose indistinguishable generic Fn traffic. The separate
-Fn+F1-through-Fn+F3 media-row check is installed-product regression acceptance,
-not new protocol evidence.
+Use `decoded/*-device-coverage.json` as the authoritative status matrix for an
+exact model and firmware scope. A matching `decoded/*-evidence.json` may
+summarize the admitted evidence, while other decoded fixtures and annotations
+retain the bounded details and limitations.
+
+Advance every coverage leaf independently. A validated base control or effect
+does not automatically validate its parameters, getter, readback, power
+contexts, or lifecycle. Keep partial input evidence when some physical reports
+are distinguishable and others are not. Installed UI and regression acceptance
+prove product behavior only; neither is a firmware command or device readback.
 
 ## 9. Sanitize and validate
 
