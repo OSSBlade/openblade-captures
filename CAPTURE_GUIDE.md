@@ -230,6 +230,48 @@ For effects or controls with multiple variants, capture every variant rather
 than assuming a bit flag. For host-rendered effects, capture both the setup
 command and enough frame traffic to establish matrix format and cadence.
 
+### Exact-model helpers and the RZ09-0528 example
+
+Model-named scripts are frozen to the identity, interfaces, controller
+ownership, expected files, and safety boundary of their reviewed sessions.
+Before rerunning one, inspect its parameters and retained evidence, confirm the
+exact model and accepted firmware, and use a new ignored output directory. Do
+not loosen a hard-coded identity, address, path, signature, or hash check to
+make the helper run on another machine.
+
+The RZ09-0528 helpers fall into four different evidence classes:
+
+1. `Start-Rz090528*OracleCapture.ps1` captures Synapse lighting behavior with
+   OpenBlade stopped. Resolve the USBPcap address again, keep the PCAP local,
+   and preserve the operator-action and capture-state files used by the
+   matching `Analyze-*` or `Export-*` script.
+2. `Invoke-Rz090528PowerSourceReadbackMatrix.ps1` performs repeated read-only
+   queries across operator-confirmed barrel AC, battery, USB-C, and restored AC
+   states. It isolates the exact installed OpenBlade service to prevent
+   competing reads and must restore the service before exit.
+3. `Invoke-Rz090528DeviceModeValidation.ps1` and
+   `Invoke-Rz090528GpuClockOffsetValidation.ps1` perform bounded reversible
+   writes. Run them only under their reviewed confirmation and restoration
+   contract; a rejected apply or successful restoration is still negative
+   evidence, not setter admission.
+4. The CPU tuning ownership and lifecycle helpers inspect a verified Synapse
+   backend. Their committed sessions establish module ownership and a bounded
+   getter timeout. They do not authorize a kernel driver, a Synapse dependency,
+   or a CPU tuning setter in OpenBlade.
+
+For this model, the coverage matrix is
+[`decoded/rz09-0528-pid-02c6-bios-2.02-device-coverage.json`](decoded/rz09-0528-pid-02c6-bios-2.02-device-coverage.json),
+with a condensed ledger in
+[`decoded/rz09-0528-pid-02c6-bios-2.02-evidence.json`](decoded/rz09-0528-pid-02c6-bios-2.02-evidence.json).
+The latest lighting work separates effect-base admission from parameter and
+readback claims: installed lifecycle checks admit the visible effect bases,
+while parameter leaves keep their own statuses and no visual check becomes an
+effect getter or matrix readback. The key evidence is similarly partial. M3,
+M4, and M5 have exact production reports; M1, M2, and Fn+P remain `Captured`
+because they expose indistinguishable generic Fn traffic. The separate
+Fn+F1-through-Fn+F3 media-row check is installed-product regression acceptance,
+not new protocol evidence.
+
 ## 9. Sanitize and validate
 
 Create an annotation skeleton:
