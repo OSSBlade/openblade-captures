@@ -20,6 +20,11 @@
     "commitHash": "d0808f0721424ffc5ea6b404c5626ace1d5800b7",
     "protocolAssemblySha256": "2730E3584659FD7874B1ECCF39DCB5CC9A8333661CBCAB1129BF67089949EDAE"
   },
+  "admissionBuild": {
+    "informationalVersion": "0.1.0-nightly.17+ae8350b1",
+    "commitHash": "ae8350b108a57fd97a7dfb1841dc5423724bcda9",
+    "protocolAssemblySha256": "DBCEFE7B3C99B40E81152D41D8092F8649EB8EAB28C72855ABF11490F78F061C"
+  },
   "machineLocalResults": {
     "preUpdateBaseline": {
       "fileName": "baseline.json",
@@ -43,6 +48,15 @@
     "reversibleResults": {
       "fileName": "reversible-results.json",
       "sha256": "E4A6387C9CFB63B6954981DC50A51DA17FA9698EC1D0799C9A8304783DCA69CA"
+    },
+    "admissionBaseline": {
+      "fileName": "baseline.json",
+      "sha256": "F7EECF40E451E2EDCA93EAB69F9CB313188CE3A948E69D27888FFFE8AE8AE7D4",
+      "schemaVersion": 6
+    },
+    "admissionBaselineReport": {
+      "fileName": "baseline-report.json",
+      "sha256": "AB830FD093D5170215EF47D09B58D08C7BB1112286E7E30CD2C7EA6084F475B1"
     }
   },
   "readOnlyValidation": {
@@ -92,6 +106,8 @@
   "productionAdmission": {
     "bios301Retained": true,
     "bios400AutomatedValidationPassed": true,
+    "exactAdmissionBuildReadOnlyPassed": true,
+    "reportedFirmwareCompatibility": "Tested",
     "unlistedBiosVersionsRemainBlocked": true,
     "rz090528AdmissionUnchanged": true,
     "manualLifecycleGateComplete": false
