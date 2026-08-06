@@ -42,6 +42,23 @@
       "core": 15,
       "memory": 15
     },
+    "minimumUiStepMHz": 5,
+    "minimumUiStepValidation": {
+      "requestedLogicalMHz": {
+        "core": 5,
+        "memory": 5
+      },
+      "appliedLogicalMHz": {
+        "core": 5,
+        "memory": 5
+      },
+      "restoredLogicalMHz": {
+        "core": 0,
+        "memory": 0
+      },
+      "readbackConfirmed": true,
+      "restored": true
+    },
     "performanceModes": [
       "Balanced",
       "Silent",

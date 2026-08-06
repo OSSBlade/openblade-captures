@@ -72,6 +72,22 @@
       },
       "mappingConfirmed": true,
       "restored": true
+    },
+    "minimumUiStepValidation": {
+      "requestedLogical": {
+        "coreMHz": 5,
+        "memoryMHz": 5
+      },
+      "appliedLogical": {
+        "coreMHz": 5,
+        "memoryMHz": 5
+      },
+      "restoredLogical": {
+        "coreMHz": 0,
+        "memoryMHz": 0
+      },
+      "readBack": true,
+      "restored": true
     }
   },
   "isolationGuards": {

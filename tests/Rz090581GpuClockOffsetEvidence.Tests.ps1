@@ -91,6 +91,23 @@ Assert-True (
     $crossApi.restored -eq $true) `
     'The cross-API restoration proof changed.'
 
+$minimumStep = $api.minimumUiStepValidation
+Assert-True (
+    $minimumStep.requestedLogical.coreMHz -eq 5 -and
+    $minimumStep.requestedLogical.memoryMHz -eq 5 -and
+    $minimumStep.appliedLogical.coreMHz -eq 5 -and
+    $minimumStep.appliedLogical.memoryMHz -eq 5 -and
+    $minimumStep.restoredLogical.coreMHz -eq 0 -and
+    $minimumStep.restoredLogical.memoryMHz -eq 0 -and
+    $minimumStep.readBack -eq $true -and
+    $minimumStep.restored -eq $true) `
+    'The minimum UI-step validation proof changed.'
+Assert-True (
+    $evidence.validation.minimumUiStepMHz -eq 5 -and
+    $evidence.validation.minimumUiStepValidation.readbackConfirmed -eq $true -and
+    $evidence.validation.minimumUiStepValidation.restored -eq $true) `
+    'The decoded evidence dropped the validated minimum UI step.'
+
 $expectedModes = @('Balanced', 'Silent', 'Performance')
 Assert-True ($annotation.performanceModeValidation.Count -eq 3) `
     'The GPU performance-mode matrix changed.'
