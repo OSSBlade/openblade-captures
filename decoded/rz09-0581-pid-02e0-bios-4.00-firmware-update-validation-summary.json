@@ -25,6 +25,17 @@
     "commitHash": "ae8350b108a57fd97a7dfb1841dc5423724bcda9",
     "protocolAssemblySha256": "DBCEFE7B3C99B40E81152D41D8092F8649EB8EAB28C72855ABF11490F78F061C"
   },
+  "physicalKeysBuild": {
+    "validatedAtUtc": "2026-08-06T04:06:55.6535308Z",
+    "informationalVersion": "0.1.0-nightly.18+dc1129bc",
+    "commitHash": "dc1129bc805da4692709a7a0badb6c9a21fcad57",
+    "installedArtifactsSha256": {
+      "OpenBlade.Protocol.dll": "6DB35DF7BE2DBDA88D5D122A0D63ACD68DF6D35D71194EDB569B63A1246C9423",
+      "OpenBlade.Service.exe": "518A2EA3644ADC3491E430F628B85FC1B6A388D15689B7D0077E7A653A580912",
+      "OpenBlade.SessionAgent.exe": "2FF8BE6766820A36DAAB8F3DB15CB69DBC1E1E9F9AC484E56A269531E50C7DE9",
+      "OpenBlade.Tray.exe": "F0BF16350EDA20C07C709ACC689200992ADDC4FC6522D0E199F4EEE753EEC4F8"
+    }
+  },
   "machineLocalResults": {
     "preUpdateBaseline": {
       "fileName": "baseline.json",
@@ -100,8 +111,8 @@
     "lidCycleConfirmed": false,
     "shutdownStartupConfirmed": false,
     "powerSourceTransitionsConfirmed": false,
-    "physicalFunctionRowConfirmed": false,
-    "specialKeysConfirmed": false
+    "physicalFunctionRowConfirmed": true,
+    "specialKeysConfirmed": true
   },
   "productionAdmission": {
     "bios301Retained": true,
@@ -115,7 +126,7 @@
   "limitations": [
     "The strict 3.01-to-4.00 comparison intentionally reports two software-build identity failures because the validation fix required a coordinated product upgrade after the pre-update baseline was captured.",
     "The sleeping NVIDIA GPU did not expose a temperature reading; the smoke workflow records that optional reading as a warning.",
-    "Sleep, lid, shutdown, power-source, physical function-row, and special-key checks still require operator confirmation.",
+    "Sleep, lid, shutdown, and power-source checks still require operator confirmation.",
     "No raw USB capture was made or committed for this typed firmware-smoke validation."
   ]
 }
