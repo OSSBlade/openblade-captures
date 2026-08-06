@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "evidenceKind": "openBladeFirmwareUpdateValidationSummary",
+  "device": {
+    "model": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "biosBefore": "3.01",
+    "biosAfter": "4.00",
+    "ecBefore": "1.04",
+    "ecAfter": "1.04",
+    "mcuBefore": "1.6.0.0",
+    "mcuAfter": "1.6.0.0",
+    "vbiosBefore": "98.3.5c.40.3d",
+    "vbiosAfter": "98.3.5c.40.3d"
+  },
+  "validatedAtUtc": "2026-08-06T02:52:59.9080517Z",
+  "validationBuild": {
+    "informationalVersion": "0.1.0-nightly.16+d0808f07",
+    "commitHash": "d0808f0721424ffc5ea6b404c5626ace1d5800b7",
+    "protocolAssemblySha256": "2730E3584659FD7874B1ECCF39DCB5CC9A8333661CBCAB1129BF67089949EDAE"
+  },
+  "machineLocalResults": {
+    "preUpdateBaseline": {
+      "fileName": "baseline.json",
+      "sha256": "66CA84BF90CB21CFA305FACFA991DE535C47C1F018ECA1C244793A88CF51168C",
+      "schemaVersion": 6
+    },
+    "postUpdateSnapshot": {
+      "fileName": "post-update.json",
+      "sha256": "EF0A676717054B355717EFDCBBAD0A976B5B92090F931064BDCE75961593F939",
+      "schemaVersion": 6
+    },
+    "postUpdateReport": {
+      "fileName": "post-update-report.json",
+      "sha256": "9E4722610DC65BB9E6EAA7F98D1CBC9B888E8E20A6525F4C11737DFF78060C99"
+    },
+    "validatedBaseline": {
+      "fileName": "baseline.json",
+      "sha256": "00844E27202276C19E2F5DA1EED954C44F98FCF887CB6CF33B7178CC3613CFC7",
+      "schemaVersion": 6
+    },
+    "reversibleResults": {
+      "fileName": "reversible-results.json",
+      "sha256": "E4A6387C9CFB63B6954981DC50A51DA17FA9698EC1D0799C9A8304783DCA69CA"
+    }
+  },
+  "readOnlyValidation": {
+    "exactDeviceVerified": true,
+    "writesBlocked": false,
+    "competingControllers": [],
+    "controllerDetectionWarning": null,
+    "externalChanges": [],
+    "fullPowerAdapterConfirmed": true,
+    "firmwareChangeLimitedToBios": true,
+    "capabilitiesMatchedBaseline": true,
+    "confirmedStateMatchedBaseline": true,
+    "postUpdatePassedChecks": 43,
+    "postUpdateWarningChecks": 1,
+    "postUpdateFailedHardwareChecks": 0,
+    "postUpdateFailedBuildIdentityChecks": 2
+  },
+  "reversibleValidation": {
+    "operatorConfirmation": "Exact model firmware-smoke token supplied",
+    "passedChecks": 52,
+    "warningChecks": 1,
+    "failedChecks": 0,
+    "restoredOriginalState": true,
+    "validatedControls": [
+      "Performance preset",
+      "Fixed fan mode",
+      "Battery charge limit",
+      "Keyboard lighting",
+      "Startup animation",
+      "Function-key primary mode",
+      "Gaming Mode"
+    ],
+    "lightingFirmwareStateReadbackAvailable": false,
+    "lightingResult": "The typed command completed and the previous renderer was restored. This model does not report the resulting lighting state."
+  },
+  "lifecycleValidation": {
+    "serviceRestartPassed": true,
+    "serviceRestartReadOnlyPassedChecks": 29,
+    "serviceRestartWarningChecks": 1,
+    "sleepResumeConfirmed": false,
+    "lidCycleConfirmed": false,
+    "shutdownStartupConfirmed": false,
+    "powerSourceTransitionsConfirmed": false,
+    "physicalFunctionRowConfirmed": false,
+    "specialKeysConfirmed": false
+  },
+  "productionAdmission": {
+    "bios301Retained": true,
+    "bios400AutomatedValidationPassed": true,
+    "unlistedBiosVersionsRemainBlocked": true,
+    "rz090528AdmissionUnchanged": true,
+    "manualLifecycleGateComplete": false
+  },
+  "limitations": [
+    "The strict 3.01-to-4.00 comparison intentionally reports two software-build identity failures because the validation fix required a coordinated product upgrade after the pre-update baseline was captured.",
+    "The sleeping NVIDIA GPU did not expose a temperature reading; the smoke workflow records that optional reading as a warning.",
+    "Sleep, lid, shutdown, power-source, physical function-row, and special-key checks still require operator confirmation.",
+    "No raw USB capture was made or committed for this typed firmware-smoke validation."
+  ]
+}
