@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "evidenceKind": "gpuClockOffsetCrossApiReversibleValidation",
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "bios": "4.00",
+    "gpu": "NVIDIA GeForce RTX 5090 Laptop GPU",
+    "nvidiaDriver": "610.88"
+  },
+  "annotation": "2026-08-06-rz09-0581-gpu-clock-offset-validation.json",
+  "validatedLogicalRangesMHz": {
+    "policy": {
+      "coreMinimum": -1000,
+      "coreMaximum": 400,
+      "memoryMinimum": -1000,
+      "memoryMaximum": 3000
+    },
+    "nvapiEditableP0": {
+      "coreMinimum": -1000,
+      "coreMaximum": 1000,
+      "memoryMinimum": -1000,
+      "memoryMaximum": 3000
+    }
+  },
+  "nvmlRepresentation": {
+    "coreMultiplier": 1,
+    "memoryMultiplier": 2,
+    "validatedScope": "Exact device, GPU, and driver combination"
+  },
+  "validation": {
+    "logicalCandidateMHz": {
+      "core": 15,
+      "memory": 15
+    },
+    "nvmlRawCandidateMHz": {
+      "core": 15,
+      "memory": 30
+    },
+    "nvapiReadbackMHz": {
+      "core": 15,
+      "memory": 15
+    },
+    "minimumUiStepMHz": 5,
+    "minimumUiStepValidation": {
+      "requestedLogicalMHz": {
+        "core": 5,
+        "memory": 5
+      },
+      "appliedLogicalMHz": {
+        "core": 5,
+        "memory": 5
+      },
+      "restoredLogicalMHz": {
+        "core": 0,
+        "memory": 0
+      },
+      "readbackConfirmed": true,
+      "restored": true
+    },
+    "performanceModes": [
+      "Balanced",
+      "Silent",
+      "Performance"
+    ],
+    "readbackConfirmedInEveryMode": true,
+    "baselineRestoredAfterEveryMutation": true,
+    "finalPerformanceMode": "Balanced",
+    "finalCoreOffsetMHz": 0,
+    "finalMemoryOffsetMHz": 0
+  },
+  "admission": {
+    "gpuOverclockAccess": "ReadWrite",
+    "supportsEnableDisable": true,
+    "firmwareScope": "BIOS 4.00 only"
+  },
+  "limits": [
+    "The NVIDIA memory multiplier is validated only for this exact GPU and driver combination.",
+    "The validation runner, not an installed build containing the production admission, performed and restored the mutations.",
+    "The raw Synapse screenshot and machine-local validation outputs remain uncommitted."
+  ]
+}

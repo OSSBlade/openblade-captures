@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "evidenceProvenance": {
+    "controller": "OpenBlade exact-device validation runner and independent NVIDIA API probe",
+    "role": "ReversibleValidationAdmission",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeReadbackConfirmed": false,
+    "openBladeRestorationConfirmed": false,
+    "captureRunnerReadbackConfirmed": true,
+    "captureRunnerRestorationConfirmed": true
+  },
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "bios": "4.00",
+    "gpu": "NVIDIA GeForce RTX 5090 Laptop GPU",
+    "nvidiaDriver": "610.88"
+  },
+  "synapsePolicyObservation": {
+    "source": "Operator-visible Synapse Performance page",
+    "gpuOverclockVisibleOnlyInCustom": true,
+    "supportsEnableDisable": true,
+    "coreMinimumMHz": -1000,
+    "coreMaximumMHz": 400,
+    "memoryMinimumMHz": -1000,
+    "memoryMaximumMHz": 3000,
+    "rawScreenshotCommitted": false
+  },
+  "nvidiaApiComparison": {
+    "nvapiEditableP0": {
+      "coreMinimumMHz": -1000,
+      "coreMaximumMHz": 1000,
+      "memoryMinimumMHz": -1000,
+      "memoryMaximumMHz": 3000
+    },
+    "nvmlRaw": {
+      "coreMinimumMHz": -1000,
+      "coreMaximumMHz": 1000,
+      "memoryMinimumMHz": -2000,
+      "memoryMaximumMHz": 6000
+    },
+    "representation": {
+      "coreNvmlMultiplier": 1,
+      "memoryNvmlMultiplier": 2,
+      "scope": "Exact validated GPU and driver combination"
+    },
+    "crossApiReadback": {
+      "baselineNvml": {
+        "coreMHz": 0,
+        "memoryMHz": 0
+      },
+      "baselineNvapi": {
+        "coreMHz": 0,
+        "memoryMHz": 0
+      },
+      "appliedNvml": {
+        "coreMHz": 15,
+        "memoryMHz": 30
+      },
+      "appliedNvapi": {
+        "coreMHz": 15,
+        "memoryMHz": 15
+      },
+      "restoredNvml": {
+        "coreMHz": 0,
+        "memoryMHz": 0
+      },
+      "restoredNvapi": {
+        "coreMHz": 0,
+        "memoryMHz": 0
+      },
+      "mappingConfirmed": true,
+      "restored": true
+    },
+    "minimumUiStepValidation": {
+      "requestedLogical": {
+        "coreMHz": 5,
+        "memoryMHz": 5
+      },
+      "appliedLogical": {
+        "coreMHz": 5,
+        "memoryMHz": 5
+      },
+      "restoredLogical": {
+        "coreMHz": 0,
+        "memoryMHz": 0
+      },
+      "readBack": true,
+      "restored": true
+    }
+  },
+  "isolationGuards": {
+    "exactHost": true,
+    "exactDevice": true,
+    "synapseInactive": true,
+    "openBladeServiceInactiveDuringMutation": true,
+    "afterburnerInactive": true,
+    "rtssInactive": true,
+    "recheckedImmediatelyBeforeEachMutation": true
+  },
+  "performanceModeValidation": [
+    {
+      "mode": "Balanced",
+      "modeConfirmed": true,
+      "requestedLogical": {
+        "coreMHz": 15,
+        "memoryMHz": 15
+      },
+      "readBack": true,
+      "restoredToZero": true
+    },
+    {
+      "mode": "Silent",
+      "modeConfirmedByDirectFirmwareQuery": true,
+      "fans": "Automatic",
+      "requestedLogical": {
+        "coreMHz": 15,
+        "memoryMHz": 15
+      },
+      "appliedLogical": {
+        "coreMHz": 15,
+        "memoryMHz": 15
+      },
+      "readBack": true,
+      "restoredToZero": true
+    },
+    {
+      "mode": "Performance",
+      "modeConfirmedByDirectFirmwareQuery": true,
+      "fans": "Automatic",
+      "requestedLogical": {
+        "coreMHz": 15,
+        "memoryMHz": 15
+      },
+      "appliedLogical": {
+        "coreMHz": 15,
+        "memoryMHz": 15
+      },
+      "readBack": true,
+      "restoredToZero": true
+    }
+  ],
+  "finalState": {
+    "performance": "Balanced",
+    "coreOffsetMHz": 0,
+    "memoryOffsetMHz": 0,
+    "openBladeServiceRunning": true,
+    "openBladeTrayRunning": true,
+    "openBladeSessionAgentRunning": true
+  },
+  "admission": {
+    "gpuOverclockAccess": "ReadWrite",
+    "biosScope": "4.00",
+    "policyCoreMinimumMHz": -1000,
+    "policyCoreMaximumMHz": 400,
+    "policyMemoryMinimumMHz": -1000,
+    "policyMemoryMaximumMHz": 3000,
+    "supportsEnableDisable": true,
+    "advancedByThisSession": true
+  },
+  "privacy": {
+    "rawOutputsCommitted": false,
+    "serialNumbersRetained": false,
+    "devicePathsRetained": false,
+    "userProfileNamesRetained": false,
+    "uniqueIdentifiersRetained": false
+  }
+}
