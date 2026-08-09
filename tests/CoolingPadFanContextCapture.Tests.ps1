@@ -38,8 +38,20 @@ Assert-True ($captureSource.Contains("-cne 'RZ09-05819EN4'")) `
     'The context capture lost its exact SKU gate.'
 Assert-True ($captureSource.Contains("-cne '4.00'")) `
     'The context capture lost its exact BIOS gate.'
+Assert-True ($captureSource.Contains("'HKLM:\HARDWARE\DESCRIPTION\System\BIOS'")) `
+    'The context capture must use the production BIOS identity registry source.'
+Assert-True ($captureSource.Contains('SystemSKU')) `
+    'The context capture must read the machine SKU, not a serial number.'
+Assert-True (-not $captureSource.Contains('IdentifyingNumber')) `
+    'The context capture must not read the system serial as an SKU.'
 Assert-True ($captureSource.Contains("PID_0F43&REV_0200")) `
     'The context capture lost its exact cooling-pad revision gate.'
+Assert-True ($captureSource.Contains('PnPAddress=$pnpAddress')) `
+    'The context capture must retain the PnP address as separate evidence.'
+Assert-True ($captureSource.Contains('CaptureAddress=$CoolingPadDeviceAddress')) `
+    'The context capture must retain the USBPcap address as separate evidence.'
+Assert-True (-not $captureSource.Contains('$pnpAddress -ne $CoolingPadDeviceAddress')) `
+    'PnP and USBPcap address namespaces must not be compared for equality.'
 Assert-True ($captureSource.Contains('Invoke-InteractiveUsbPcapCapture.ps1')) `
     'The context capture must use the reviewed USBPcap wrapper.'
 Assert-True (-not $captureSource.Contains('USBPcapCMD.exe')) `
@@ -60,6 +72,13 @@ Assert-True ($captureSource.Contains('DarkFixedStarting')) `
     'The retained lighting-off context is missing.'
 Assert-True ($captureSource.Contains('FreshLitFixedStarting')) `
     'The fresh Synapse process context is missing.'
+Assert-True ($captureSource.Contains('[switch]$FreshSessionOnly')) `
+    'The capture must support a bounded fresh-session-only continuation.'
+Assert-True ($captureSource.Contains('ProcessAnchorHash')) `
+    'The capture lost stable signed-process anchor evidence.'
+Assert-True (-not $captureSource.Contains(
+        '$afterDark.Count -ne $retainedProcess.Count')) `
+    'Transient Synapse worker churn must not invalidate a stable session anchor.'
 Assert-True ($captureSource.Contains('ProcessSetHash')) `
     'The private marker log lost process-session continuity evidence.'
 Assert-True ($captureSource.Contains('does not have a valid Razer signature')) `

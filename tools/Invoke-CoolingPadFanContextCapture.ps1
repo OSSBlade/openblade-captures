@@ -19,7 +19,9 @@ param(
     [string]$ProcmonExecutablePath = 'C:\tmp\openblade-procmon\Procmon64.exe',
 
     [ValidateRange(120, 900)]
-    [int]$TimeoutSeconds = 420
+    [int]$TimeoutSeconds = 420,
+
+    [switch]$FreshSessionOnly
 )
 
 $ErrorActionPreference = 'Stop'
@@ -81,10 +83,12 @@ function Get-SynapseProcessFingerprint {
         return [pscustomobject]@{
             Count = 0
             Hash = $null
+            AnchorHash = $null
         }
     }
 
     $identities = [Collections.Generic.List[string]]::new()
+    $anchors = [Collections.Generic.List[object]]::new()
     foreach ($process in $processes) {
         try {
             $path = $process.Path
@@ -97,8 +101,13 @@ function Get-SynapseProcessFingerprint {
                 [string]$signature.SignerCertificate.Subject -notmatch 'O=Razer') {
                 throw 'RazerAppEngine does not have a valid Razer signature.'
             }
-            [void]$identities.Add(
-                "$($process.Id):$($process.StartTime.ToUniversalTime().Ticks)")
+            $startTicks = $process.StartTime.ToUniversalTime().Ticks
+            $identity = "$($process.Id):$startTicks"
+            [void]$identities.Add($identity)
+            [void]$anchors.Add([pscustomobject]@{
+                Identity = $identity
+                StartTicks = $startTicks
+            })
         }
         finally {
             $process.Dispose()
@@ -113,9 +122,22 @@ function Get-SynapseProcessFingerprint {
     finally {
         $sha.Dispose()
     }
+    $anchor = $anchors |
+        Sort-Object StartTicks, Identity |
+        Select-Object -First 1
+    $anchorMaterial = [Text.Encoding]::UTF8.GetBytes([string]$anchor.Identity)
+    $anchorSha = [Security.Cryptography.SHA256]::Create()
+    try {
+        $anchorHash = [BitConverter]::ToString(
+            $anchorSha.ComputeHash($anchorMaterial)).Replace('-', '')
+    }
+    finally {
+        $anchorSha.Dispose()
+    }
     return [pscustomobject]@{
         Count = $identities.Count
         Hash = $hash
+        AnchorHash = $anchorHash
     }
 }
 
@@ -145,6 +167,32 @@ function Stop-ProcmonCapture {
         (Get-Item -LiteralPath $pmlPath).Length -eq 0) {
         throw 'Procmon stopped without finalizing a nonempty PML.'
     }
+}
+
+function Complete-Capture {
+    Write-Marker -Name 'StopRequested'
+    [IO.File]::WriteAllText($stopPath, '', [Text.UTF8Encoding]::new($false))
+    if (-not $script:captureProcess.WaitForExit(30000)) {
+        throw 'USBPcap did not exit within 30 seconds. It was not force-terminated.'
+    }
+    $script:captureProcess.Dispose()
+    $script:captureProcess = $null
+
+    $captureState = Get-Content -LiteralPath $captureStatePath -Raw |
+        ConvertFrom-Json
+    if ([string]$captureState.status -cne 'Completed' -or
+        [string]$captureState.stopMode -cne 'Graceful' -or
+        $captureState.service.managementSkipped -ne $true -or
+        $captureState.service.restarted -ne $false) {
+        throw "USBPcap did not finish cleanly: $(Get-Content -LiteralPath $captureStatePath -Raw)"
+    }
+
+    Stop-ProcmonCapture
+    Write-Marker -Name 'CaptureCompleted' `
+        -Note 'USBPcap graceful; Procmon finalized; OpenBlade remained stopped'
+    Write-Host ''
+    Write-Host 'Capture completed. OpenBlade remains stopped.' -ForegroundColor Green
+    Write-Host "Private output: $resolvedOutput"
 }
 
 if (-not (Test-IsAdministrator)) {
@@ -180,12 +228,23 @@ if ($verificationAge.TotalSeconds -lt -5 -or
     throw 'The USBPcap address verification must be no more than 15 minutes old.'
 }
 
-$computer = Get-CimInstance -ClassName Win32_ComputerSystemProduct
-$bios = Get-CimInstance -ClassName Win32_BIOS
-if ([string]$computer.Name -cne 'Blade 16 - RZ09-0581' -or
-    [string]$computer.IdentifyingNumber -cne 'RZ09-05819EN4' -or
-    [string]$bios.SMBIOSBIOSVersion -cne '4.00') {
-    throw "Unexpected capture host: $($computer.Name), $($computer.IdentifyingNumber), BIOS $($bios.SMBIOSBIOSVersion)."
+$biosIdentity = Get-ItemProperty `
+    -LiteralPath 'HKLM:\HARDWARE\DESCRIPTION\System\BIOS' `
+    -ErrorAction Stop
+$systemIdentity = Get-ItemProperty `
+    -LiteralPath 'HKLM:\SYSTEM\CurrentControlSet\Control\SystemInformation' `
+    -ErrorAction Stop
+if ([string]$biosIdentity.SystemManufacturer -cne 'Razer' -or
+    [string]$biosIdentity.SystemProductName -cne 'Blade 16 - RZ09-0581' -or
+    [string]$biosIdentity.SystemSKU -cne 'RZ09-05819EN4' -or
+    [string]$biosIdentity.BIOSVersion -cne '4.00' -or
+    [string]$systemIdentity.SystemManufacturer -cne
+        [string]$biosIdentity.SystemManufacturer -or
+    [string]$systemIdentity.SystemProductName -cne
+        [string]$biosIdentity.SystemProductName -or
+    [string]$systemIdentity.BIOSVersion -cne
+        [string]$biosIdentity.BIOSVersion) {
+    throw 'Unexpected capture host identity.'
 }
 
 $padDevices = @(Get-PnpDevice -PresentOnly | Where-Object {
@@ -206,8 +265,8 @@ $pnpAddress = [int](Get-PnpDeviceProperty `
     -InstanceId $padDevices[0].InstanceId `
     -KeyName 'DEVPKEY_Device_Address' `
     -ErrorAction Stop).Data
-if ($pnpAddress -ne $CoolingPadDeviceAddress) {
-    throw "Cooling-pad address changed: PnP reports $pnpAddress, capture-plane verification reports $CoolingPadDeviceAddress."
+if ($pnpAddress -lt 1 -or $pnpAddress -gt 127) {
+    throw "Cooling-pad PnP address is invalid: $pnpAddress."
 }
 
 $resolvedProcmon = (Resolve-Path -LiteralPath $ProcmonExecutablePath -ErrorAction Stop).Path
@@ -222,7 +281,7 @@ if ($procmonSignature.Status -ne [Management.Automation.SignatureStatus]::Valid 
 
 [IO.Directory]::CreateDirectory($resolvedOutput) | Out-Null
 Write-Marker -Name 'PreflightConfirmed' `
-    -Note 'RZ09-0581 exact SKU; BIOS 4.00; PID 0F43 REV 0200; OpenBlade stopped; Synapse closed'
+    -Note "RZ09-0581 exact SKU; BIOS 4.00; PID 0F43 REV 0200; PnPAddress=$pnpAddress; CaptureAddress=$CoolingPadDeviceAddress; OpenBlade stopped; Synapse closed"
 
 try {
     $procmonProcess = Start-Process -FilePath $resolvedProcmon `
@@ -283,6 +342,67 @@ try {
         -ForegroundColor Cyan
     Write-Host ''
 
+    if ($FreshSessionOnly) {
+        Write-Marker -Name 'FreshSynapseLaunchStarting' `
+            -Note 'Preflight observed zero RazerAppEngine processes'
+        Read-Exact `
+            -Prompt '1. Launch Synapse, wait for the cooling pad to become ready in Auto, then type FRESH PAD READY' `
+            -Expected 'FRESH PAD READY'
+        $freshProcess = Get-SynapseProcessFingerprint
+        if ($freshProcess.Count -eq 0) {
+            throw 'RazerAppEngine was not running after the fresh pad-ready confirmation.'
+        }
+        Write-Marker -Name 'FreshSynapseProcessConfirmed' `
+            -Note "ProcessCount=$($freshProcess.Count);ProcessSetHash=$($freshProcess.Hash);ProcessAnchorHash=$($freshProcess.AnchorHash)"
+
+        $baselineBrightnessText = Read-Host `
+            '2. Enter the restored cooling-pad lighting brightness percent (1-100)'
+        $baselineBrightness = 0
+        if (-not [int]::TryParse(
+                $baselineBrightnessText,
+                [ref]$baselineBrightness) -or
+            $baselineBrightness -lt 1 -or $baselineBrightness -gt 100) {
+            throw 'The restored brightness must be an integer from 1 through 100.'
+        }
+        Write-Marker -Name 'LightingBaselineSaved' `
+            -Note "BrightnessPercent=$baselineBrightness"
+        Write-Marker -Name 'FreshLitBaselineConfirmed' `
+            -Note "BrightnessPercent=$baselineBrightness;Auto=True"
+        Start-Sleep -Seconds 5
+
+        Read-Host '3. Press Enter immediately BEFORE selecting Fixed, High preset, 2200 RPM' | Out-Null
+        Write-Marker -Name 'FreshLitFixedStarting'
+        Read-Exact `
+            -Prompt 'Select Fixed / High / 2200 now, wait five seconds, confirm the UI and pad indicator, then type FRESH LIT FIXED 2200 CONFIRMED' `
+            -Expected 'FRESH LIT FIXED 2200 CONFIRMED'
+        Write-Marker -Name 'FreshLitFixedConfirmed' `
+            -Note 'Operator UI and indicator confirmation only'
+
+        Read-Host '4. Press Enter immediately BEFORE selecting Auto' | Out-Null
+        Write-Marker -Name 'FreshLitAutoStarting'
+        Read-Exact `
+            -Prompt 'Select Auto now, wait five seconds, confirm the UI and pad indicator, then type FRESH LIT AUTO CONFIRMED' `
+            -Expected 'FRESH LIT AUTO CONFIRMED'
+        Write-Marker -Name 'FreshLitAutoConfirmed' `
+            -Note 'Operator UI and indicator confirmation only'
+
+        Read-Exact `
+            -Prompt "5. Confirm Auto and brightness $baselineBrightness are restored, fully exit Synapse, wait for it to close, then type RESTORED AND CLOSED" `
+            -Expected 'RESTORED AND CLOSED'
+        $synapseDeadline = [DateTimeOffset]::UtcNow.AddSeconds(15)
+        while (Get-Process -Name RazerAppEngine -ErrorAction SilentlyContinue) {
+            if ([DateTimeOffset]::UtcNow -ge $synapseDeadline) {
+                throw 'RazerAppEngine remained active after the final operator confirmation.'
+            }
+            Start-Sleep -Milliseconds 250
+        }
+        Write-Marker -Name 'FinalSynapseExited' `
+            -Note "Auto=True;BrightnessPercent=$baselineBrightness;ProcessCount=0"
+        Start-Sleep -Seconds 3
+        Complete-Capture
+        return
+    }
+
     Read-Exact `
         -Prompt '1. Launch Synapse, wait for the cooling pad to become ready in Auto, then type PAD READY' `
         -Expected 'PAD READY'
@@ -303,7 +423,7 @@ try {
         throw 'RazerAppEngine was not running after the pad-ready confirmation.'
     }
     Write-Marker -Name 'RetainedSynapseProcessConfirmed' `
-        -Note "ProcessCount=$($retainedProcess.Count);ProcessSetHash=$($retainedProcess.Hash)"
+        -Note "ProcessCount=$($retainedProcess.Count);ProcessSetHash=$($retainedProcess.Hash);ProcessAnchorHash=$($retainedProcess.AnchorHash)"
 
     Write-Marker -Name 'RetainedLitBaselineConfirmed' `
         -Note "BrightnessPercent=$baselineBrightness;Auto=True"
@@ -326,12 +446,13 @@ try {
         -Note 'Operator UI and indicator confirmation only'
 
     $beforeDark = Get-SynapseProcessFingerprint
-    if ($beforeDark.Count -ne $retainedProcess.Count -or
-        [string]$beforeDark.Hash -cne [string]$retainedProcess.Hash) {
-        throw 'The Synapse process set changed before the lighting-off context.'
+    if ($beforeDark.Count -eq 0 -or
+        [string]$beforeDark.AnchorHash -cne
+            [string]$retainedProcess.AnchorHash) {
+        throw 'The stable Synapse process anchor changed before the lighting-off context.'
     }
     Write-Marker -Name 'RetainedSessionContinuityConfirmed' `
-        -Note "ProcessCount=$($beforeDark.Count);ProcessSetHash=$($beforeDark.Hash)"
+        -Note "ProcessCount=$($beforeDark.Count);ProcessSetHash=$($beforeDark.Hash);ProcessAnchorHash=$($beforeDark.AnchorHash)"
 
     Read-Exact `
         -Prompt '5. Set cooling-pad lighting brightness to 0, confirm the strip is dark, then type DARK' `
@@ -354,12 +475,13 @@ try {
     Write-Marker -Name 'DarkAutoConfirmed' -Note 'Operator UI and indicator confirmation only'
 
     $afterDark = Get-SynapseProcessFingerprint
-    if ($afterDark.Count -ne $retainedProcess.Count -or
-        [string]$afterDark.Hash -cne [string]$retainedProcess.Hash) {
-        throw 'The Synapse process set changed during the lighting-off context.'
+    if ($afterDark.Count -eq 0 -or
+        [string]$afterDark.AnchorHash -cne
+            [string]$retainedProcess.AnchorHash) {
+        throw 'The stable Synapse process anchor changed during the lighting-off context.'
     }
     Write-Marker -Name 'DarkContextSameSessionConfirmed' `
-        -Note "ProcessCount=$($afterDark.Count);ProcessSetHash=$($afterDark.Hash)"
+        -Note "ProcessCount=$($afterDark.Count);ProcessSetHash=$($afterDark.Hash);ProcessAnchorHash=$($afterDark.AnchorHash)"
 
     Read-Exact `
         -Prompt "8. Restore lighting brightness to $baselineBrightness, confirm the strip is lit and Auto remains selected, then type LIT RESTORED" `
@@ -387,11 +509,12 @@ try {
         -Expected 'FRESH PAD READY'
     $freshProcess = Get-SynapseProcessFingerprint
     if ($freshProcess.Count -eq 0 -or
-        [string]$freshProcess.Hash -ceq [string]$retainedProcess.Hash) {
-        throw 'Synapse did not establish a disjoint fresh process set.'
+        [string]$freshProcess.AnchorHash -ceq
+            [string]$retainedProcess.AnchorHash) {
+        throw 'Synapse did not establish a disjoint fresh process anchor.'
     }
     Write-Marker -Name 'FreshSynapseProcessConfirmed' `
-        -Note "ProcessCount=$($freshProcess.Count);ProcessSetHash=$($freshProcess.Hash)"
+        -Note "ProcessCount=$($freshProcess.Count);ProcessSetHash=$($freshProcess.Hash);ProcessAnchorHash=$($freshProcess.AnchorHash)"
     Write-Marker -Name 'FreshLitBaselineConfirmed' `
         -Note "BrightnessPercent=$baselineBrightness;Auto=True"
     Start-Sleep -Seconds 5
@@ -430,29 +553,7 @@ try {
     # log. Sanitized evidence may report same/disjoint booleans, never process
     # IDs, start times, or paths.
 
-    Write-Marker -Name 'StopRequested'
-    [IO.File]::WriteAllText($stopPath, '', [Text.UTF8Encoding]::new($false))
-    if (-not $captureProcess.WaitForExit(30000)) {
-        throw 'USBPcap did not exit within 30 seconds. It was not force-terminated.'
-    }
-    $captureProcess.Dispose()
-    $captureProcess = $null
-
-    $captureState = Get-Content -LiteralPath $captureStatePath -Raw |
-        ConvertFrom-Json
-    if ([string]$captureState.status -cne 'Completed' -or
-        [string]$captureState.stopMode -cne 'Graceful' -or
-        $captureState.service.managementSkipped -ne $true -or
-        $captureState.service.restarted -ne $false) {
-        throw "USBPcap did not finish cleanly: $(Get-Content -LiteralPath $captureStatePath -Raw)"
-    }
-
-    Stop-ProcmonCapture
-    Write-Marker -Name 'CaptureCompleted' `
-        -Note 'USBPcap graceful; Procmon finalized; OpenBlade remained stopped'
-    Write-Host ''
-    Write-Host 'Capture completed. OpenBlade remains stopped.' -ForegroundColor Green
-    Write-Host "Private output: $resolvedOutput"
+    Complete-Capture
 }
 finally {
     if ($null -ne $captureProcess) {
