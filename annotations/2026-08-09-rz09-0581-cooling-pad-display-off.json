@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "Razer Synapse 4.0.698",
+    "role": "OracleCapture",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeReadbackConfirmed": false
+  },
+  "capturedAtUtc": "2026-08-09T11:04:52.7990040Z",
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "bios": "4.00",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "sha256": "1A9402A007647C19DDA95547E175EA15A1CF30749B4DDAF02AC8B3E7FA780A61",
+    "byteLength": 3086437,
+    "rawCaptureCommitted": false,
+    "captureMode": "AllDevices",
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "kind": "SettingChange",
+    "subsystem": "Cooling-pad lighting",
+    "name": "Switch off lighting when display is turned off",
+    "value": "Windows display off, physical blackout hold, wake, and exact lighting restoration",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": true,
+    "applyResult": "The status-02 brightness-zero response and operator-confirmed physical darkness successfully matched the display-off action.",
+    "readbackResult": "The zero-frame blackout interval and operator confirmation successfully confirmed the off state.",
+    "restorationResult": "Synapse successfully restored raw brightness FF and resumed the host frame stream after wake.",
+    "restorationReadbackResult": "The operator confirmed that the original pad lighting successfully returned after wake."
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "DisplayOffBrightness",
+      "summary": "After Windows posted monitor power-off, Synapse sent 0F/04 payload 010000 and received a status-02 echo. The operator confirmed that the pad went physically dark.",
+      "requestPayloadHex": "010000",
+      "ackPayloadHex": "010000",
+      "operatorConfirmedPhysicalDarkness": true
+    },
+    {
+      "kind": "DisplayOffFrameStream",
+      "summary": "No 0F/03 host lighting frame occurred between the brightness-zero setter and the wake restoration setter.",
+      "framesDuringBlackout": 0,
+      "capturedFrameCount": 939
+    },
+    {
+      "kind": "DisplayOnRestoration",
+      "summary": "On wake, Synapse queried brightness, sent 0F/04 payload 0100FF, received a status-02 echo, and resumed 0F/03 frames 482.48 milliseconds later. The operator confirmed physical restoration.",
+      "requestPayloadHex": "0100FF",
+      "ackPayloadHex": "0100FF",
+      "firstFrameAfterRestoreMilliseconds": 482.48,
+      "operatorConfirmedPhysicalRestoration": true
+    },
+    {
+      "kind": "SanitizedDecodeProvenance",
+      "summary": "The pad-only decoded view contained 974 bounded transactions and matched the full-root source hash recorded above.",
+      "padAddress": 4,
+      "padTransactionCount": 974,
+      "padFilteredCaptureSha256": "8FF529F77DBC299D3D0F8D8D5B361FD5F7D4F97C103E4087DEC916CE59C8A773",
+      "sanitizedTransactionsSha256": "61C869FD6571DB326FF56D147832B3D9D320C7C04EFDA03482D15C7E919992C6"
+    }
+  ],
+  "limitations": [
+    "The full-root all-devices capture includes unrelated USB traffic; conclusions are limited to the exact VID 1532 PID 0F43 pad address and marker-aligned control transfers.",
+    "The capture confirms one 100-percent brightness restoration value; it does not independently validate restoration at every saved brightness.",
+    "The display-off sequence confirms blackout and restoration behavior but does not assign the strip's physical origin or direction.",
+    "Unplug persistence, sleep and resume behavior, and accepted frame-rate tolerance remain unvalidated.",
+    "No OpenBlade lighting write or host-frame replay was performed."
+  ],
+  "productionAdmission": {
+    "coolingPadDisplayOffPolicyObserved": true,
+    "coolingPadLightingWriteAdmitted": false,
+    "reason": "Display-off brightness and stream behavior are now physically confirmed, but physical strip order and remaining lifecycle and cadence bounds are incomplete."
+  },
+  "notes": [
+    "DisplayOffCommandStarting was recorded at 2026-08-09T11:05:13.8025364Z.",
+    "DisplayOffCommandPosted was recorded at 2026-08-09T11:05:17.0103530Z.",
+    "DisplayWakeOperatorConfirmed was recorded at 2026-08-09T11:05:45.3677227Z.",
+    "The capture stopped by the owned sentinel and targeted graceful Ctrl+Break; no USBPcap process remained.",
+    "The raw full-root capture, filtered capture, decoded transactions, state, and operator markers remain local and uncommitted.",
+    "OpenBlade and the two Razer background services were running after cleanup."
+  ]
+}
