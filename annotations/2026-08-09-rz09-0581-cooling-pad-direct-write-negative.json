@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "OpenBlade.Capture uncommitted developer validator derived from product head 132fc01",
+    "role": "OpenBladeTypedValidation",
+    "openBladeTypedApplyPerformed": true,
+    "openBladeReadbackConfirmed": false
+  },
+  "capturedAtUtc": "2026-08-09T12:03:07.6873309Z",
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "0F43",
+    "bios": "4.00",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "sha256": "4398AAC64C9A57266D3D7716FF8E39828084D483D2DA7F17BA7C914C688CAF56",
+    "byteLength": 1968,
+    "rawCaptureCommitted": false,
+    "captureMode": "TypedDirectValidationTranscript",
+    "selectedDeviceCount": 1,
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "kind": "SettingChange",
+    "subsystem": "Cooling-pad fan",
+    "name": "Negative direct Fixed 2200 then presumed Auto handback validation",
+    "value": "One acknowledged 0D/10 01022C apply followed by one acknowledged 0D/10 000600 cleanup",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": false,
+    "applyResult": "The exact Fixed 2200 candidate returned a status-02 semantic echo, but the only available 0D/81 getter remained 010500 and did not confirm an active mode or target change.",
+    "readbackResult": "Readback failed semantically: the getter was unchanged at raw 00. The validator therefore did not ask the operator to confirm physical Fixed behavior.",
+    "restorationResult": "The presumed Auto handback 000600 returned a status-02 semantic echo once; it was not retried.",
+    "restorationReadbackResult": "The 0D/81 getter remained 010500, but Synapse subsequently reported the device in sleep mode and the pad flashed red. USB-only reconnect did not recover it; disconnecting both USB and 12V power, waiting, then reconnecting 12V before USB restored the pad."
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "Preflight",
+      "summary": "The validator confirmed exact RZ09-0581 BIOS 4.00, one exact PID 0F43 usage 000C:0001 91-byte collection, inactive Synapse, and inactive OpenBlade service.",
+      "baselineGetterResponseHex": "010500",
+      "baselineActiveModeConfirmed": false
+    },
+    {
+      "kind": "TypedApplyNegativeReadback",
+      "summary": "One Fixed candidate 01022C was acknowledged, but the 0D/81 getter remained 010500; this getter cannot validate active Fixed mode or configured target for this transition.",
+      "fixedSetterSemanticPayloadHex": "01022C",
+      "fixedSetterAcknowledged": true,
+      "candidateGetterResponseHex": "010500",
+      "candidateReadbackConfirmed": false,
+      "fixedWriteCount": 1,
+      "indeterminatePartialWrite": false
+    },
+    {
+      "kind": "TypedCleanupNegativeOutcome",
+      "summary": "One 000600 cleanup was acknowledged and the getter remained 010500, but the pad entered a Synapse-reported sleep state with flashing red lighting and required a full USB-plus-12V power cycle.",
+      "cleanupSetterSemanticPayloadHex": "000600",
+      "cleanupSetterAcknowledged": true,
+      "finalGetterResponseHex": "010500",
+      "cleanupWriteCount": 1,
+      "manualPowerCycleRequired": true,
+      "usbOnlyReconnectRecovered": false,
+      "fullPowerCycleRecovered": true,
+      "wrapperManifestSha256": "878023841C7640573FFFB75BE529736A2F5C921CA59D5DEAFC941FB19E92B5DC"
+    }
+  ],
+  "limitations": [
+    "The vendor oracle capture correlates 000600 with the operator selecting Auto in Synapse, but this direct standalone replay did not reproduce a safe Auto handback and must supersede that interpretation for OpenBlade.",
+    "A status-02 semantic echo proves command acceptance only. It did not prove the requested active mode or safe restoration.",
+    "The 0D/81 getter cannot be used as active-mode, configured-target-transition, or physical-speed readback for this validation.",
+    "The operator did not get a chance to confirm physical Fixed 2200 behavior because the false getter requirement failed immediately and cleanup ran.",
+    "The raw transcript and wrapper manifest remain private and uncommitted."
+  ],
+  "productionAdmission": {
+    "coolingPadFanWriteAdmitted": false,
+    "fixed2200SetterObserved": true,
+    "fixed2200DirectApplyValidated": false,
+    "autoHandbackObserved": true,
+    "autoHandbackDirectApplyValidated": false,
+    "activeModeReadbackConfirmed": false,
+    "tachometerReadbackConfirmed": false,
+    "cleanupRequiredFullPowerCycle": true,
+    "reason": "The only direct OpenBlade trial lacked semantic active-mode readback, and the presumed Auto cleanup left the pad asleep until a full hardware power cycle. No production fan writer or reversible validator is admitted."
+  },
+  "notes": [
+    "The unsafe validator was removed from the product worktree after this result and will not be committed.",
+    "OpenBlade and both Razer services were running and Synapse was relaunched after the bounded command session.",
+    "The operator confirmed recovery only after disconnecting both pad USB and 12V power, waiting, reconnecting 12V first, and then reconnecting USB."
+  ]
+}
