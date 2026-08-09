@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "OpenBlade.Capture working build immediately preceding commit 132fc01",
+    "role": "OpenBladeTypedValidation",
+    "openBladeTypedApplyPerformed": true,
+    "openBladeReadbackConfirmed": true
+  },
+  "capturedAtUtc": "2026-08-09T11:44:40.5310517Z",
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "bios": "4.00",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "sha256": "570F9BA7DF06B9FB0CE2B508ED72A3BB35AC84B97A815976F8243A97F42E451B",
+    "byteLength": 1109,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddresses",
+    "selectedDeviceCount": 2,
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "kind": "SettingChange",
+    "subsystem": "Blade performance",
+    "name": "Typed HyperBoost mode-7 reversible validation",
+    "value": "Balanced mode 0 to HyperBoost mode 7 on both channels, then exact Balanced restoration with cooling pad present and Auto",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": true,
+    "applyResult": "Applied successfully: both mode-7 setters returned status-02 exact semantic echoes.",
+    "readbackResult": "Readback successful: channel 1 returned 01010700 and channel 2 returned 01020700.",
+    "restorationResult": "Restored successfully: both saved Balanced mode-0 setters returned status-02 exact semantic echoes.",
+    "restorationReadbackResult": "Restoration readback successful: channel 1 returned 01010000 and channel 2 returned 01020000."
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "ExactPreflight",
+      "summary": "The mutation was gated to exact RZ09-0581, PID 02E0, BIOS 4.00, one exact laptop HID collection, one exact PID 0F43 report-ID-5 cooling-pad collection, inactive competing controllers, and inactive OpenBlade service.",
+      "adapterResponsePayloadHex": "1111",
+      "adapterSemantic": "FullPower280W",
+      "laptopPreflightTranscriptSha256": "578298CDB023D2E2C7F1DA60FD2EED804912A18041ADCFA34073478642769699",
+      "coolingPadPreflightTranscriptSha256": "1595AA6A75F6654F9C16DE44F921FD2A6B01E6FA723FAD25B593B48448F197F5"
+    },
+    {
+      "kind": "TypedApplyAndReadback",
+      "summary": "The validator submitted one mode-7 write per channel, received both exact acknowledgements, and independently read mode 7/value 0 from both channels.",
+      "baselineThermal1Hex": "01010000",
+      "baselineThermal2Hex": "01020000",
+      "candidateThermal1Hex": "01010700",
+      "candidateThermal2Hex": "01020700",
+      "applyAcknowledged": true,
+      "candidateConfirmed": true,
+      "indeterminatePartialWrite": false
+    },
+    {
+      "kind": "TypedRestoration",
+      "summary": "The validator restored the saved Balanced pair once, received both exact acknowledgements, and independently read the exact saved mode-0 state from both channels.",
+      "restorationThermal1Hex": "01010000",
+      "restorationThermal2Hex": "01020000",
+      "restoreAcknowledged": true,
+      "restored": true,
+      "manualRecoveryRequired": false,
+      "runManifestSha256": "AFB690ACE50518A516B47A1D2E4C5C48D02E24096729B9862FB7C818760BAB6B"
+    }
+  ],
+  "limitations": [
+    "The laptop and cooling-pad preflights were separate ordered sessions; their multi-device correlation relies on the exact collections remaining attached throughout the bounded run and the operator-confirmed pad Auto state.",
+    "Synapse was force-terminated before preflight so its normal shutdown cleanup could not replace the operator-confirmed active Balanced baseline. Synapse and all stopped services were restored after validation.",
+    "The raw validator document contained a metadata-only legacy BIOS 3.01 constant inside its nested device object. The exact runtime gate, preflight, wrapper manifest, and host identity all confirmed BIOS 4.00; commit 132fc01 corrects future transcript metadata without repeating the hardware write.",
+    "This validates the exact pad-present mode-7 setter and paired readback/restoration contract. It does not validate pad-less activation, operation on another model or firmware, or behavior without the full-power adapter.",
+    "No power-limit telemetry, benchmark, sustained thermal load, or long-duration stability test was performed.",
+    "Raw transcripts, process inventory, and logs remain private and uncommitted."
+  ],
+  "productionAdmission": {
+    "hyperBoostAccess": "ReadWrite",
+    "hyperBoostReadbackConfirmed": true,
+    "hyperBoostWriteAdmitted": true,
+    "coolingPadRequired": true,
+    "fullPowerAdapterRequired": true,
+    "padLessActivationAdmitted": false,
+    "coolingPadFanWriteAdmitted": false,
+    "reason": "The exact BIOS-4.00 pad-present mode-7 setter completed one acknowledged apply, paired semantic readback, exact saved-state restoration, and paired restoration readback. Pad-less use and cooling-pad fan writes remain separate gates."
+  },
+  "notes": [
+    "The validator refuses non-Balanced baselines and never retries an indeterminate write.",
+    "The cooling pad remained connected, powered, and operator-confirmed Auto throughout the mutation.",
+    "OpenBlade, Synapse, Razer Game Manager Service 3, and Razer Elevation Service were running after cleanup; USBPcap was not running."
+  ]
+}

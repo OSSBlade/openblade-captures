@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "Razer Synapse 4.0.698.98",
+    "role": "OracleCapture",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeReadbackConfirmed": false
+  },
+  "capturedAtUtc": "2026-08-09T11:49:03.5791574Z",
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "0F43",
+    "bios": "4.00",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "sha256": "849D1CF1D20F369F65B075A651300B20C9208184F5BADFC4D754BA50FB377093",
+    "byteLength": 249815,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddress",
+    "selectedDeviceCount": 0,
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "kind": "SettingChange",
+    "subsystem": "Cooling-pad fan",
+    "name": "Vendor Auto to Smart Curve to Fixed 2200 to Auto sequence",
+    "value": "Operator-confirmed rapid Smart Fan Curve and Fixed 2200 selections followed by Auto restoration",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": true,
+    "applyResult": "Applied successfully in Synapse: the operator selected Smart Fan Curve and then Fixed 2200; each action emitted an acknowledged 0D/10 command.",
+    "readbackResult": "Vendor response successful: both commands returned status-02 exact semantic echoes. No independent active-mode or tachometer getter exists.",
+    "restorationResult": "Restored successfully in Synapse: Auto emitted the captured 0D/10 handback command with a status-02 exact semantic echo.",
+    "restorationReadbackResult": "Restoration was operator-confirmed in Synapse and transport-acknowledged; no active-mode readback was available."
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "SmartCurveSelection",
+      "summary": "The operator's first rapid selection was Smart Fan Curve; Synapse emitted 0D/10 payload 01022C and received a status-02 exact echo.",
+      "frame": 1243,
+      "requestPrefixHex": "0015000000030D1001022C",
+      "semanticPayloadHex": "01022C",
+      "responseFrame": 1246,
+      "responsePrefixHex": "0215000000030D1001022C",
+      "statusHex": "02"
+    },
+    {
+      "kind": "Fixed2200Selection",
+      "summary": "The operator then selected Fixed 2200; Synapse emitted the same 0D/10 payload 01022C and received a status-02 exact echo.",
+      "frame": 1247,
+      "requestPrefixHex": "0016000000030D1001022C",
+      "semanticPayloadHex": "01022C",
+      "configuredTargetRawDecimal": 44,
+      "configuredTargetDisplayValue": 2200,
+      "responseFrame": 1250,
+      "responsePrefixHex": "0216000000030D1001022C",
+      "statusHex": "02"
+    },
+    {
+      "kind": "AutoHandback",
+      "summary": "The operator restored Auto; Synapse emitted 0D/10 payload 000600 and received a status-02 exact echo.",
+      "frame": 1911,
+      "requestPrefixHex": "0017000000030D10000600",
+      "semanticPayloadHex": "000600",
+      "responseFrame": 1914,
+      "responsePrefixHex": "0217000000030D10000600",
+      "statusHex": "02"
+    }
+  ],
+  "limitations": [
+    "The operator clarified that the two 01022C commands were two separate rapid UI actions, first Smart Fan Curve and then Fixed 2200. They are not evidence of a retry policy.",
+    "Both rapid selections emitted the same 0D/10 semantic payload, so this capture alone does not distinguish the pad's persistent active-mode state after those actions.",
+    "Synapse exposes no fan-speed readback. The configured-target getter is commanded state only, and the candidate current-speed getter fails protocol validation.",
+    "The Auto command is an acknowledged vendor handback, but no independent active-mode getter confirms the resulting firmware ownership state.",
+    "The transient USB device address is capture-local and must not be used as production identity.",
+    "No OpenBlade pad fan write was performed in this capture. The raw PCAP remains local and uncommitted."
+  ],
+  "productionAdmission": {
+    "coolingPadFanWriteAdmitted": false,
+    "fixed2200SetterObserved": true,
+    "autoHandbackObserved": true,
+    "activeModeReadbackConfirmed": false,
+    "tachometerReadbackConfirmed": false,
+    "reason": "The exact vendor setters and status-02 echoes are captured, but a typed OpenBlade apply/restore and independent active-mode readback remain incomplete."
+  },
+  "notes": [
+    "The capture selected only the exact pad's transient address on the complete shared USB root.",
+    "OpenBlade service was stopped before capture and restarted after a graceful stop.",
+    "The operator's final pad state was Auto."
+  ]
+}
