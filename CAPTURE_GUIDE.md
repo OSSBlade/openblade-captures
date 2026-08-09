@@ -50,6 +50,21 @@ and VID/PID pairs, but not the machine serial number or full PnP instance
 suffixes. Record EC and MCU versions from a trustworthy UI or a later validated
 query; do not guess them.
 
+For the exact Razer Laptop Cooling Pad (`1532:0F43`, USB revision `0200`),
+record its USB interfaces and HID report geometry separately:
+
+```powershell
+.\tools\Get-CoolingPadCaptureInventory.ps1 `
+  -OutputPath .\raw\cooling-pad-interface-inventory.json
+```
+
+This inventory opens HID collections with zero desired access and calls only
+descriptor and preparsed-data APIs. It does not issue feature-report queries or
+writes, and it never serializes a device-interface path, full instance ID,
+container ID, location path, or serial number. The exact reviewed unit exposes
+one 91-byte feature-report collection on `MI_00`; that proves a direct user-mode
+HID transport is available, but it does not assign any command semantics.
+
 ## 2. Create a local session
 
 ```powershell
@@ -151,6 +166,14 @@ command definition. The comparer recognizes checksum-valid 90-byte and
 transaction ID, checksum, reserved bytes, and unused padding, but retains
 status, report ID, command class/ID, payload length, and semantic payload.
 Unknown or malformed payloads fall back to exact full-payload comparison.
+
+Some successful USBPcap control-completion frames contain a response body even
+when Wireshark leaves every semantic payload field empty. The decoder performs
+a second, narrowly filtered `tshark -T json -x` pass for only those IN frames,
+removes the declared USBPcap pseudoheader, and labels the bounded body
+`UsbPcapFrameData`. Complete raw frames and IRP metadata are never serialized.
+This fallback is required before concluding that a command has no ACK or query
+response.
 
 Correlate candidates with:
 
