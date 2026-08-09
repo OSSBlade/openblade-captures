@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "OpenBlade.Capture commit a009a1e4",
+    "role": "ReadOnlyQueryCapture",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeReadbackConfirmed": true
+  },
+  "capturedAtUtc": "2026-08-09T11:30:29.5118593Z",
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "bios": "4.00",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "sha256": "90E376E109F878DDAF48947F30ECDDA332E044528324D46A66671291D239C557",
+    "byteLength": 786,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddress",
+    "selectedDeviceCount": 0,
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "kind": "ReadOnlyQuery",
+    "subsystem": "Blade performance",
+    "name": "Active HyperBoost and Balanced thermal-mode readback",
+    "value": "Two exact thermal-channel getters after bounded forced Synapse termination in each operator-confirmed state",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": true
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "ActiveHyperBoostIndependentReadback",
+      "summary": "With Synapse visibly in HyperBoost, its application process was force-terminated before normal shutdown cleanup. The independent exact-device getter then returned mode 7/value 0 on both thermal channels.",
+      "thermal1RequestPayloadHex": "01010000",
+      "thermal1ResponsePayloadHex": "01010700",
+      "thermal2RequestPayloadHex": "01020000",
+      "thermal2ResponsePayloadHex": "01020700",
+      "expectedStatusHex": "02"
+    },
+    {
+      "kind": "AbruptControllerLossPersistence",
+      "summary": "After the successful mode-7 query, Synapse relaunched showing HyperBoost. This demonstrates that the active state survived abrupt loss of the Synapse application long enough for independent readback; it does not prove persistence across reboot or power loss."
+    },
+    {
+      "kind": "ActiveBalancedIndependentReadback",
+      "summary": "After the operator explicitly selected Balanced, Synapse was again force-terminated before normal shutdown cleanup. The independent getter returned mode 0/value 0 on both thermal channels.",
+      "thermal1RequestPayloadHex": "01010000",
+      "thermal1ResponsePayloadHex": "01010000",
+      "thermal2RequestPayloadHex": "01020000",
+      "thermal2ResponsePayloadHex": "01020000",
+      "expectedStatusHex": "02",
+      "privateTranscriptSha256": "A16C27E144541573BB126409DC199E98C13F8565C62359BBFBC5FE8D191B82D0"
+    },
+    {
+      "kind": "CoolingPadSmartCurveConfiguredTarget",
+      "summary": "During the paired restored state, the cooling pad was in Smart Fan Curve Balanced. Its configured-target getter returned raw 2C, corresponding to the current 2200 target through the independently established target/50 scale. Synapse exposes no measured fan-speed readback.",
+      "configuredTargetResponsePayloadHex": "01052C",
+      "configuredTargetRawDecimal": 44,
+      "configuredTargetDisplayValue": 2200,
+      "currentSpeedGetterConfirmed": false,
+      "privateTranscriptSha256": "53A6231D7227E1441202DDFAD37F23B0DF8C9B5CCE03B28967F9493836DE2EAC"
+    }
+  ],
+  "limitations": [
+    "The Synapse application was deliberately force-terminated after each operator-confirmed state so normal shutdown cleanup could not replace the active state before the read-only getter. This was a bounded developer capture, not a production control mechanism.",
+    "The two Razer helper services and OpenBlade service were temporarily stopped only for the exact read-only query and were confirmed running afterward. Synapse was relaunched after each query.",
+    "The readback proves exact-device mode 7/value 0 while HyperBoost is active and mode 0/value 0 while Balanced is active. It does not independently validate any OpenBlade setter, power-limit effect, thermal safety behavior, or mode transition.",
+    "The filter-mediated path used by Synapse for the active mode-7 setter remains unresolved at the physical USB boundary.",
+    "Cooling-pad presence was not spoofed or removed. Pad-less HyperBoost activation remains untested and unsupported.",
+    "The cooling-pad configured target is commanded state, not measured RPM. The candidate current-speed getter failed protocol validation and Synapse exposes no fan-speed readback.",
+    "The raw transcripts, process inventory, and Synapse logs remain local and uncommitted. The committed evidence contains no device serial, user path, or raw process inventory."
+  ],
+  "productionAdmission": {
+    "hyperBoostAccess": "ObservedOnly",
+    "hyperBoostReadbackConfirmed": true,
+    "hyperBoostWriteAdmitted": false,
+    "padLessActivationAdmitted": false,
+    "coolingPadFanWriteAdmitted": false,
+    "reason": "Active HyperBoost readback is confirmed on the exact model and BIOS, but no OpenBlade setter has been applied, read back, and restored; pad-presence eligibility and pad-less safety are also unvalidated."
+  },
+  "notes": [
+    "The read-only query required the exact host, exact HID collection, inactive Synapse controller processes, and inactive OpenBlade service.",
+    "The operator restored the final baseline to laptop Balanced and cooling-pad Auto fans.",
+    "OpenBlade, Synapse, Razer Game Manager Service 3, and Razer Elevation Service were running after cleanup; USBPcap was not running."
+  ]
+}
