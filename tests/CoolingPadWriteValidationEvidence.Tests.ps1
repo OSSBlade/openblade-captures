@@ -7,11 +7,14 @@ $hyperBoostPath = Join-Path $repository `
     'annotations\2026-08-09-rz09-0581-hyperboost-write-validation-repeat.json'
 $fixedPath = Join-Path $repository `
     'annotations\2026-08-09-rz09-0581-cooling-pad-fixed-write-synapse-recovery.json'
+$fixedPhysicalPath = Join-Path $repository `
+    'annotations\2026-08-09-rz09-0581-cooling-pad-fixed-write-physical-positive.json'
 $observationsPath = Join-Path $repository `
     'decoded\rz09-0581-pid-02e0-bios-4.00-cooling-pad-protocol-observations.json'
 $validator = Join-Path $repository 'tools\Test-CaptureEvidence.ps1'
 $hyperBoost = Get-Content -LiteralPath $hyperBoostPath -Raw | ConvertFrom-Json
 $fixed = Get-Content -LiteralPath $fixedPath -Raw | ConvertFrom-Json
+$fixedPhysical = Get-Content -LiteralPath $fixedPhysicalPath -Raw | ConvertFrom-Json
 $observations = Get-Content -LiteralPath $observationsPath -Raw | ConvertFrom-Json
 
 function Assert-True {
@@ -27,6 +30,7 @@ function Assert-True {
 
 & $validator -AnnotationPath $hyperBoostPath -SchemaOnly | Out-Null
 & $validator -AnnotationPath $fixedPath -SchemaOnly | Out-Null
+& $validator -AnnotationPath $fixedPhysicalPath -SchemaOnly | Out-Null
 
 Assert-True ($hyperBoost.evidenceProvenance.controller -ceq `
         'OpenBlade.Capture 0.5.0+68085fa7a19dfd02a7edd8f78d258c8479c5414e') `
@@ -81,6 +85,52 @@ Assert-True ($fixed.productionAdmission.coolingPadFanWriteAdmitted -eq $false -a
     $fixed.productionAdmission.synapseAutoRecoveryConfirmed -eq $true -and
     $fixed.productionAdmission.openBladeAutoHandbackValidated -eq $false) `
     'The Fixed-only trial must not admit a production fan writer.'
+
+Assert-True ($fixedPhysical.evidenceProvenance.controller -ceq `
+        'OpenBlade.Capture 0.5.0+1c9a4dcdb4d0b627f7b9d05dbb2e59aa889d1d85' -and
+    $fixedPhysical.evidenceProvenance.role -ceq 'NegativeCapture' -and
+    $fixedPhysical.evidenceProvenance.openBladeTypedApplyPerformed -eq $true -and
+    $fixedPhysical.evidenceProvenance.openBladeReadbackConfirmed -eq $false) `
+    'The physical-positive Fixed validation lost its exact negative-readback provenance.'
+Assert-True ($fixedPhysical.capture.sha256 -ceq `
+        '46445B67DF76688EB0D058124B690C35D25EC8E704AD42098BB46379ACC5E2F6' -and
+    $fixedPhysical.capture.byteLength -eq 658) `
+    'The physical-positive Fixed validation transcript identity changed.'
+$physicalApply = @($fixedPhysical.sanitizedEvidence |
+    Where-Object kind -ceq 'Fixed2200PhysicalApplyPositive')
+$getterNegative = @($fixedPhysical.sanitizedEvidence |
+    Where-Object kind -ceq 'ConfiguredTargetGetterNegative')
+$managedRecovery = @($fixedPhysical.sanitizedEvidence |
+    Where-Object kind -ceq 'SynapseManagedAutoRecovery')
+Assert-True ($physicalApply.Count -eq 1 -and
+    $physicalApply[0].fixedSetterSemanticPayloadHex -ceq '01022C' -and
+    $physicalApply[0].fixedSetterAcknowledged -eq $true -and
+    $physicalApply[0].operatorPhysicalApplyConfirmed -eq $true -and
+    $physicalApply[0].fixedWriteCount -eq 1 -and
+    $physicalApply[0].openBladeAutomaticControlWriteCount -eq 0) `
+    'The physically confirmed Fixed 2200 apply evidence changed.'
+Assert-True ($getterNegative.Count -eq 1 -and
+    $getterNegative[0].postWriteConfiguredTargetNormalizedNull -eq $true -and
+    $getterNegative[0].postWriteFailureClassification -ceq 'post-read-zero' -and
+    $getterNegative[0].targetReadbackConfirmed -eq $false -and
+    $getterNegative[0].activeModeReadbackConfirmed -eq $false -and
+    $getterNegative[0].tachometerReadbackConfirmed -eq $false) `
+    'The configured-target negative result must remain distinct from physical success.'
+Assert-True ($managedRecovery.Count -eq 1 -and
+    $managedRecovery[0].operatorConfirmedSynapseManagedAuto -eq $true -and
+    $managedRecovery[0].synapseRecoveryRequired -eq $true -and
+    $managedRecovery[0].openBladeRecoveryWritePerformed -eq $false -and
+    $managedRecovery[0].independentRestorationReadbackConfirmed -eq $false) `
+    'The vendor-managed recovery must not be represented as an OpenBlade restore.'
+Assert-True ($fixedPhysical.productionAdmission.fixed2200PhysicalApplyValidated -eq $true -and
+    $fixedPhysical.productionAdmission.fixed2200ConfiguredTargetReadbackConfirmed -eq $false -and
+    $fixedPhysical.productionAdmission.synapseManagedAutoRecoveryConfirmed -eq $true -and
+    $fixedPhysical.productionAdmission.openBladeAutomaticControlHandbackValidated -eq $false -and
+    $fixedPhysical.productionAdmission.coolingPadFanWriteAdmitted -eq $false) `
+    'Physical Fixed validation must not admit production fan mutation.'
+Assert-True ((@($fixedPhysical.limitations) -join ' ') -match 'active controller' -and
+    (@($fixedPhysical.limitations) -join ' ') -match 'not an OpenBlade restoration') `
+    'The evidence must preserve the Synapse-managed Auto control boundary.'
 
 $direct = $observations.fan.readback.configuredTargetGetter.directFixedWriteTrial
 Assert-True ($direct.baselineConfiguredTarget -eq 1600 -and

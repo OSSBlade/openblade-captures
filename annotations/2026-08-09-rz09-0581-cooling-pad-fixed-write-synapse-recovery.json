@@ -29,14 +29,14 @@
     "kind": "SettingChange",
     "subsystem": "Cooling-pad fan",
     "name": "Fixed 2200 single-write trial with Synapse recovery",
-    "value": "One acknowledged Fixed 2200 write, no OpenBlade Auto write, then vendor-controlled Auto restoration on Synapse boot",
+    "value": "One acknowledged Fixed 2200 write, no OpenBlade automatic-control write, then recovery to the Synapse Auto UI state on Synapse boot",
     "operatorConfirmed": true
   },
   "validation": {
     "priorStateSaved": true,
     "applyResult": "The exact Fixed 2200 setter was applied once and returned a status-02 semantic acknowledgement.",
     "readbackResult": "The post-write query succeeded as a transaction but returned configured target 1550 instead of 2200, so the Fixed target was not independently confirmed.",
-    "restorationResult": "Restored successfully through the vendor controller: Synapse booted and the operator confirmed that it automatically returned the pad to Auto.",
+    "restorationResult": "Restored successfully through the vendor controller: Synapse booted and the operator confirmed that its UI returned to Auto; active controller and physical speed remained opaque.",
     "restorationReadbackResult": "After Synapse fully exited, an independent read-only query confirmed configured target zero while both stored cooling-mode banks remained unchanged."
   },
   "sanitizedEvidence": [
@@ -62,7 +62,7 @@
     },
     {
       "kind": "SynapseAutoRecovery",
-      "summary": "Synapse booted after the bounded trial and the operator confirmed that the pad automatically returned to Auto. Synapse was then fully closed before an independent read-only query.",
+      "summary": "Synapse booted after the bounded trial and the operator confirmed that its UI returned to Auto. The active controller and physical speed remained opaque. Synapse was then fully closed before an independent read-only query.",
       "operatorConfirmedAuto": true,
       "synapseRecoveryRequired": true,
       "openBladeRecoveryWritePerformed": false
@@ -82,7 +82,7 @@
   "limitations": [
     "The Fixed setter acknowledgement did not prove the requested target, active fan mode, physical fan motion, ownership, or safe standalone control.",
     "Configured-target readback changed from 1600 to 1550 after the Fixed 2200 write. The cause is unresolved and the result does not admit the setter.",
-    "Synapse restored Auto on boot, but this is vendor-controlled recovery rather than an independently reproduced OpenBlade Auto handback.",
+    "Synapse restored its Auto UI state on boot, but the active controller remained opaque and this is vendor-controlled recovery rather than an independently reproduced OpenBlade automatic-control handback.",
     "The unchanged firmware and Synapse cooling-mode banks are stored configuration banks, not an active-controller or active-mode discriminator.",
     "The current-speed candidate getter remains unsupported, and no tachometer readback is available.",
     "The private write and post-recovery transcripts remain uncommitted."
@@ -96,7 +96,7 @@
     "configuredTargetReadbackConfirmed": true,
     "activeModeReadbackConfirmed": false,
     "tachometerReadbackConfirmed": false,
-    "reason": "The single Fixed write was acknowledged but did not produce the expected configured-target readback. Only Synapse restored Auto safely, so OpenBlade fan mutation remains unadmitted."
+    "reason": "The single Fixed write was acknowledged but did not produce the expected configured-target readback. Only Synapse restored its opaque Auto UI state safely, so OpenBlade fan mutation remains unadmitted."
   },
   "notes": [
     "The trial deliberately omitted the previously unsafe standalone OpenBlade Auto command.",
