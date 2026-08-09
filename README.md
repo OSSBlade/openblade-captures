@@ -21,7 +21,8 @@ The broader project documentation is maintained in
   versioned capture plan and operator log.
 - `tools/Invoke-InteractiveUsbPcapCapture.ps1`: run USBPcapCMD in an isolated
   process group, stop it through targeted Ctrl+Break, and restore the OpenBlade
-  service state.
+  service state. One or more verified device addresses on the same root can be
+  selected for bounded cross-device correlation.
 - `tools/Convert-UsbPcapToTransactions.ps1`: decode a local PCAP into bounded
   transaction records with tshark.
 - `tools/Compare-CaptureTransactions.ps1`: compare baseline and one-action

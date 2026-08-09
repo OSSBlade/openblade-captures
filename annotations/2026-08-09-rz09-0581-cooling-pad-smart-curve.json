@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "Razer Synapse 4.0.698",
+    "role": "OracleCapture",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeReadbackConfirmed": false
+  },
+  "capturedAtUtc": "2026-08-09T08:31:27.7116248Z",
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "bios": "4.00",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "sha256": "FE7FA3A0B31ECC8AA9A118A481954740CBAEC7F313BDCE10BDCFB0F1F732539E",
+    "byteLength": 877379,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddresses",
+    "selectedDeviceCount": 2,
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "kind": "SettingChange",
+    "subsystem": "Razer Laptop Cooling Pad",
+    "name": "Smart Fan Curve and display-off lighting policy",
+    "value": "Minimum safe curve-point increments and one checkbox toggle",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": true,
+    "applyResult": "Applied successfully in Synapse: CPU 100 C point changed from 68.8 percent to 68.9 percent; GPU 90 C point changed from 68.8 percent to 68.9 percent; display-off lighting policy changed from unchecked to checked",
+    "readbackResult": "Synapse UI readback was confirmed by the operator for each changed value; the paired trace decoded 4713 cooling-pad transactions",
+    "restorationResult": "Restored successfully in Synapse: both fan-curve points returned to 68.8 percent, fan mode returned to Auto, and display-off lighting policy returned to unchecked",
+    "restorationReadbackResult": "The operator confirmed every restored value in Synapse; USBPcap stopped gracefully and OpenBlade restarted"
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "SmartFanCurvePresentation",
+      "summary": "Synapse exposes separate CPU and GPU Smart Fan Curve views in percent mode. The saved CPU curve has visible points at 40 C, 90 C, and 100 C; the saved GPU curve has visible points at 30 C, 80 C, and 90 C.",
+      "cpuPointTemperaturesCelsius": [40, 90, 100],
+      "gpuPointTemperaturesCelsius": [30, 80, 90]
+    },
+    {
+      "kind": "SmartFanCurveReversibleProbe",
+      "summary": "The highest-temperature CPU and GPU points each accepted a 0.1 percentage-point increase and returned to the exact prior value.",
+      "cpuProbe": {
+        "temperatureCelsius": 100,
+        "priorPercent": 68.8,
+        "probePercent": 68.9,
+        "restoredPercent": 68.8
+      },
+      "gpuProbe": {
+        "temperatureCelsius": 90,
+        "priorPercent": 68.8,
+        "probePercent": 68.9,
+        "restoredPercent": 68.8
+      }
+    },
+    {
+      "kind": "HostEvaluatedFanCurve",
+      "summary": "The pad received small calculated fan-target messages while Smart Fan Curve was active. No curve table upload was observed, so this capture supports a Synapse-hosted control loop rather than an onboard curve.",
+      "candidateFanControlMessageCount": 5,
+      "candidateSemanticPayloadBytes": 3
+    },
+    {
+      "kind": "DisplayOffLightingPolicy",
+      "summary": "Synapse exposes a Switch off lighting when display is turned off checkbox. It was toggled from unchecked to checked and restored to unchecked. No distinct immediate accessory command was observed, which is consistent with a host policy that acts at a later display-power event.",
+      "priorState": "Unchecked",
+      "probeState": "Checked",
+      "restoredState": "Unchecked"
+    },
+    {
+      "kind": "AccessoryLightingFrameStream",
+      "summary": "Host-rendered accessory lighting continued during the session as 4705 messages with a 59-byte declared payload.",
+      "declaredPayloadBytes": 59,
+      "frameCount": 4705
+    },
+    {
+      "kind": "PrivateScreenshotEvidence",
+      "summary": "Two local screenshots preserve the CPU and GPU curve presentation. They contain no device serial or user path and remain uncommitted with the private raw session.",
+      "cpuScreenshotSha256": "7E8D5C296F185AA2F2D464F84C45658E91DE815D5D3CE4BADA257D124551CC41",
+      "gpuScreenshotSha256": "8EFD4173309B0307DC16DD5FEB144EA3967D800B5B1851025828B2B272FC034A",
+      "committed": false
+    }
+  ],
+  "limitations": [
+    "Multi-device timing correlation is limited to the explicitly selected Blade and cooling-pad addresses on one USB root.",
+    "Only cooling-pad traffic was observed even though the Blade and cooling pad were selected on the shared USB root.",
+    "This trace does not establish the pad fan-target unit, range, update cadence under load, thermal-source arbitration, curve interpolation rule, or failure behavior if Synapse exits.",
+    "The display-off policy was toggled in Synapse, but Windows display power-off was not induced; actual lighting shutdown and resume behavior remain unconfirmed.",
+    "The trace contains operator markers for both curve probes, but it does not expose a standalone device write that uploads either saved curve.",
+    "No OpenBlade write, command replay, HyperBoost action, pad-less action, or third-party pad forwarding was attempted."
+  ],
+  "notes": [
+    "The capture ended through the requested stop sentinel with graceful targeted Ctrl+Break.",
+    "OpenBlade was running before capture, stopped before USBPcap ownership, and successfully restarted after USBPcap exited.",
+    "The raw PCAP, decoded transaction file, screenshots, state, and operator markers remain local and uncommitted."
+  ]
+}

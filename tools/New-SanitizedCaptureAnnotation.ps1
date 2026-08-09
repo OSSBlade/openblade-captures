@@ -21,6 +21,12 @@ if ($plan.schemaVersion -ne 1 -or $state.schemaVersion -ne 1) {
 if ($state.status -notin @('Completed', 'TimedOut')) {
     throw "Capture state is not final: $($state.status)"
 }
+$selectedDeviceCount = if ([string]$state.captureMode -ceq 'DeviceAddresses') {
+    @($state.deviceAddresses).Count
+}
+else {
+    0
+}
 
 $annotation = [ordered]@{
     schemaVersion = 2
@@ -44,6 +50,7 @@ $annotation = [ordered]@{
         byteLength = (Get-Item -LiteralPath $resolvedPcap).Length
         rawCaptureCommitted = $false
         captureMode = [string]$state.captureMode
+        selectedDeviceCount = $selectedDeviceCount
         stopMode = [string]$state.stopMode
         forcedShutdownDataLossDisclosed = $false
         decodable = $null

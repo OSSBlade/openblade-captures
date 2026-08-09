@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "Razer Synapse 4.0.698",
+    "role": "OracleCapture",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeReadbackConfirmed": false
+  },
+  "capturedAtUtc": "2026-08-09T08:24:08.7224397Z",
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "bios": "4.00",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "sha256": "28AC89A0513BC633D5ACFE136FBAA1ECE149FB815711B425C892177009D54B46",
+    "byteLength": 844829,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddresses",
+    "selectedDeviceCount": 2,
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "kind": "SettingChange",
+    "subsystem": "Blade performance and Razer Laptop Cooling Pad",
+    "name": "HyperBoost, pad fan, and pad lighting sequence",
+    "value": "HyperBoost selection, maximum pad fan, and static pad lighting probes",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": true,
+    "applyResult": "Applied successfully in Synapse: HyperBoost, maximum cooling-pad fan, and pad static color probes were accepted in operator-marked windows",
+    "readbackResult": "Synapse UI readback was confirmed by the operator; the paired trace decoded 4518 transactions, but only cooling-pad USB traffic was observed",
+    "restorationResult": "Restored successfully in Synapse: Blade performance returned to Balanced, cooling-pad fan returned to Auto, and lighting returned to the recorded baseline",
+    "restorationReadbackResult": "The operator confirmed the restored Synapse values; USBPcap stopped gracefully and OpenBlade restarted"
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "HyperBoostNegativeUsbResult",
+      "summary": "HyperBoost was selected and restored to Balanced in a paired Blade-and-pad capture, but no Blade USB transaction was observed. This trace therefore does not reveal the HyperBoost transport or a safe OpenBlade command.",
+      "bladeUsbTransactionCount": 0,
+      "coolingPadUsbTransactionCount": 4518
+    },
+    {
+      "kind": "CoolingPadFanControl",
+      "summary": "Maximum fan selection and Auto restoration produced two bounded three-byte cooling-pad message families. Automatic mode also emitted changing calculated fan targets. Field meanings and physical units remain unassigned.",
+      "candidateAutomaticTargetMessageCount": 6,
+      "candidateModeOrFixedTargetMessageCount": 4,
+      "candidateSemanticPayloadBytes": 3
+    },
+    {
+      "kind": "AccessoryLightingFrameStream",
+      "summary": "Synapse host-rendered the cooling-pad lighting as 4490 messages with a 59-byte declared payload during the captured lighting sequence.",
+      "declaredPayloadBytes": 59,
+      "frameCount": 4490
+    },
+    {
+      "kind": "PadStaticLightingProbe",
+      "summary": "The operator selected pad Static color 123456 at 50 percent brightness and later restored the recorded baseline. The capture contains the corresponding host-rendered frame window, but physical LED order remains unvalidated.",
+      "requestedColor": "123456",
+      "requestedBrightnessPercent": 50
+    },
+    {
+      "kind": "ChromaSyncUnavailable",
+      "summary": "Synapse exposed no cooling-pad Chroma Sync option on this installation. Two planned synchronization markers are negative-control windows only and do not establish keyboard-to-pad synchronization support."
+    }
+  ],
+  "limitations": [
+    "Multi-device timing correlation is limited to the explicitly selected Blade and cooling-pad addresses on one USB root.",
+    "The absence of Blade USB traffic does not prove HyperBoost is only a Synapse UI gate; it may use another driver, service, ACPI, WMI, or firmware transport not visible to USBPcap.",
+    "This capture does not prove HyperBoost power-limit changes, readback, restoration below the UI, safety without the cooling pad, or support on any other model or firmware.",
+    "Cooling-pad fan message fields, units, supported range, device readback, failure behavior, and ownership rules remain unconfirmed.",
+    "The capture does not establish pad LED geometry, channel order, effect persistence, frame-rate tolerance, or keyboard-to-pad synchronization.",
+    "No OpenBlade write, command replay, pad-less HyperBoost action, or third-party pad forwarding was attempted."
+  ],
+  "notes": [
+    "A post-capture operator correction records that Synapse provided no Chroma Sync option; planned sync markers must not be treated as successful actions.",
+    "The capture ended through the requested stop sentinel with graceful targeted Ctrl+Break.",
+    "OpenBlade was running before capture, stopped before USBPcap ownership, and successfully restarted after USBPcap exited.",
+    "The raw PCAP, decoded transaction file, state, and operator markers remain local and uncommitted."
+  ]
+}

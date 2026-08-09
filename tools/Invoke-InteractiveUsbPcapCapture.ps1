@@ -8,6 +8,11 @@ param(
     [ValidateRange(1, 127)]
     [int]$DeviceAddress,
 
+    [Parameter(Mandatory, ParameterSetName = 'DeviceAddresses')]
+    [ValidateCount(2, 127)]
+    [ValidateRange(1, 127)]
+    [int[]]$DeviceAddresses,
+
     [Parameter(Mandatory, ParameterSetName = 'AllDevices')]
     [switch]$AllDevices,
 
@@ -98,8 +103,34 @@ $sessionPath = Join-Path $resolvedOutputDirectory 'capture.usbpcap.json'
 $readyPath = Join-Path $resolvedOutputDirectory 'capture.ready.json'
 $stopSentinelPath = Join-Path $resolvedOutputDirectory 'capture.stop'
 $statePath = Join-Path $resolvedOutputDirectory 'capture.state.json'
-$captureMode = if ($AllDevices) { 'AllDevices' } else { 'DeviceAddress' }
-$requestedDeviceAddress = if ($AllDevices) { $null } else { $DeviceAddress }
+$captureMode = if ($AllDevices) {
+    'AllDevices'
+}
+elseif ($PSCmdlet.ParameterSetName -ceq 'DeviceAddresses') {
+    'DeviceAddresses'
+}
+else {
+    'DeviceAddress'
+}
+$requestedDeviceAddresses = if ($AllDevices) {
+    @()
+}
+elseif ($PSCmdlet.ParameterSetName -ceq 'DeviceAddresses') {
+    @($DeviceAddresses)
+}
+else {
+    @($DeviceAddress)
+}
+if (@($requestedDeviceAddresses | Select-Object -Unique).Count -ne
+    $requestedDeviceAddresses.Count) {
+    throw 'DeviceAddresses must not contain duplicate USB device addresses.'
+}
+$requestedDeviceAddress = if ($captureMode -ceq 'DeviceAddress') {
+    $requestedDeviceAddresses[0]
+}
+else {
+    $null
+}
 $startedAtUtc = [DateTimeOffset]::UtcNow.ToString('O')
 
 foreach ($outputPath in @($pcapPath, $sessionPath, $readyPath, $stopSentinelPath, $statePath)) {
@@ -117,6 +148,7 @@ $state = [ordered]@{
     usbPcapDevice = $UsbPcapDevice
     captureMode = $captureMode
     deviceAddress = $requestedDeviceAddress
+    deviceAddresses = @($requestedDeviceAddresses)
     timeoutSeconds = $TimeoutSeconds
     processId = $null
     processGroupId = $null
@@ -188,7 +220,9 @@ try {
     else {
         $arguments += @(
             '--devices',
-            $DeviceAddress.ToString([Globalization.CultureInfo]::InvariantCulture))
+            (($requestedDeviceAddresses | ForEach-Object {
+                $_.ToString([Globalization.CultureInfo]::InvariantCulture)
+            }) -join ','))
     }
     $arguments += @('--inject-descriptors', '-s', '65535', '-o', $pcapPath)
 
@@ -224,6 +258,7 @@ try {
         usbPcapDevice = $UsbPcapDevice
         captureMode = $captureMode
         deviceAddress = $requestedDeviceAddress
+        deviceAddresses = @($requestedDeviceAddresses)
         processId = $captureProcessId
         processGroupId = $processGroupId
         pcapPath = $pcapPath
