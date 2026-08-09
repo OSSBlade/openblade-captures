@@ -29,6 +29,15 @@ The broader project documentation is maintained in
   captures by a semantic fingerprint that removes transaction IDs, checksums,
   and unused padding from validated 90-byte and 374-byte Razer envelopes while
   retaining command and payload differences.
+- `tools/Invoke-CoolingPadFanContextCapture.ps1`: on the exact RZ09-0581 BIOS
+  4.00 target, record Synapse-owned Fixed/Auto transitions with lighting frames
+  active, with lighting dark in the same Synapse process session, and after a
+  verified fresh Synapse process session. OpenBlade remains stopped and sends
+  no HID command.
+- `tools/Analyze-CoolingPadFanContextCapture.ps1`: compare those three bounded
+  marker windows, require exact Fixed/Auto request acknowledgements, count
+  lighting frames, and preserve the distinction between process-session
+  evidence and unresolved literal HID-handle ownership.
 - `tools/New-SanitizedCaptureAnnotation.ps1`: create a commit-safe annotation
   skeleton with hashes and restoration results.
 - `tools/Test-CaptureEvidence.ps1`: validate required provenance, redaction,
