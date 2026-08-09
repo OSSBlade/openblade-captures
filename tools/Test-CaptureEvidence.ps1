@@ -208,6 +208,7 @@ if ($annotation.action.operatorConfirmed -isnot [bool] -or
 }
 
 $typedApply = $provenance.openBladeTypedApplyPerformed -eq $true
+$negativeCapture = [string]$provenance.role -ceq 'NegativeCapture'
 $writeValidation = $typedApply -or
     [string]$annotation.action.kind -ceq 'SettingChange' -or
     [string]$provenance.role -cin @(
@@ -217,20 +218,24 @@ if ($annotation.validation.priorStateSaved -isnot [bool]) {
     Add-Error 'validation.priorStateSaved must be a JSON boolean.'
 }
 if ($writeValidation) {
-    if ($annotation.validation.priorStateSaved -ne $true) {
+    if (-not $negativeCapture -and
+        $annotation.validation.priorStateSaved -ne $true) {
         Add-Error 'A setting change requires a saved prior state.'
     }
-    foreach ($property in @(
-        'applyResult',
-        'readbackResult',
-        'restorationResult',
-        'restorationReadbackResult')) {
-        if (-not (Test-SuccessOutcome $annotation.validation.$property)) {
-            Add-Error "A setting change requires a successful validation.$property outcome."
+    if (-not $negativeCapture) {
+        foreach ($property in @(
+            'applyResult',
+            'readbackResult',
+            'restorationResult',
+            'restorationReadbackResult')) {
+            if (-not (Test-SuccessOutcome $annotation.validation.$property)) {
+                Add-Error "A setting change requires a successful validation.$property outcome."
+            }
         }
     }
 }
-if ($typedApply -and $provenance.openBladeReadbackConfirmed -ne $true) {
+if ($typedApply -and -not $negativeCapture -and
+    $provenance.openBladeReadbackConfirmed -ne $true) {
     Add-Error 'A typed OpenBlade apply requires openBladeReadbackConfirmed=true.'
 }
 

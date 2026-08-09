@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "OpenBlade.Capture 0.5.0+1b7354ea803f20514934989560ce249cef4e78f7",
+    "role": "NegativeCapture",
+    "openBladeTypedApplyPerformed": true,
+    "openBladeReadbackConfirmed": false
+  },
+  "capturedAtUtc": "2026-08-09T20:33:48.3622941Z",
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "0F43",
+    "bios": "4.00",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "sha256": "364FC56744ED1665937B3C033044B6D33071D6671C2B21725C4AD0D5C4BEF4B2",
+    "byteLength": 1620,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddress",
+    "selectedDeviceCount": 0,
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "kind": "SettingChange",
+    "subsystem": "Cooling-pad fan",
+    "name": "Fixed 2200 single-write trial with Synapse recovery",
+    "value": "One acknowledged Fixed 2200 write, no OpenBlade Auto write, then vendor-controlled Auto restoration on Synapse boot",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": true,
+    "applyResult": "The exact Fixed 2200 setter was applied once and returned a status-02 semantic acknowledgement.",
+    "readbackResult": "The post-write query succeeded as a transaction but returned configured target 1550 instead of 2200, so the Fixed target was not independently confirmed.",
+    "restorationResult": "Restored successfully through the vendor controller: Synapse booted and the operator confirmed that it automatically returned the pad to Auto.",
+    "restorationReadbackResult": "After Synapse fully exited, an independent read-only query confirmed configured target zero while both stored cooling-mode banks remained unchanged."
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "FixedOnlyPreflight",
+      "summary": "The validator confirmed the exact host and pad, inactive Synapse and OpenBlade service, and a readable configured-target baseline before issuing one Fixed write.",
+      "baselineConfiguredTargetRpm": 1600,
+      "baselineConfiguredTargetResponseHex": "010520",
+      "activeModeReadbackConfirmed": false
+    },
+    {
+      "kind": "FixedOnlyApplyNegative",
+      "summary": "One Fixed 2200 request was acknowledged, but the immediate configured-target query returned 1550 rather than 2200. No retry and no OpenBlade Auto command followed.",
+      "commandClassHex": "0D",
+      "commandIdHex": "10",
+      "fixedSetterSemanticPayloadHex": "01022C",
+      "responseStatusHex": "02",
+      "fixedSetterAcknowledged": true,
+      "postWriteConfiguredTargetRpm": 1550,
+      "postWriteConfiguredTargetResponseHex": "01051F",
+      "fixedWriteCount": 1,
+      "openBladeAutoWriteCount": 0
+    },
+    {
+      "kind": "SynapseAutoRecovery",
+      "summary": "Synapse booted after the bounded trial and the operator confirmed that the pad automatically returned to Auto. Synapse was then fully closed before an independent read-only query.",
+      "operatorConfirmedAuto": true,
+      "synapseRecoveryRequired": true,
+      "openBladeRecoveryWritePerformed": false
+    },
+    {
+      "kind": "IndependentPostRecoveryReadback",
+      "summary": "The exact read-only post-recovery query returned configured target zero. The firmware and Synapse cooling-mode banks still returned their stored values, confirming that those banks are not active-mode readback.",
+      "configuredTargetResponseHex": "010500",
+      "configuredTargetRpm": 0,
+      "firmwareBankResponseHex": "0006",
+      "synapseBankResponseHex": "01022C",
+      "currentSpeedGetterSupported": false,
+      "activeModeReadbackConfirmed": false,
+      "postRecoveryTranscriptSha256": "94CFA9DC85C5BD113CC62B338A0B4AEBF0C824F2C50FD05C5030D269791C068A"
+    }
+  ],
+  "limitations": [
+    "The Fixed setter acknowledgement did not prove the requested target, active fan mode, physical fan motion, ownership, or safe standalone control.",
+    "Configured-target readback changed from 1600 to 1550 after the Fixed 2200 write. The cause is unresolved and the result does not admit the setter.",
+    "Synapse restored Auto on boot, but this is vendor-controlled recovery rather than an independently reproduced OpenBlade Auto handback.",
+    "The unchanged firmware and Synapse cooling-mode banks are stored configuration banks, not an active-controller or active-mode discriminator.",
+    "The current-speed candidate getter remains unsupported, and no tachometer readback is available.",
+    "The private write and post-recovery transcripts remain uncommitted."
+  ],
+  "productionAdmission": {
+    "coolingPadFanWriteAdmitted": false,
+    "fixed2200SetterObserved": true,
+    "fixed2200DirectApplyValidated": false,
+    "synapseAutoRecoveryConfirmed": true,
+    "openBladeAutoHandbackValidated": false,
+    "configuredTargetReadbackConfirmed": true,
+    "activeModeReadbackConfirmed": false,
+    "tachometerReadbackConfirmed": false,
+    "reason": "The single Fixed write was acknowledged but did not produce the expected configured-target readback. Only Synapse restored Auto safely, so OpenBlade fan mutation remains unadmitted."
+  },
+  "notes": [
+    "The trial deliberately omitted the previously unsafe standalone OpenBlade Auto command.",
+    "USBPcap was not running and the installed OpenBlade service remained stopped.",
+    "Razer Game Manager Service 3 and Razer Elevation Service were restored after both bounded OpenBlade sessions."
+  ]
+}

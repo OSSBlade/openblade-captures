@@ -103,6 +103,22 @@
             "configuredTarget": 0
           }
         ],
+        "directFixedWriteTrial": {
+          "controller": "OpenBlade.Capture 0.5.0+1b7354ea803f20514934989560ce249cef4e78f7",
+          "baselineResponsePayloadHex": "010520",
+          "baselineConfiguredTarget": 1600,
+          "fixed2200RequestPayloadHex": "01022C",
+          "setterAcknowledged": true,
+          "postWriteResponsePayloadHex": "01051F",
+          "postWriteConfiguredTarget": 1550,
+          "expectedTargetConfirmed": false,
+          "openBladeAutoWritePerformed": false,
+          "synapseBootAutoOperatorConfirmed": true,
+          "postRecoveryResponsePayloadHex": "010500",
+          "postRecoveryConfiguredTarget": 0,
+          "productionWriteAdmitted": false,
+          "interpretation": "The standalone Fixed request was acknowledged but did not produce the requested configured-target readback. Synapse, not OpenBlade, restored Auto safely on boot."
+        },
         "interpretation": "The getter tracks the selected configured target, including physical fan-button preset changes. It is not a tachometer or physical current-speed reading."
       },
       "currentSpeedGetter": {
@@ -197,6 +213,24 @@
       "rawArtifactCommitted": false
     },
     {
+      "name": "Repeated OpenBlade HyperBoost reversible-validation transcript",
+      "sha256": "7F439C7C2EF0E09B24477081C36EDC271AB1AF6861CF9EADADBCF3D5E9820755",
+      "byteLength": 4714,
+      "rawArtifactCommitted": false
+    },
+    {
+      "name": "OpenBlade cooling-pad Fixed-only validation transcript",
+      "sha256": "364FC56744ED1665937B3C033044B6D33071D6671C2B21725C4AD0D5C4BEF4B2",
+      "byteLength": 1620,
+      "rawArtifactCommitted": false
+    },
+    {
+      "name": "OpenBlade cooling-pad post-Synapse-recovery read-only transcript",
+      "sha256": "94CFA9DC85C5BD113CC62B338A0B4AEBF0C824F2C50FD05C5030D269791C068A",
+      "byteLength": 2054,
+      "rawArtifactCommitted": false
+    },
+    {
       "name": "Synapse PID 3907 middleware main response body",
       "sha256": "69975887AFC80EDBD548AF57D8A0DEA35EF67C7F695CABA2DDEF43391250BE13"
     },
@@ -236,6 +270,6 @@
     "Configured-target selection is independently readable, including physical fan-button preset changes and restored Auto zero, but the fan ACKs and configured-target getter do not prove physical speed, tachometer state, active mode, or ownership.",
     "The two cooling-mode getter selectors expose stored firmware and Synapse configuration banks. Neither selector identifies which bank currently drives the fan.",
     "The 18-slot logical strip order is known. Physical origin and direction remain unassigned and must not be claimed; logical whole-strip rendering does not require that claim.",
-    "The exact vendor Fixed and Auto payloads are now assigned, but the earlier OpenBlade replay failure proves that encoding and status-02 echo alone are insufficient for production write admission."
+    "The exact vendor Fixed and Auto payloads are now assigned, but both OpenBlade trials prove that encoding and status-02 echo alone are insufficient for production write admission. The safer Fixed-only trial returned 1550 rather than the requested 2200 and required Synapse for an operator-confirmed Auto recovery."
   ]
 }
