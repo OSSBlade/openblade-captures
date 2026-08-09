@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "OpenBlade.Capture 0.5.0+4bbb3b3445e42ba50f2e73104b96804eeeebb2b1",
+    "role": "NegativeCapture",
+    "openBladeTypedApplyPerformed": true,
+    "openBladeReadbackConfirmed": false
+  },
+  "capturedAtUtc": "2026-08-09T23:10:36.0108096Z",
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "0F43",
+    "bios": "4.00",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "sha256": "A456A3CFD300840E5B385163BBF6EEAD4AD5FD6FE6E1F5A1650DAC036E22CEC7",
+    "byteLength": 745,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddress",
+    "selectedDeviceCount": 0,
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "kind": "SettingChange",
+    "subsystem": "Cooling-pad host-managed fan control",
+    "name": "Auto-state plus one host-demand validation",
+    "value": "One 000600 vendor Auto-state write immediately followed by one 0D/01 01052C host-demand write for 2200, with operator-confirmed physical fan response and Synapse UI recovery",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": true,
+    "applyResult": "Applied successfully once: the Auto-state command and immediate host-demand 2200 command each returned an exact status-02 semantic acknowledgement, and the operator physically confirmed that the fan responded.",
+    "readbackResult": "No independent active-mode, demand, or physical-speed getter exists; the successful result is the exact acknowledgements plus operator physical confirmation.",
+    "restorationResult": "Restored successfully through the vendor controller: both Razer services were restarted and the operator confirmed that Synapse returned to its Auto UI state.",
+    "restorationReadbackResult": "The vendor UI recovery was operator-confirmed, but no independent active-controller, active-mode, or tachometer readback exists."
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "ExactBuildAndSafetyPreflight",
+      "summary": "The exact committed Capture build confirmed the RZ09-0581 BIOS 4.00 host, exact PID 0F43 revision-0200 pad, inactive Synapse, and stopped OpenBlade service before mutation.",
+      "captureExecutableProductVersion": "0.5.0+4bbb3b3445e42ba50f2e73104b96804eeeebb2b1",
+      "captureExecutableSha256": "D7A90473668BC7C3FB23A8A1AE10549247B315F8FBC1C8C003506E2560CFDCAD",
+      "captureExecutableByteLength": 198144,
+      "exactHost": true,
+      "exactPad": true,
+      "synapseInactive": true,
+      "openBladeServiceInactive": true
+    },
+    {
+      "kind": "BoundedHostControlSequence",
+      "summary": "OpenBlade submitted exactly one vendor Auto-state command followed immediately by exactly one host-demand 2200 command on the same validated pad session. Both returned exact semantic acknowledgements; no retry or cleanup command followed.",
+      "automaticStateCommandClassHex": "0D",
+      "automaticStateCommandIdHex": "10",
+      "automaticStateSemanticPayloadHex": "000600",
+      "automaticStateWriteCount": 1,
+      "automaticStateAcknowledged": true,
+      "hostDemandCommandClassHex": "0D",
+      "hostDemandCommandIdHex": "01",
+      "hostDemandSemanticPayloadHex": "01052C",
+      "hostDemandTargetRpm": 2200,
+      "hostDemandWriteCount": 1,
+      "hostDemandAcknowledged": true,
+      "retryCount": 0,
+      "openBladeCleanupWriteCount": 0
+    },
+    {
+      "kind": "OperatorPhysicalResponse",
+      "summary": "With Synapse and the two vendor services inactive, the operator physically confirmed that the fan responded after the paired Auto-state plus host-demand sequence.",
+      "operatorPhysicalFanResponseConfirmed": true,
+      "activeModeReadbackConfirmed": false,
+      "hostDemandReadbackConfirmed": false,
+      "tachometerReadbackConfirmed": false
+    },
+    {
+      "kind": "SynapseUiRecovery",
+      "summary": "The two exact Razer services were restored to Running and the operator launched Synapse and confirmed recovery to its Auto UI state. OpenBlade issued no restoration command.",
+      "razerServicesRestored": true,
+      "operatorConfirmedSynapseAutoUi": true,
+      "openBladeRestorationWritePerformed": false,
+      "independentRestorationReadbackConfirmed": false
+    },
+    {
+      "kind": "TranscriptIntegrity",
+      "summary": "The sanitized stdout and wrapper report bind the exact executable to the acknowledged two-command result and empty standard error.",
+      "stdoutSha256": "A456A3CFD300840E5B385163BBF6EEAD4AD5FD6FE6E1F5A1650DAC036E22CEC7",
+      "stdoutByteLength": 745,
+      "wrapperReportSha256": "E2136261126392CB8D4054B4318ED61750CECFA3BC9642E2D50023828D21A77D",
+      "wrapperReportByteLength": 333,
+      "captureExitCode": 0,
+      "stderrEmpty": true,
+      "failure": "none"
+    }
+  ],
+  "limitations": [
+    "The exact paired sequence physically worked once, but status-02 acknowledgements and operator observation do not provide typed active-mode, demand, ownership, or tachometer readback.",
+    "The earlier standalone 000600 OpenBlade trial remains negative evidence: without an immediate host-demand command the pad entered a flashing-red sleep state and required a full power cycle.",
+    "This run validates one host-demand value, 2200, and does not independently validate every value from 500 through 3200 or a sustained Smart Curve cadence.",
+    "Synapse UI recovery is not an OpenBlade restoration primitive and cannot be a production dependency.",
+    "A production owner still needs a bounded failure policy, service-shutdown handoff, disconnect behavior, and exact write-admission manifest before mutation can be enabled.",
+    "Raw local output and the operator interaction remain private; no path, serial, device instance, or process identifier is committed."
+  ],
+  "productionAdmission": {
+    "coolingPadFanWriteAdmitted": false,
+    "standaloneAutomaticStateWriteAdmitted": false,
+    "automaticStatePlusHostDemandSequenceObserved": true,
+    "hostDemand2200PhysicalApplyValidated": true,
+    "hostDemandRangeValidated": false,
+    "smartCurveCadenceValidated": false,
+    "openBladeRestorationValidated": false,
+    "activeModeReadbackConfirmed": false,
+    "tachometerReadbackConfirmed": false,
+    "reason": "The corrected two-command host-control sequence physically worked, unlike standalone 000600, but production still lacks independent state readback and a validated OpenBlade shutdown/restoration contract."
+  },
+  "notes": [
+    "The Razer services were intentionally kept stopped between the write and operator physical assessment so Synapse could not alter the observed response.",
+    "The installed OpenBlade service remained stopped throughout the trial and was not restarted afterward.",
+    "The production implementation must model vendor Auto-state selection and host-demand submission as one ordered host-control transition, never as a standalone Auto command."
+  ]
+}

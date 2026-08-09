@@ -9,12 +9,15 @@ $fixedPath = Join-Path $repository `
     'annotations\2026-08-09-rz09-0581-cooling-pad-fixed-write-synapse-recovery.json'
 $fixedPhysicalPath = Join-Path $repository `
     'annotations\2026-08-09-rz09-0581-cooling-pad-fixed-write-physical-positive.json'
+$hostControlPath = Join-Path $repository `
+    'annotations\2026-08-09-rz09-0581-cooling-pad-host-control-physical-positive.json'
 $observationsPath = Join-Path $repository `
     'decoded\rz09-0581-pid-02e0-bios-4.00-cooling-pad-protocol-observations.json'
 $validator = Join-Path $repository 'tools\Test-CaptureEvidence.ps1'
 $hyperBoost = Get-Content -LiteralPath $hyperBoostPath -Raw | ConvertFrom-Json
 $fixed = Get-Content -LiteralPath $fixedPath -Raw | ConvertFrom-Json
 $fixedPhysical = Get-Content -LiteralPath $fixedPhysicalPath -Raw | ConvertFrom-Json
+$hostControl = Get-Content -LiteralPath $hostControlPath -Raw | ConvertFrom-Json
 $observations = Get-Content -LiteralPath $observationsPath -Raw | ConvertFrom-Json
 
 function Assert-True {
@@ -31,6 +34,7 @@ function Assert-True {
 & $validator -AnnotationPath $hyperBoostPath -SchemaOnly | Out-Null
 & $validator -AnnotationPath $fixedPath -SchemaOnly | Out-Null
 & $validator -AnnotationPath $fixedPhysicalPath -SchemaOnly | Out-Null
+& $validator -AnnotationPath $hostControlPath -SchemaOnly | Out-Null
 
 Assert-True ($hyperBoost.evidenceProvenance.controller -ceq `
         'OpenBlade.Capture 0.5.0+68085fa7a19dfd02a7edd8f78d258c8479c5414e') `
@@ -131,6 +135,53 @@ Assert-True ($fixedPhysical.productionAdmission.fixed2200PhysicalApplyValidated 
 Assert-True ((@($fixedPhysical.limitations) -join ' ') -match 'active controller' -and
     (@($fixedPhysical.limitations) -join ' ') -match 'not an OpenBlade restoration') `
     'The evidence must preserve the Synapse-managed Auto control boundary.'
+
+Assert-True ($hostControl.evidenceProvenance.controller -ceq `
+        'OpenBlade.Capture 0.5.0+4bbb3b3445e42ba50f2e73104b96804eeeebb2b1' -and
+    $hostControl.evidenceProvenance.role -ceq 'NegativeCapture' -and
+    $hostControl.evidenceProvenance.openBladeTypedApplyPerformed -eq $true -and
+    $hostControl.evidenceProvenance.openBladeReadbackConfirmed -eq $false) `
+    'The host-control physical validation lost its exact provenance boundary.'
+Assert-True ($hostControl.capture.sha256 -ceq `
+        'A456A3CFD300840E5B385163BBF6EEAD4AD5FD6FE6E1F5A1650DAC036E22CEC7' -and
+    $hostControl.capture.byteLength -eq 745) `
+    'The host-control validation transcript identity changed.'
+$sequence = @($hostControl.sanitizedEvidence |
+    Where-Object kind -ceq 'BoundedHostControlSequence')
+$physicalResponse = @($hostControl.sanitizedEvidence |
+    Where-Object kind -ceq 'OperatorPhysicalResponse')
+$hostRecovery = @($hostControl.sanitizedEvidence |
+    Where-Object kind -ceq 'SynapseUiRecovery')
+Assert-True ($sequence.Count -eq 1 -and
+    $sequence[0].automaticStateSemanticPayloadHex -ceq '000600' -and
+    $sequence[0].automaticStateWriteCount -eq 1 -and
+    $sequence[0].automaticStateAcknowledged -eq $true -and
+    $sequence[0].hostDemandSemanticPayloadHex -ceq '01052C' -and
+    $sequence[0].hostDemandTargetRpm -eq 2200 -and
+    $sequence[0].hostDemandWriteCount -eq 1 -and
+    $sequence[0].hostDemandAcknowledged -eq $true -and
+    $sequence[0].retryCount -eq 0 -and
+    $sequence[0].openBladeCleanupWriteCount -eq 0) `
+    'The exact two-command host-control sequence changed.'
+Assert-True ($physicalResponse.Count -eq 1 -and
+    $physicalResponse[0].operatorPhysicalFanResponseConfirmed -eq $true -and
+    $physicalResponse[0].activeModeReadbackConfirmed -eq $false -and
+    $physicalResponse[0].hostDemandReadbackConfirmed -eq $false -and
+    $physicalResponse[0].tachometerReadbackConfirmed -eq $false) `
+    'The physical response must remain distinct from typed readback.'
+Assert-True ($hostRecovery.Count -eq 1 -and
+    $hostRecovery[0].razerServicesRestored -eq $true -and
+    $hostRecovery[0].operatorConfirmedSynapseAutoUi -eq $true -and
+    $hostRecovery[0].openBladeRestorationWritePerformed -eq $false) `
+    'Vendor UI recovery must not be represented as OpenBlade restoration.'
+Assert-True ($hostControl.productionAdmission.coolingPadFanWriteAdmitted -eq $false -and
+    $hostControl.productionAdmission.standaloneAutomaticStateWriteAdmitted -eq $false -and
+    $hostControl.productionAdmission.automaticStatePlusHostDemandSequenceObserved -eq $true -and
+    $hostControl.productionAdmission.hostDemand2200PhysicalApplyValidated -eq $true -and
+    $hostControl.productionAdmission.hostDemandRangeValidated -eq $false -and
+    $hostControl.productionAdmission.smartCurveCadenceValidated -eq $false -and
+    $hostControl.productionAdmission.openBladeRestorationValidated -eq $false) `
+    'The host-control trial must not admit a production writer.'
 
 $direct = $observations.fan.readback.configuredTargetGetter.directFixedWriteTrial
 Assert-True ($direct.baselineConfiguredTarget -eq 1600 -and
