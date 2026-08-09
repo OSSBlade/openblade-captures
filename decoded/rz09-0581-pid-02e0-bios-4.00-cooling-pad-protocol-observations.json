@@ -57,11 +57,30 @@
       "edgeBehavior": "Equality advances to the next point. When no greater point exists, the observed source returns target zero."
     },
     "readback": {
-      "runtimeGetterObserved": false,
+      "runtimeGetterObserved": true,
       "tachometerObserved": false,
-      "genericDefinitionsOnly": ["0D/81 Get Thermal Fan Speed", "0D/88 Get Thermal Fan Current Speed", "0D/90 Get Thermal Fan Cooling Mode"],
+      "configuredTargetGetter": {
+        "commandClassHex": "0D",
+        "commandIdHex": "81",
+        "requestPayloadHex": "010500",
+        "balancedResponsePayloadHex": "010500",
+        "fixed2200ResponsePayloadHex": "01052C",
+        "confirmedScale": "floor(configuredTarget / 50)"
+      },
+      "currentSpeedGetter": {
+        "commandClassHex": "0D",
+        "commandIdHex": "88",
+        "requestPayloadHex": "010500",
+        "result": "Device returned a non-success protocol status; no current-speed or tachometer payload was admitted."
+      },
+      "coolingModeGetter": {
+        "commandClassHex": "0D",
+        "commandIdHex": "90",
+        "queried": false,
+        "reason": "The required selector is not identified by captured vendor traffic."
+      },
       "productionWriteAdmitted": false,
-      "reason": "No PID 0F43 runtime getter call or independently confirmed device state has been captured. ACK echo is not physical fan-speed or tachometer readback."
+      "reason": "Configured-target readback is confirmed, but no active-mode readback or physical current-speed/tachometer readback is available."
     }
   },
   "lighting": {
@@ -105,7 +124,13 @@
         "responseEchoesSemanticPayload": true
       },
       "displayOffPolicyInInstalledSource": "Send transient brightness zero without changing saved brightness, then restore the configured brightness on display on.",
-      "displayOffPhysicallyValidated": false
+      "displayOffPhysicallyValidated": true,
+      "displayOffRequestPayloadHex": "010000",
+      "displayOffAckPayloadHex": "010000",
+      "displayOnRestoreRequestPayloadHex": "0100FF",
+      "displayOnRestoreAckPayloadHex": "0100FF",
+      "framesDuringBlackout": 0,
+      "firstFrameAfterRestoreMilliseconds": 482.48
     },
     "observedNominalFrameRateFps": 22.789,
     "frameRateToleranceValidated": false,
@@ -146,9 +171,8 @@
     }
   ],
   "limitations": [
-    "The fan ACKs prove protocol acceptance, not physical speed, target retention, tachometer state, or ownership.",
+    "Configured-target retention is independently readable, but the fan ACKs and configured-target getter do not prove physical speed, tachometer state, active mode, or ownership.",
     "The logical strip order is known, but a photographed one-hot walk is still required to assign physical origin and direction.",
-    "An actual Windows display-off and display-on capture is still required before admitting transient blackout and restoration writes.",
     "No OpenBlade cooling-pad write was performed."
   ]
 }

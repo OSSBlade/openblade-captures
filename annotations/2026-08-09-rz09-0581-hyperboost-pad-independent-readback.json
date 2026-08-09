@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "OpenBlade.Capture commit a009a1e4",
+    "role": "ReadOnlyQueryCapture",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeReadbackConfirmed": true
+  },
+  "capturedAtUtc": "2026-08-09T11:12:39.9394723Z",
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "bios": "4.00",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "sha256": "7C35A373B6F8A269ED820DA9D7781D0E08DD0BAECFE17CE8058D3849EA55190D",
+    "byteLength": 2133,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddresses",
+    "selectedDeviceCount": 2,
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "kind": "ReadOnlyQuery",
+    "subsystem": "Blade performance and cooling-pad fan",
+    "name": "Independent HyperBoost-exit and cooling-pad fan getter queries",
+    "value": "Two Blade thermal channels plus pad configured-speed and current-speed candidates",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": true
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "HyperBoostIndependentReadbackNegative",
+      "summary": "After the operator selected HyperBoost and fully exited Synapse, the independent physical-HID thermal getter returned mode 2/value 0 on both channels. The paired query after Synapse displayed Balanced returned the same values. Mode 7 was not independently readable after Synapse exit.",
+      "hyperBoostExitThermal1ResponseHex": "01010200",
+      "hyperBoostExitThermal2ResponseHex": "01020200",
+      "balancedExitThermal1ResponseHex": "01010200",
+      "balancedExitThermal2ResponseHex": "01020200"
+    },
+    {
+      "kind": "CoolingPadConfiguredTargetReadback",
+      "summary": "The exact report-ID-5 0D/81 getter returned raw 00 after Balanced Smart Fan Curve and raw 2C after vendor-configured Fixed RPM 2200. This independently confirms the configured-target field and the installed middleware scale floor(target/50).",
+      "requestPayloadHex": "010500",
+      "balancedResponsePayloadHex": "010500",
+      "fixed2200ResponsePayloadHex": "01052C",
+      "fixed2200RawDecimal": 44,
+      "scale": "floor(configuredTarget / 50)"
+    },
+    {
+      "kind": "CoolingPadCurrentSpeedGetterUnavailable",
+      "summary": "The exact report-ID-5 0D/88 candidate returned a non-success protocol status in both observed states. No current-speed or tachometer value was admitted.",
+      "requestPayloadHex": "010500",
+      "tachometerReadbackConfirmed": false
+    }
+  ],
+  "limitations": [
+    "The Blade and cooling-pad queries were separate, ordered read-only sessions; their multi-device correlation relies on the operator-confirmed Synapse state transitions.",
+    "Synapse appears to restore or virtualize HyperBoost during shutdown; this paired after-exit query cannot observe the active mode-7 session and does not authorize a mode-7 write.",
+    "The physical transport for Synapse's active HyperBoost request remains filter-mediated and unresolved.",
+    "Pad-less HyperBoost activation was not attempted and remains unsupported.",
+    "The configured-target getter does not identify or confirm the active cooling mode, physical RPM, fan movement, or tachometer state.",
+    "The 0D/90 cooling-mode getter was not queried because its selector is not identified by captured vendor traffic.",
+    "Exact per-query wall-clock timestamps were not retained in the sanitized transcript; ordering and exact response bytes were retained.",
+    "No OpenBlade write, fan setter, pad-presence spoof, or pad-less action was performed."
+  ],
+  "productionAdmission": {
+    "hyperBoostAccess": "ObservedOnly",
+    "hyperBoostWriteAdmitted": false,
+    "padLessActivationAdmitted": false,
+    "coolingPadFanWriteAdmitted": false,
+    "reason": "HyperBoost is not independently readable as mode 7 after Synapse exits, and the pad exposes configured-target readback but no confirmed mode or tachometer readback."
+  },
+  "notes": [
+    "The query tools required the exact host, exact HID collection, inactive Synapse controller processes, and inactive OpenBlade service.",
+    "The raw query transcript remains local and uncommitted.",
+    "OpenBlade and the two Razer background services were running after cleanup."
+  ]
+}
