@@ -91,7 +91,13 @@ $payloadFields = [ordered]@{
 # bmRequestType is exposed directly under usb; the other setup fields remain under usb.setup.
 $fields = @(
     'frame.number',
+    'frame.time_epoch',
     'frame.time_relative',
+    'usb.bus_id',
+    'usb.device_address',
+    'usb.bInterfaceNumber',
+    'usb.idVendor',
+    'usb.idProduct',
     'usb.transfer_type',
     'usb.endpoint_address.direction',
     'usb.endpoint_address',
@@ -184,9 +190,15 @@ foreach ($line in $standardOutput -split "`r?`n") {
 
     [void]$transactions.Add([ordered]@{
         frame = [int]$columns[$fieldIndex['frame.number']]
+        absoluteTimeEpoch = [string]$columns[$fieldIndex['frame.time_epoch']]
         relativeSeconds = [double]::Parse(
             $columns[$fieldIndex['frame.time_relative']],
             [Globalization.CultureInfo]::InvariantCulture)
+        busId = [string]$columns[$fieldIndex['usb.bus_id']]
+        deviceAddress = [string]$columns[$fieldIndex['usb.device_address']]
+        descriptorInterfaceNumber = [string]$columns[$fieldIndex['usb.bInterfaceNumber']]
+        vendorId = [string]$columns[$fieldIndex['usb.idVendor']]
+        productId = [string]$columns[$fieldIndex['usb.idProduct']]
         transferType = [string]$columns[$fieldIndex['usb.transfer_type']]
         direction = [string]$columns[$fieldIndex['usb.endpoint_address.direction']]
         endpoint = [string]$columns[$fieldIndex['usb.endpoint_address']]

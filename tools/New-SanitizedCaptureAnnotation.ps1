@@ -44,6 +44,7 @@ $annotation = [ordered]@{
         byteLength = (Get-Item -LiteralPath $resolvedPcap).Length
         rawCaptureCommitted = $false
         captureMode = [string]$state.captureMode
+        selectedDeviceCount = @($state.deviceAddresses).Count
         stopMode = [string]$state.stopMode
         forcedShutdownDataLossDisclosed = $false
         decodable = $null

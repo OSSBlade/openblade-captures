@@ -152,9 +152,23 @@ if ($annotation.capture.rawCaptureCommitted -isnot [bool] -or
     $annotation.capture.rawCaptureCommitted -ne $false) {
     Add-Error 'Raw captures must not be committed.'
 }
-$allowedCaptureModes = @('DeviceAddress', 'AllDevices')
+$allowedCaptureModes = @('DeviceAddress', 'DeviceAddresses', 'AllDevices')
 if ([string]$annotation.capture.captureMode -cnotin $allowedCaptureModes) {
     Add-Error "capture.captureMode must be one of: $($allowedCaptureModes -join ', ')."
+}
+$selectedDeviceCount = $annotation.capture.selectedDeviceCount
+if ([string]$annotation.capture.captureMode -ceq 'DeviceAddresses') {
+    if ($selectedDeviceCount -isnot [int] -or
+        $selectedDeviceCount -lt 2 -or $selectedDeviceCount -gt 127) {
+        Add-Error 'DeviceAddresses capture mode requires a selected-device count from 2 to 127.'
+    }
+    if ((@($annotation.limitations) -join ' ') -notmatch
+        '(?i)multi(?:ple)?[ -]?device|correlat') {
+        Add-Error 'Multi-device capture use must disclose its correlation limitations.'
+    }
+}
+elseif ($null -ne $selectedDeviceCount -and $selectedDeviceCount -ne 0) {
+    Add-Error 'capture.selectedDeviceCount is only valid for DeviceAddresses capture mode.'
 }
 $allowedStopModes = @('Graceful', 'Forced')
 if ([string]$annotation.capture.stopMode -cnotin $allowedStopModes) {

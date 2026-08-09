@@ -59,6 +59,7 @@ function New-ValidAnnotation {
             byteLength = $CaptureLength
             rawCaptureCommitted = $false
             captureMode = 'DeviceAddress'
+            selectedDeviceCount = 0
             stopMode = 'Graceful'
             forcedShutdownDataLossDisclosed = $false
             decodable = $true
@@ -223,6 +224,24 @@ try {
     $invalid = New-ValidAnnotation -CaptureHash $captureHash -CaptureLength $captureLength
     $invalid.capture.captureMode = 'Anything'
     Assert-ValidationFails $invalid 'invalid-capture-mode' 'capture.captureMode' $pcapPath
+
+    $paired = New-ValidAnnotation -CaptureHash $captureHash -CaptureLength $captureLength
+    $paired.capture.captureMode = 'DeviceAddresses'
+    $paired.capture.selectedDeviceCount = 2
+    $paired.limitations = @(
+        'Multi-device timing correlation is limited to the selected USB root'
+    )
+    $pairedPath = Join-Path $testRoot 'valid-paired.json'
+    Write-Json -Path $pairedPath -Value $paired
+    $pairedResult = & $validator -AnnotationPath $pairedPath -PcapPath $pcapPath
+    Assert-True $pairedResult.Valid 'A valid paired-device annotation did not validate.'
+
+    $invalid = New-ValidAnnotation -CaptureHash $captureHash -CaptureLength $captureLength
+    $invalid.capture.captureMode = 'DeviceAddresses'
+    $invalid.capture.selectedDeviceCount = 1
+    $invalid.limitations = @('Multi-device correlation is synthetic')
+    Assert-ValidationFails $invalid 'invalid-selected-device-count' `
+        'selected-device count' $pcapPath
 
     $invalid = New-ValidAnnotation -CaptureHash $captureHash -CaptureLength $captureLength
     $invalid.capture.stopMode = 'Anything'

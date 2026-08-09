@@ -80,7 +80,10 @@ ambiguous, stop. Do not capture all devices merely to avoid identifying the
 target.
 
 The capture runner accepts `-AllDevices` only for descriptor discovery. An
-action capture should use a single `-DeviceAddress`.
+action capture should use a single `-DeviceAddress`, or `-DeviceAddresses`
+when one action must be correlated across two or more explicitly selected
+devices on the same USBPcap root. Never substitute `-AllDevices` for a bounded
+multi-device action capture.
 
 ## 4. Capture baseline and one action
 
@@ -91,6 +94,16 @@ Start the baseline capture from an elevated PowerShell:
   -UsbPcapDevice \\.\USBPcap3 `
   -DeviceAddress 2 `
   -OutputDirectory $session.BaselineDirectory
+```
+
+For a bounded paired capture on one root, pass the verified transient addresses
+as an array. Re-resolve them after every unplug or reconnect:
+
+```powershell
+.\tools\Invoke-InteractiveUsbPcapCapture.ps1 `
+  -UsbPcapDevice \\.\USBPcap3 `
+  -DeviceAddresses 2,5 `
+  -OutputDirectory $session.ActionDirectory
 ```
 
 Leave the relevant vendor page idle for several seconds, then create the

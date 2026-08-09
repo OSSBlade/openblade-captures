@@ -20,6 +20,7 @@
     "byteLength": 1,
     "rawCaptureCommitted": false,
     "captureMode": "DeviceAddress",
+    "selectedDeviceCount": 0,
     "stopMode": "Graceful",
     "forcedShutdownDataLossDisclosed": false,
     "decodable": true
