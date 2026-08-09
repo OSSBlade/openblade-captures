@@ -87,6 +87,9 @@ $payloadFields = [ordered]@{
     UsbControlResponse = 'usb.control.Response'
     UsbCaptureData = 'usb.capdata'
 }
+$rawFallbackFilter =
+    'usb.endpoint_address.direction == 1 && usb.data_len > 0 && !(' +
+    (($payloadFields.Values -join ' || ')) + ')'
 
 # bmRequestType is exposed directly under usb; the other setup fields remain under usb.setup.
 $fields = @(
@@ -115,7 +118,8 @@ $tsharkArguments = @(
     '-r',
     $resolvedPcap,
     '-Y',
-    (($payloadFields.Values -join ' || ') + ' || usb.setup.bRequest'),
+    (($payloadFields.Values -join ' || ') + ' || usb.setup.bRequest || (' +
+        $rawFallbackFilter + ')'),
     '-T',
     'fields',
     '-E',
@@ -154,6 +158,72 @@ finally {
     $process.Dispose()
 }
 
+# Wireshark can leave successful USBPcap control-completion bodies undisected:
+# usb.data_len reports the bytes, but none of the semantic payload fields is populated.
+# A bounded second pass requests raw frame bytes only for those response frames, then
+# removes the USBPcap pseudoheader. Never serialize the raw frame or IRP metadata.
+$rawFallbackArguments = @(
+    '-r',
+    $resolvedPcap,
+    '-Y',
+    $rawFallbackFilter,
+    '-T',
+    'json',
+    '-x'
+)
+$rawFallbackStartInfo = [Diagnostics.ProcessStartInfo]::new()
+$rawFallbackStartInfo.FileName = $resolvedTshark
+$rawFallbackStartInfo.UseShellExecute = $false
+$rawFallbackStartInfo.CreateNoWindow = $true
+$rawFallbackStartInfo.RedirectStandardOutput = $true
+$rawFallbackStartInfo.RedirectStandardError = $true
+$rawFallbackStartInfo.Arguments = (($rawFallbackArguments | ForEach-Object {
+    ConvertTo-NativeProcessArgument -Value $_
+}) -join ' ')
+$rawFallbackProcess = [Diagnostics.Process]::Start($rawFallbackStartInfo)
+if ($null -eq $rawFallbackProcess) {
+    throw 'Could not start tshark for USBPcap response extraction.'
+}
+try {
+    $rawFallbackOutputTask = $rawFallbackProcess.StandardOutput.ReadToEndAsync()
+    $rawFallbackErrorTask = $rawFallbackProcess.StandardError.ReadToEndAsync()
+    $rawFallbackProcess.WaitForExit()
+    $rawFallbackOutput = $rawFallbackOutputTask.GetAwaiter().GetResult()
+    $rawFallbackError = $rawFallbackErrorTask.GetAwaiter().GetResult()
+    if ($rawFallbackProcess.ExitCode -ne 0) {
+        throw "tshark raw fallback failed with exit code $($rawFallbackProcess.ExitCode): $rawFallbackError"
+    }
+}
+finally {
+    $rawFallbackProcess.Dispose()
+}
+
+$rawFallbackPayloads = @{}
+if (-not [string]::IsNullOrWhiteSpace($rawFallbackOutput)) {
+    $rawFallbackPackets = $rawFallbackOutput | ConvertFrom-Json
+    foreach ($packet in $rawFallbackPackets) {
+        $layers = $packet._source.layers
+        $frameNumber = [int]$layers.frame.'frame.number'
+        $headerLength = [int]$layers.usb.'usb.usbpcap_header_len'
+        $dataLength = [int]$layers.usb.'usb.data_len'
+        $frameHex = [Text.RegularExpressions.Regex]::Replace(
+            [string]$layers.frame_raw[0],
+            '[^0-9A-Fa-f]',
+            '').ToUpperInvariant()
+        if ($frameNumber -le 0 -or $headerLength -le 0 -or $dataLength -le 0) {
+            throw 'tshark returned invalid USBPcap response metadata.'
+        }
+
+        $payloadOffset = $headerLength * 2
+        $payloadLength = $dataLength * 2
+        if ($frameHex.Length -lt ($payloadOffset + $payloadLength)) {
+            throw "USBPcap frame $frameNumber is shorter than its reported response body."
+        }
+        $rawFallbackPayloads[$frameNumber] =
+            $frameHex.Substring($payloadOffset, $payloadLength)
+    }
+}
+
 $transactions = [Collections.Generic.List[object]]::new()
 foreach ($line in $standardOutput -split "`r?`n") {
     if ([string]::IsNullOrWhiteSpace($line)) {
@@ -181,6 +251,11 @@ foreach ($line in $standardOutput -split "`r?`n") {
             break
         }
     }
+    $frameNumber = [int]$columns[$fieldIndex['frame.number']]
+    if ($payload.Length -eq 0 -and $rawFallbackPayloads.ContainsKey($frameNumber)) {
+        $payload = [string]$rawFallbackPayloads[$frameNumber]
+        $payloadSource = 'UsbPcapFrameData'
+    }
 
     $maximumHexLength = $MaximumPayloadBytes * 2
     $truncated = $payload.Length -gt $maximumHexLength
@@ -189,7 +264,7 @@ foreach ($line in $standardOutput -split "`r?`n") {
     }
 
     [void]$transactions.Add([ordered]@{
-        frame = [int]$columns[$fieldIndex['frame.number']]
+        frame = $frameNumber
         absoluteTimeEpoch = [string]$columns[$fieldIndex['frame.time_epoch']]
         relativeSeconds = [double]::Parse(
             $columns[$fieldIndex['frame.time_relative']],

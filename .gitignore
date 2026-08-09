@@ -5,6 +5,7 @@ work/*
 
 *.pcap
 *.pcapng
+*.pml
 *.usbpcap.json
 .capture-control-*/
 .query-control-*/

@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "capturedAtUtc": "2026-08-09T10:28:43.2190539Z",
+  "host": {
+    "modelNumber": "RZ09-0581",
+    "productName": "Blade 16 - RZ09-0581",
+    "bios": "4.00"
+  },
+  "target": {
+    "productName": "Razer Laptop Cooling Pad",
+    "vendorIdHex": "1532",
+    "productIdHex": "0F43",
+    "revisionHex": "0200"
+  },
+  "windows": {
+    "version": "10.0.26200",
+    "build": "26200",
+    "architecture": "64-bit"
+  },
+  "transport": {
+    "usbComposite": true,
+    "usbInterfaceCount": 2,
+    "hidCollectionCount": 6,
+    "controlCollection": {
+      "interfaceNumber": "00",
+      "collectionNumber": null,
+      "usagePageHex": "0x000C",
+      "usageHex": "0x0001",
+      "featureReportBytes": 91,
+      "service": "HidUsb",
+      "classGuid": "{745A17A0-74D3-11D0-B6FE-00A0C90F57DA}",
+      "driverProvider": "Microsoft",
+      "driverVersion": "10.0.26100.8972"
+    },
+    "inputInterface": {
+      "interfaceNumber": "01",
+      "collectionNumbers": ["01", "02", "03", "04", "05"],
+      "inputReportBytes": 16,
+      "featureReportBytes": 0,
+      "service": "HidUsb",
+      "classGuid": "{745A17A0-74D3-11D0-B6FE-00A0C90F57DA}",
+      "driverProvider": "Razer Inc",
+      "driverVersion": "10.0.15063.0"
+    }
+  },
+  "privacy": {
+    "serialNumberIncluded": false,
+    "fullDeviceInstanceIdsIncluded": false,
+    "deviceInterfacePathsIncluded": false,
+    "containerIdsIncluded": false,
+    "locationPathsIncluded": false,
+    "systemUuidIncluded": false
+  },
+  "conclusions": [
+    "The exact cooling pad exposes one 91-byte HID feature-report collection on MI_00 and can be opened for descriptor inspection through the standard user-mode HID API.",
+    "MI_01 contains five 16-byte input collections and no feature-report collection.",
+    "The inventory proves a direct user-mode transport exists; it does not assign command semantics or admit a write."
+  ]
+}

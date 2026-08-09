@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "Razer Synapse 4.0.698",
+    "role": "OracleCapture",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeReadbackConfirmed": false
+  },
+  "capturedAtUtc": "2026-08-09T10:12:16.5152361Z",
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "bios": "4.00",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "usbPcapSha256": "2743A9034B2CA0DB8B949C2BE1D8C747A431AA8F7B033D58B37605FF8FB01F3B",
+    "usbPcapByteLength": 350801,
+    "procmonPmlSha256": "9698C7390283333203BED64692AB83C8D84DC41C4A384E36209E6769E5217B30",
+    "procmonPmlByteLength": 4592715144,
+    "rawArtifactsCommitted": false,
+    "captureMode": "FullUsbRootAndProcmon",
+    "usbRoot": "USBPcap3",
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true,
+    "decodedUsbTransactionCount": 1992
+  },
+  "action": {
+    "kind": "SettingChange",
+    "subsystem": "Blade performance",
+    "name": "Balanced to HyperBoost to Balanced",
+    "operatorConfirmed": true,
+    "markers": [
+      {
+        "name": "BalancedBaselineConfirmed",
+        "atUtc": "2026-08-09T10:15:23.4112849Z"
+      },
+      {
+        "name": "HyperBoostApplyStarting",
+        "atUtc": "2026-08-09T10:15:26.4350228Z"
+      },
+      {
+        "name": "HyperBoostApplyConfirmed",
+        "atUtc": "2026-08-09T10:15:41.7930838Z",
+        "confirmation": "Synapse UI only"
+      },
+      {
+        "name": "BalancedRestoreStarting",
+        "atUtc": "2026-08-09T10:15:43.8941956Z"
+      },
+      {
+        "name": "BalancedRestoreConfirmed",
+        "atUtc": "2026-08-09T10:15:58.9948006Z",
+        "confirmation": "Synapse UI only"
+      }
+    ]
+  },
+  "validation": {
+    "priorStateSaved": true,
+    "applyResult": "Synapse displayed HyperBoost after the operator action.",
+    "readbackResult": "No independent laptop getter was captured; the confirmation is UI-only.",
+    "restorationResult": "Synapse displayed Balanced after the operator restore action.",
+    "restorationReadbackResult": "No independent laptop getter was captured; the confirmation is UI-only.",
+    "openBladeRestarted": true
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "FullRootNegativeLaptopUsbResult",
+      "summary": "The complete shared USB root contained cooling-pad traffic but no 90-byte laptop feature-report transaction during the marker-aligned HyperBoost apply or Balanced restore.",
+      "laptopUsbTransactionCount": 0,
+      "coolingPadUsbTransactionCount": 1332,
+      "coolingPadAddress": 4,
+      "expectedLaptopAddress": 6
+    },
+    {
+      "kind": "SynapseLogCorrelation",
+      "summary": "The product-736 middleware log recorded paired thermal-mode calls during the apply and restore windows. This confirms Synapse attempted semantic mode changes, but it does not establish the transport or independent readback.",
+      "hyperBoostThermalCallsUtc": [
+        "2026-08-09T10:15:28.375Z",
+        "2026-08-09T10:15:28.388Z"
+      ],
+      "balancedRestoreThermalCallsUtc": [
+        "2026-08-09T10:15:46.294Z",
+        "2026-08-09T10:15:46.320Z"
+      ]
+    },
+    {
+      "kind": "ProcmonTransportBoundary",
+      "summary": "Synapse opened the laptop MI_02 HID interface and submitted feature reports through node-rz-hid. That exact devnode has RzDev_02e0 as an upper filter and a same-PID RZCONTROL child serviced by RzCommon. Marker-aligned Procmon events did not reveal an attributable HyperBoost DeviceIoControl path or IOCTL buffer.",
+      "razerAppEngineVersion": "4.0.698.98",
+      "razerAppEngineSha256": "64C6FFF3B99F14D05E111B66F7E9BE29F65C7206D6AC2816B49E7E863B82F30B",
+      "rzDevice25BodySha256": "FA5D8302402E7A4153C71DC926D40670BF792249912E4AA108740119CF2C0489",
+      "hidNodeSha256": "5738D562B4197AC52066C09AE5CEAD45570F474366C6226EBB77374C11FA49E2",
+      "rzDev02e0Version": "1.0.0.78",
+      "rzDev02e0Sha256": "BC1666048D81A8DBA6BBFFDBDC86C2119632FD68EF2BB6D5D417FE3B84744787",
+      "rzCommonVersion": "1.0.0.76",
+      "rzCommonSha256": "64B72EF9CE409BB17D31096C119B68C4A6A02AB35B7535D763157A4E1A587E59"
+    },
+    {
+      "kind": "CoolingPadDirectHidResponseRecovery",
+      "summary": "The same full-root capture proves the cooling pad uses a directly accessible 90-byte Razer body and returns status-02 ACK responses for observed fan, mode, brightness, and effect setters. Lighting frame 0F/03 remains host-streamed without a response.",
+      "fanTargetRequests": 5,
+      "fanTargetAcks": 5,
+      "modeRequests": 2,
+      "modeAcks": 2,
+      "brightnessSetRequests": 2,
+      "brightnessSetAcks": 2,
+      "brightnessGetRequests": 2,
+      "brightnessGetResponses": 2,
+      "lightingFrameRequests": 1224
+    }
+  ],
+  "limitations": [
+    "The observed path is a filter-mediated Windows HID submission. The capture does not prove whether the upper filter completes locally, translates the request, or forwards through another path.",
+    "The absence of laptop USB traffic disproves a physical-USB capture claim for this session; physical firmware transport remains unresolved.",
+    "Procmon records operation metadata but not DeviceIoControl input and output buffers, and no action-aligned attributable HyperBoost IOCTL was observed.",
+    "Installed middleware statically defines thermal mode 7 and a thermal getter, but the trace contains no independent mode-7 getter result.",
+    "The capture does not prove HyperBoost power-limit changes, firmware enforcement of cooling-pad presence, safe pad-less activation, or support on another model or firmware.",
+    "No OpenBlade write, candidate replay, pad-presence spoof, or pad-less activation was attempted."
+  ],
+  "productionAdmission": {
+    "hyperBoostAccess": "ObservedOnly",
+    "hyperBoostWriteAdmitted": false,
+    "padLessActivationAdmitted": false,
+    "coolingPadFanWriteAdmitted": false,
+    "coolingPadLightingWriteAdmitted": false,
+    "reason": "The laptop transport and independent HyperBoost readback remain unresolved; cooling-pad fan state lacks an observed getter; lighting physical order, display-off behavior, persistence, and rate tolerance remain incomplete."
+  },
+  "notes": [
+    "USBPcap stopped by targeted graceful Ctrl+Break; Procmon finalized; no capture process remained running.",
+    "The raw PCAP, PML rollovers, decoded transactions, capture state, and operator markers remain local and uncommitted.",
+    "OpenBlade was restarted after capture cleanup."
+  ]
+}
