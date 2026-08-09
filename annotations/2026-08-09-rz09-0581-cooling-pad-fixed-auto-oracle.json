@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "Razer Synapse 4.0.698",
+    "role": "OracleCapture",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeReadbackConfirmed": false
+  },
+  "capturedAtUtc": "2026-08-09T19:13:27.8713115Z",
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "bios": "4.00",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "sha256": "5957D8808D30247214C23C65A32A6CC2E08148BB982E5296E79755D605DF8E98",
+    "byteLength": 216002,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddresses",
+    "selectedDeviceCount": 2,
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true,
+    "decodedTransactionCount": 1179
+  },
+  "action": {
+    "kind": "SettingChange",
+    "subsystem": "Razer Laptop Cooling Pad fan control",
+    "name": "Fixed 2200 to Auto vendor-oracle transition",
+    "value": "Fixed RPM 2200, then Auto",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": true,
+    "applyResult": "Confirmed successfully: the operator selected Fixed RPM 2200 in Synapse and held it for at least five seconds.",
+    "readbackResult": "Confirmed: Synapse continued to display Fixed RPM 2200; USB traffic contained one status-02 acknowledgement echoing the exact Fixed payload. No active-mode or current-speed getter was issued.",
+    "restorationResult": "The operator restored the cooling pad to Auto in Synapse and held it for at least five seconds.",
+    "restorationReadbackResult": "Confirmed restored: Synapse displayed Auto; USB traffic contained one status-02 acknowledgement echoing the exact Auto payload. USBPcap stopped gracefully and OpenBlade remained stopped."
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "CoolingPadFixed2200",
+      "summary": "Synapse issued one Fixed 2200 request and received a status-02 response echoing the exact semantic payload.",
+      "commandClassHex": "0D",
+      "commandIdHex": "10",
+      "requestFrame": 517,
+      "responseFrame": 520,
+      "transactionIdHex": "19",
+      "requestPayloadHex": "01022C",
+      "responseStatusHex": "02",
+      "responsePayloadHex": "01022C",
+      "acknowledgementLatencyMilliseconds": 6.364
+    },
+    {
+      "kind": "CoolingPadAutoRestore",
+      "summary": "Synapse issued one Auto restoration request and received a status-02 response echoing the exact semantic payload.",
+      "commandClassHex": "0D",
+      "commandIdHex": "10",
+      "requestFrame": 1405,
+      "responseFrame": 1408,
+      "transactionIdHex": "1A",
+      "requestPayloadHex": "000600",
+      "responseStatusHex": "02",
+      "responsePayloadHex": "000600",
+      "acknowledgementLatencyMilliseconds": 6.13
+    },
+    {
+      "kind": "GetterNegativeControl",
+      "getConfiguredTargetCount": 0,
+      "getCurrentSpeedCount": 0,
+      "getCoolingModeCount": 0,
+      "summary": "The vendor transition emitted no 0D/81, 0D/88, or 0D/90 getter, so its UI confirmation is not independent device readback."
+    }
+  ],
+  "limitations": [
+    "The status-02 responses echo semantic payloads but do not prove physical fan speed, active mode, ownership, or persistence.",
+    "The earlier OpenBlade trial used the same Fixed and Auto semantic payloads but failed configured-target validation and later required a complete pad power cycle after Synapse reported sleep mode with flashing red lighting.",
+    "This vendor-oracle capture therefore confirms command encoding only. It does not admit an OpenBlade fan write or remove the need for initialization, active-mode readback, physical confirmation, and reversible cleanup evidence.",
+    "USB device addresses are transient and are not production identity evidence.",
+    "Multi-device correlation is limited: the two selected devices shared one USB root, but this capture uses only explicitly marked cooling-pad transactions and does not infer cross-device timing or causality.",
+    "The raw PCAP, decoded transactions, and operator markers remain local and uncommitted."
+  ],
+  "notes": [
+    "OpenBlade service, Tray, and Session Agent were stopped before capture and were intentionally left stopped afterward at the operator's request.",
+    "Two preceding captures selected stale post-reboot USBPcap addresses and contained only a PCAP header; they are not evidence and are not referenced here.",
+    "A passive all-device root probe established the live post-reboot USBPcap addresses before this successful bounded capture."
+  ]
+}
