@@ -26,7 +26,7 @@
     "decodable": true
   },
   "action": {
-    "kind": "ApplyAndRestore",
+    "kind": "SettingChange",
     "subsystem": "Razer Laptop Cooling Pad",
     "name": "Smart Fan Curve and display-off lighting policy",
     "value": "Minimum safe curve-point increments and one checkbox toggle",
@@ -34,9 +34,9 @@
   },
   "validation": {
     "priorStateSaved": true,
-    "applyResult": "CPU 100 C point changed from 68.8 percent to 68.9 percent; GPU 90 C point changed from 68.8 percent to 68.9 percent; display-off lighting policy changed from unchecked to checked",
-    "readbackResult": "The operator confirmed each changed value in Synapse and the paired trace decoded 4713 cooling-pad transactions",
-    "restorationResult": "Both fan-curve points returned to 68.8 percent, fan mode returned to Auto, and display-off lighting policy returned to unchecked",
+    "applyResult": "Applied successfully in Synapse: CPU 100 C point changed from 68.8 percent to 68.9 percent; GPU 90 C point changed from 68.8 percent to 68.9 percent; display-off lighting policy changed from unchecked to checked",
+    "readbackResult": "Synapse UI readback was confirmed by the operator for each changed value; the paired trace decoded 4713 cooling-pad transactions",
+    "restorationResult": "Restored successfully in Synapse: both fan-curve points returned to 68.8 percent, fan mode returned to Auto, and display-off lighting policy returned to unchecked",
     "restorationReadbackResult": "The operator confirmed every restored value in Synapse; USBPcap stopped gracefully and OpenBlade restarted"
   },
   "sanitizedEvidence": [
@@ -90,6 +90,7 @@
     }
   ],
   "limitations": [
+    "Multi-device timing correlation is limited to the explicitly selected Blade and cooling-pad addresses on one USB root.",
     "Only cooling-pad traffic was observed even though the Blade and cooling pad were selected on the shared USB root.",
     "This trace does not establish the pad fan-target unit, range, update cadence under load, thermal-source arbitration, curve interpolation rule, or failure behavior if Synapse exits.",
     "The display-off policy was toggled in Synapse, but Windows display power-off was not induced; actual lighting shutdown and resume behavior remain unconfirmed.",

@@ -26,7 +26,7 @@
     "decodable": true
   },
   "action": {
-    "kind": "ApplyAndRestore",
+    "kind": "SettingChange",
     "subsystem": "Blade performance and Razer Laptop Cooling Pad",
     "name": "HyperBoost, pad fan, and pad lighting sequence",
     "value": "HyperBoost selection, maximum pad fan, and static pad lighting probes",
@@ -34,9 +34,9 @@
   },
   "validation": {
     "priorStateSaved": true,
-    "applyResult": "Synapse accepted HyperBoost, maximum cooling-pad fan, and pad static color probes in operator-marked windows",
-    "readbackResult": "The paired trace decoded 4518 transactions, but only cooling-pad USB traffic was observed",
-    "restorationResult": "Blade performance returned to Balanced, cooling-pad fan returned to Auto, and lighting returned to the recorded baseline",
+    "applyResult": "Applied successfully in Synapse: HyperBoost, maximum cooling-pad fan, and pad static color probes were accepted in operator-marked windows",
+    "readbackResult": "Synapse UI readback was confirmed by the operator; the paired trace decoded 4518 transactions, but only cooling-pad USB traffic was observed",
+    "restorationResult": "Restored successfully in Synapse: Blade performance returned to Balanced, cooling-pad fan returned to Auto, and lighting returned to the recorded baseline",
     "restorationReadbackResult": "The operator confirmed the restored Synapse values; USBPcap stopped gracefully and OpenBlade restarted"
   },
   "sanitizedEvidence": [
@@ -71,6 +71,7 @@
     }
   ],
   "limitations": [
+    "Multi-device timing correlation is limited to the explicitly selected Blade and cooling-pad addresses on one USB root.",
     "The absence of Blade USB traffic does not prove HyperBoost is only a Synapse UI gate; it may use another driver, service, ACPI, WMI, or firmware transport not visible to USBPcap.",
     "This capture does not prove HyperBoost power-limit changes, readback, restoration below the UI, safety without the cooling pad, or support on any other model or firmware.",
     "Cooling-pad fan message fields, units, supported range, device readback, failure behavior, and ownership rules remain unconfirmed.",
