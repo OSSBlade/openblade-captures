@@ -29,7 +29,9 @@
       "installedMiddlewareScale": "floor(configuredTarget / 50)",
       "installedMiddlewareConfiguredRange": {
         "minimum": 500,
-        "maximum": 3200
+        "maximum": 3200,
+        "step": 50,
+        "minimumOperatorUiConfirmed": true
       },
       "fullRootObservedScaledTargetsHex": ["14", "1C", "20"],
       "requestCount": 5,
@@ -75,9 +77,33 @@
         "commandClassHex": "0D",
         "commandIdHex": "81",
         "requestPayloadHex": "010500",
-        "balancedResponsePayloadHex": "010500",
+        "automaticResponsePayloadHex": "010500",
         "fixed2200ResponsePayloadHex": "01052C",
-        "confirmedScale": "floor(configuredTarget / 50)"
+        "confirmedScale": "floor(configuredTarget / 50)",
+        "physicalButtonPresetSequence": [
+          {
+            "preset": "Low",
+            "responsePayloadHex": "010520",
+            "configuredTarget": 1600
+          },
+          {
+            "preset": "Medium",
+            "responsePayloadHex": "01052C",
+            "configuredTarget": 2200
+          },
+          {
+            "preset": "High",
+            "responsePayloadHex": "01052C",
+            "configuredTarget": 2200,
+            "note": "The operator had explicitly customized the High preset to 2200 in Synapse."
+          },
+          {
+            "preset": "AutomaticRestored",
+            "responsePayloadHex": "010500",
+            "configuredTarget": 0
+          }
+        ],
+        "interpretation": "The getter tracks the selected configured target, including physical fan-button preset changes. It is not a tachometer or physical current-speed reading."
       },
       "currentSpeedGetter": {
         "commandClassHex": "0D",
@@ -88,8 +114,22 @@
       "coolingModeGetter": {
         "commandClassHex": "0D",
         "commandIdHex": "90",
-        "queried": false,
-        "reason": "The required selector is not identified by captured vendor traffic."
+        "queried": true,
+        "firmwareBank": {
+          "requestPayloadHex": "000000",
+          "responsePayloadHex": "0006",
+          "semanticFields": ["bankSelector", "storedMode"],
+          "storedMode": "TurnOffFan"
+        },
+        "synapseBank": {
+          "requestPayloadHex": "010000",
+          "responsePayloadHex": "01022C",
+          "semanticFields": ["bankSelector", "storedMode", "scaledTarget"],
+          "storedMode": "High",
+          "configuredTarget": 2200
+        },
+        "activeModeReadbackConfirmed": false,
+        "interpretation": "Both bank responses remained unchanged while the physical fan button moved through Low, Medium, and High and after Synapse restored Auto. They are stored configuration banks, not an active-controller or active-mode discriminator."
       },
       "productionWriteAdmitted": false,
       "reason": "Configured-target readback is confirmed, but no active-mode readback or physical current-speed/tachometer readback is available."
@@ -151,6 +191,12 @@
   },
   "sourceArtifacts": [
     {
+      "name": "Final OpenBlade.Capture read-only Auto getter transcript",
+      "sha256": "BACEE9053C7832C2F603B034B0E05BAE36123DB78ABD776B12AC18169E4C82D2",
+      "byteLength": 845,
+      "rawArtifactCommitted": false
+    },
+    {
       "name": "Synapse PID 3907 middleware main response body",
       "sha256": "69975887AFC80EDBD548AF57D8A0DEA35EF67C7F695CABA2DDEF43391250BE13"
     },
@@ -187,7 +233,8 @@
     }
   ],
   "limitations": [
-    "Configured-target retention is independently readable, but the fan ACKs and configured-target getter do not prove physical speed, tachometer state, active mode, or ownership.",
+    "Configured-target selection is independently readable, including physical fan-button preset changes and restored Auto zero, but the fan ACKs and configured-target getter do not prove physical speed, tachometer state, active mode, or ownership.",
+    "The two cooling-mode getter selectors expose stored firmware and Synapse configuration banks. Neither selector identifies which bank currently drives the fan.",
     "The 18-slot logical strip order is known. Physical origin and direction remain unassigned and must not be claimed; logical whole-strip rendering does not require that claim.",
     "The exact vendor Fixed and Auto payloads are now assigned, but the earlier OpenBlade replay failure proves that encoding and status-02 echo alone are insufficient for production write admission."
   ]
