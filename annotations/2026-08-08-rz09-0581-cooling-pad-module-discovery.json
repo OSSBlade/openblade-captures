@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "Razer Synapse 4.0.698",
+    "role": "OracleCapture",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeReadbackConfirmed": false
+  },
+  "capturedAtUtc": "2026-08-09T05:10:52.7598186Z",
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "bios": "4.00",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "sha256": "AEADD044EDA78E66C1EBA788EDB572DD75C7D4B442ACF2C1047A2BCC14239D89",
+    "byteLength": 119570,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddresses",
+    "selectedDeviceCount": 2,
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "kind": "Observation",
+    "subsystem": "Razer Laptop Cooling Pad",
+    "name": "Synapse module discovery",
+    "value": "Module download and post-load idle traffic",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": false,
+    "applyResult": "Not performed; this was an observation capture",
+    "readbackResult": "Decoded 609 cooling-pad transactions",
+    "restorationResult": "No setting change was performed",
+    "restorationReadbackResult": "No setting change was performed"
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "AccessoryLightingFrameStream",
+      "summary": "One host-to-pad frame family contained 569 reports with a 59-byte declared payload over 24.925 seconds. The mean interval was 43.882 milliseconds, or 22.789 frames per second.",
+      "declaredPayloadBytes": 59,
+      "frameCount": 569,
+      "firstRelativeSeconds": 92.579311,
+      "lastRelativeSeconds": 117.504054,
+      "meanIntervalMilliseconds": 43.882,
+      "meanFramesPerSecond": 22.789
+    },
+    {
+      "kind": "AccessoryLightingFrameShape",
+      "summary": "The observed frame family has a five-byte prefix followed by 18 RGB-sized triplets. This is strong evidence for a host-rendered strip frame, but the field meanings and physical LED geometry remain unconfirmed.",
+      "prefixBytes": 5,
+      "rgbSizedTripletCount": 18
+    },
+    {
+      "kind": "AccessoryInitializationTraffic",
+      "summary": "Synapse also exchanged bounded initialization and query candidates before and during the frame stream. Their semantics are not assigned by this capture."
+    }
+  ],
+  "limitations": [
+    "This multi-device capture selected the Blade and cooling pad on one USB root, but only cooling-pad traffic was observed.",
+    "Synapse downloaded the cooling-pad module and requested a reboot before the planned one-action sequence could begin.",
+    "The capture does not prove visible effect identity, LED order, interface ownership, persistence, HyperBoost behavior, fan control, keyboard synchronization, or safe operation without the cooling pad.",
+    "The five-byte prefix and 18 RGB-sized triplets are structural observations, not a validated geometry or write contract."
+  ],
+  "notes": [
+    "The capture ended through the requested stop sentinel with graceful targeted Ctrl+Break.",
+    "OpenBlade was running before capture, stopped before USBPcap ownership, and successfully restarted after USBPcap exited.",
+    "The raw PCAP, decoded transaction file, state, and operator markers remain local and uncommitted."
+  ]
+}
