@@ -28,7 +28,7 @@
   "action": {
     "kind": "ReadOnlyQuery",
     "subsystem": "Blade performance and cooling-pad fan",
-    "name": "Independent HyperBoost-exit and cooling-pad fan getter queries",
+    "name": "Independent HyperBoost shutdown and cooling-pad fan getter queries",
     "value": "Two Blade thermal channels plus pad configured-speed and current-speed candidates",
     "operatorConfirmed": true
   },
@@ -37,8 +37,8 @@
   },
   "sanitizedEvidence": [
     {
-      "kind": "HyperBoostIndependentReadbackNegative",
-      "summary": "After the operator selected HyperBoost and fully exited Synapse, the independent physical-HID thermal getter returned mode 2/value 0 on both channels. The paired query after Synapse displayed Balanced returned the same values. Mode 7 was not independently readable after Synapse exit.",
+      "kind": "HyperBoostShutdownStateReadback",
+      "summary": "After normal Synapse shutdown, the independent thermal getter returned mode 2/value 0 on both channels whether Synapse had previously displayed HyperBoost or Balanced. This confirms the post-shutdown state only. It does not measure either active UI-selected state because Synapse performed shutdown cleanup before each query.",
       "hyperBoostExitThermal1ResponseHex": "01010200",
       "hyperBoostExitThermal2ResponseHex": "01020200",
       "balancedExitThermal1ResponseHex": "01010200",
@@ -62,7 +62,7 @@
   ],
   "limitations": [
     "The Blade and cooling-pad queries were separate, ordered read-only sessions; their multi-device correlation relies on the operator-confirmed Synapse state transitions.",
-    "Synapse appears to restore or virtualize HyperBoost during shutdown; this paired after-exit query cannot observe the active mode-7 session and does not authorize a mode-7 write.",
+    "The operator observed Synapse leave HyperBoost during normal shutdown before the query. The after-exit mode-2 result is shutdown-state evidence only and cannot assess active mode-7 readback or authorize a mode-7 write.",
     "The physical transport for Synapse's active HyperBoost request remains filter-mediated and unresolved.",
     "Pad-less HyperBoost activation was not attempted and remains unsupported.",
     "The configured-target getter does not identify or confirm the active cooling mode, physical RPM, fan movement, or tachometer state.",
@@ -75,7 +75,7 @@
     "hyperBoostWriteAdmitted": false,
     "padLessActivationAdmitted": false,
     "coolingPadFanWriteAdmitted": false,
-    "reason": "HyperBoost is not independently readable as mode 7 after Synapse exits, and the pad exposes configured-target readback but no confirmed mode or tachometer readback."
+    "reason": "Active HyperBoost was not measured by this normal-shutdown capture because Synapse completed cleanup before the query; the pad exposes configured-target readback but no confirmed active-mode or tachometer readback."
   },
   "notes": [
     "The query tools required the exact host, exact HID collection, inactive Synapse controller processes, and inactive OpenBlade service.",
