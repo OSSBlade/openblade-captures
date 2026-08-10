@@ -29,7 +29,7 @@
     "kind": "ReadOnlyQuery",
     "subsystem": "Blade performance and cooling-pad fan",
     "name": "Independent HyperBoost shutdown and cooling-pad fan getter queries",
-    "value": "Two Blade thermal channels plus pad configured-speed and current-speed candidates",
+    "value": "Two Blade thermal channels plus pad opaque fan observation and current-speed candidates",
     "operatorConfirmed": true
   },
   "validation": {
@@ -45,13 +45,13 @@
       "balancedExitThermal2ResponseHex": "01020200"
     },
     {
-      "kind": "CoolingPadConfiguredTargetReadback",
-      "summary": "The exact report-ID-5 0D/81 getter returned raw 00 after Balanced Smart Fan Curve and raw 2C after vendor-configured Fixed RPM 2200. This independently confirms the configured-target field and the installed middleware scale floor(target/50).",
+      "kind": "CoolingPadOpaqueFanObservation",
+      "summary": "The exact report-ID-5 0D/81 getter returned raw 00 after Balanced Smart Fan Curve and raw 2C after one vendor-configured Fixed RPM 2200 session. This condition correlation does not assign target or mode semantics and was later superseded by a physically confirmed Fixed 2200 trial whose raw value remained zero.",
       "requestPayloadHex": "010500",
       "balancedResponsePayloadHex": "010500",
       "fixed2200ResponsePayloadHex": "01052C",
-      "fixed2200RawDecimal": 44,
-      "scale": "floor(configuredTarget / 50)"
+      "fixed2200OpaqueRawDecimal": 44,
+      "semanticAssignmentConfirmed": false
     },
     {
       "kind": "CoolingPadCurrentSpeedGetterUnavailable",
@@ -65,7 +65,7 @@
     "The operator observed Synapse leave HyperBoost during normal shutdown before the query. The after-exit mode-2 result is shutdown-state evidence only and cannot assess active mode-7 readback or authorize a mode-7 write.",
     "The physical transport for Synapse's active HyperBoost request remains filter-mediated and unresolved.",
     "Pad-less HyperBoost activation was not attempted and remains unsupported.",
-    "The configured-target getter does not identify or confirm the active cooling mode, physical RPM, fan movement, or tachometer state.",
+    "The 0D/81 byte is opaque. Values correlated with two states in this session, but a later physically confirmed Fixed 2200 trial returned zero and disproved configured-target and Auto-state interpretations.",
     "The 0D/90 cooling-mode getter was not queried because its selector is not identified by captured vendor traffic.",
     "Exact per-query wall-clock timestamps were not retained in the sanitized transcript; ordering and exact response bytes were retained.",
     "No OpenBlade write, fan setter, pad-presence spoof, or pad-less action was performed."
@@ -75,7 +75,7 @@
     "hyperBoostWriteAdmitted": false,
     "padLessActivationAdmitted": false,
     "coolingPadFanWriteAdmitted": false,
-    "reason": "Active HyperBoost was not measured by this normal-shutdown capture because Synapse completed cleanup before the query; the pad exposes configured-target readback but no confirmed active-mode or tachometer readback."
+    "reason": "Active HyperBoost was not measured by this normal-shutdown capture because Synapse completed cleanup before the query; the pad exposes an opaque observation byte but no confirmed configured-target, active-mode, or tachometer readback."
   },
   "notes": [
     "The query tools required the exact host, exact HID collection, inactive Synapse controller processes, and inactive OpenBlade service.",

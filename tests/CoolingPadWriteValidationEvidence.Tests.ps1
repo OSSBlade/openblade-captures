@@ -69,25 +69,27 @@ Assert-True ($fixed.capture.sha256 -ceq `
         '364FC56744ED1665937B3C033044B6D33071D6671C2B21725C4AD0D5C4BEF4B2') `
     'The Fixed-only validation transcript hash changed unexpectedly.'
 $fixedApply = @($fixed.sanitizedEvidence |
-    Where-Object kind -ceq 'FixedOnlyApplyNegative')
+    Where-Object kind -ceq 'FixedOnlyApplyOpaqueObservation')
 $postRecovery = @($fixed.sanitizedEvidence |
     Where-Object kind -ceq 'IndependentPostRecoveryReadback')
 Assert-True ($fixedApply.Count -eq 1 -and
     $fixedApply[0].fixedSetterSemanticPayloadHex -ceq '01022C' -and
     $fixedApply[0].fixedSetterAcknowledged -eq $true -and
-    $fixedApply[0].postWriteConfiguredTargetRpm -eq 1550 -and
+    $fixedApply[0].postWriteOpaqueRawDecimal -eq 31 -and
+    $fixedApply[0].postWriteOpaqueResponseHex -ceq '01051F' -and
     $fixedApply[0].openBladeAutoWriteCount -eq 0) `
-    'The bounded Fixed-only negative result changed.'
+    'The bounded Fixed-only opaque observation changed.'
 Assert-True ($postRecovery.Count -eq 1 -and
-    $postRecovery[0].configuredTargetResponseHex -ceq '010500' -and
-    $postRecovery[0].configuredTargetRpm -eq 0 -and
+    $postRecovery[0].opaqueResponseHex -ceq '010500' -and
+    $postRecovery[0].opaqueRawDecimal -eq 0 -and
     $postRecovery[0].firmwareBankResponseHex -ceq '0006' -and
     $postRecovery[0].synapseBankResponseHex -ceq '01022C' -and
     $postRecovery[0].activeModeReadbackConfirmed -eq $false) `
     'The independent Synapse-recovery readback changed.'
 Assert-True ($fixed.productionAdmission.coolingPadFanWriteAdmitted -eq $false -and
     $fixed.productionAdmission.synapseAutoRecoveryConfirmed -eq $true -and
-    $fixed.productionAdmission.openBladeAutoHandbackValidated -eq $false) `
+    $fixed.productionAdmission.openBladeAutoHandbackValidated -eq $false -and
+    $fixed.productionAdmission.configuredTargetReadbackConfirmed -eq $false) `
     'The Fixed-only trial must not admit a production fan writer.'
 
 Assert-True ($fixedPhysical.evidenceProvenance.controller -ceq `
@@ -183,11 +185,11 @@ Assert-True ($hostControl.productionAdmission.coolingPadFanWriteAdmitted -eq $fa
     $hostControl.productionAdmission.openBladeRestorationValidated -eq $false) `
     'The host-control trial must not admit a production writer.'
 
-$direct = $observations.fan.readback.configuredTargetGetter.directFixedWriteTrial
-Assert-True ($direct.baselineConfiguredTarget -eq 1600 -and
-    $direct.postWriteConfiguredTarget -eq 1550 -and
-    $direct.postRecoveryConfiguredTarget -eq 0 -and
-    $direct.expectedTargetConfirmed -eq $false -and
+$direct = $observations.fan.readback.opaqueFanObservationGetter.directFixedWriteTrial
+Assert-True ($direct.baselineOpaqueRawDecimal -eq 32 -and
+    $direct.postWriteOpaqueRawDecimal -eq 31 -and
+    $direct.postRecoveryOpaqueRawDecimal -eq 0 -and
+    $direct.targetReadbackConfirmed -eq $false -and
     $direct.openBladeAutoWritePerformed -eq $false -and
     $direct.synapseBootAutoOperatorConfirmed -eq $true -and
     $direct.productionWriteAdmitted -eq $false) `

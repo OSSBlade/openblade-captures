@@ -76,7 +76,7 @@
   "limitations": [
     "The operator clarified that the two 01022C commands were two separate rapid UI actions, first Smart Fan Curve and then Fixed 2200. They are not evidence of a retry policy.",
     "Both rapid selections emitted the same 0D/10 semantic payload, so this capture alone does not distinguish the pad's persistent active-mode state after those actions.",
-    "Synapse exposes no fan-speed readback. The configured-target getter is commanded state only, and the candidate current-speed getter fails protocol validation.",
+    "Synapse exposes no fan-speed readback. The 0D/81 getter returns an opaque byte with no assigned target, mode, ownership, physical-speed, or tachometer semantics, and the candidate current-speed getter fails protocol validation.",
     "The Auto command is an acknowledged vendor handback, but no independent active-mode getter confirms the resulting firmware ownership state.",
     "The transient USB device address is capture-local and must not be used as production identity.",
     "No OpenBlade pad fan write was performed in this capture. The raw PCAP remains local and uncommitted."

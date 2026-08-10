@@ -73,53 +73,53 @@
     "readback": {
       "runtimeGetterObserved": true,
       "tachometerObserved": false,
-      "configuredTargetGetter": {
+      "opaqueFanObservationGetter": {
         "commandClassHex": "0D",
         "commandIdHex": "81",
         "requestPayloadHex": "010500",
-        "automaticResponsePayloadHex": "010500",
-        "fixed2200ResponsePayloadHex": "01052C",
-        "confirmedScale": "floor(configuredTarget / 50)",
+        "balancedSmartCurveResponsePayloadHex": "010500",
+        "vendorFixed2200ResponsePayloadHex": "01052C",
+        "semanticAssignmentConfirmed": false,
         "physicalButtonPresetSequence": [
           {
             "preset": "Low",
             "responsePayloadHex": "010520",
-            "configuredTarget": 1600
+            "opaqueRawDecimal": 32
           },
           {
             "preset": "Medium",
             "responsePayloadHex": "01052C",
-            "configuredTarget": 2200
+            "opaqueRawDecimal": 44
           },
           {
             "preset": "High",
             "responsePayloadHex": "01052C",
-            "configuredTarget": 2200,
+            "opaqueRawDecimal": 44,
             "note": "The operator had explicitly customized the High preset to 2200 in Synapse."
           },
           {
             "preset": "AutomaticRestored",
             "responsePayloadHex": "010500",
-            "configuredTarget": 0
+            "opaqueRawDecimal": 0
           }
         ],
         "directFixedWriteTrial": {
           "controller": "OpenBlade.Capture 0.5.0+1b7354ea803f20514934989560ce249cef4e78f7",
           "baselineResponsePayloadHex": "010520",
-          "baselineConfiguredTarget": 1600,
+          "baselineOpaqueRawDecimal": 32,
           "fixed2200RequestPayloadHex": "01022C",
           "setterAcknowledged": true,
           "postWriteResponsePayloadHex": "01051F",
-          "postWriteConfiguredTarget": 1550,
-          "expectedTargetConfirmed": false,
+          "postWriteOpaqueRawDecimal": 31,
+          "targetReadbackConfirmed": false,
           "openBladeAutoWritePerformed": false,
           "synapseBootAutoOperatorConfirmed": true,
           "postRecoveryResponsePayloadHex": "010500",
-          "postRecoveryConfiguredTarget": 0,
+          "postRecoveryOpaqueRawDecimal": 0,
           "productionWriteAdmitted": false,
-          "interpretation": "The standalone Fixed request was acknowledged but did not produce the requested configured-target readback. Synapse, not OpenBlade, restored Auto safely on boot."
+          "interpretation": "The standalone Fixed request was acknowledged and the opaque byte changed from 20 to 1F. The byte does not confirm a configured target or active mode; a later physically confirmed Fixed 2200 trial returned zero. Synapse, not OpenBlade, restored its Auto UI state on boot."
         },
-        "interpretation": "The getter tracks the selected configured target, including physical fan-button preset changes. It is not a tachometer or physical current-speed reading."
+        "interpretation": "The byte correlated with several vendor UI and physical-button states in these sessions, but a later physically confirmed Fixed 2200 trial returned zero. It has no assigned target, active-mode, controller-ownership, physical-speed, or tachometer semantics."
       },
       "currentSpeedGetter": {
         "commandClassHex": "0D",
@@ -148,7 +148,7 @@
         "interpretation": "Both bank responses remained unchanged while the physical fan button moved through Low, Medium, and High and after Synapse restored Auto. They are stored configuration banks, not an active-controller or active-mode discriminator."
       },
       "productionWriteAdmitted": false,
-      "reason": "Configured-target readback is confirmed, but no active-mode readback or physical current-speed/tachometer readback is available."
+      "reason": "The 0D/81 getter returns an opaque byte whose semantics are unassigned; no configured-target, active-mode, controller-ownership, physical-speed, or tachometer readback is available."
     }
   },
   "lighting": {
@@ -267,9 +267,9 @@
     }
   ],
   "limitations": [
-    "Configured-target selection is independently readable, including physical fan-button preset changes and restored Auto zero, but the fan ACKs and configured-target getter do not prove physical speed, tachometer state, active mode, or ownership.",
+    "The 0D/81 byte correlated with several physical-button and vendor UI states, but the later physical Fixed 2200 success with a zero response disproves configured-target and Auto-state interpretations. The byte remains opaque.",
     "The two cooling-mode getter selectors expose stored firmware and Synapse configuration banks. Neither selector identifies which bank currently drives the fan.",
     "The 18-slot logical strip order is known. Physical origin and direction remain unassigned and must not be claimed; logical whole-strip rendering does not require that claim.",
-    "The exact vendor Fixed and Auto payloads are now assigned, but both OpenBlade trials prove that encoding and status-02 echo alone are insufficient for production write admission. The safer Fixed-only trial returned 1550 rather than the requested 2200 and required Synapse for an operator-confirmed Auto recovery."
+    "The exact vendor Fixed and Auto payloads are now assigned, but both OpenBlade trials prove that encoding and status-02 echo alone are insufficient for production write admission. The safer Fixed-only trial changed the opaque byte from 20 to 1F and required Synapse for an operator-confirmed Auto UI recovery."
   ]
 }
