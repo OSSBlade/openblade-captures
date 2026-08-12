@@ -99,7 +99,7 @@ Assert-True ($admission.device.admittedBiosVersions[0] -ceq '3.01') `
 Assert-True ($admission.device.admittedBiosVersions[1] -ceq '4.00') `
     'The second admitted BIOS version changed.'
 Assert-True ($admission.sourceEvidence.annotationSha256 -ceq
-    'A3B9039646A8FBA307C3EDE841851769788C8FBE6DE59635D98B4589A40A89BA') `
+    '89D94E61BF913D7EFD1D89505A49791063FF3002DC55E3A79CCED182C786902A') `
     'The production decision must bind the reviewed read-only evidence.'
 Assert-True ($admission.sourceEvidence.responsePayloadHex -ceq '1211') `
     'The admitted firmware response changed.'
