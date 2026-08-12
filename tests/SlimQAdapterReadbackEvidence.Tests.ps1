@@ -5,6 +5,8 @@ $ErrorActionPreference = 'Stop'
 $repository = Split-Path -Parent $PSScriptRoot
 $annotationPath = Join-Path $repository `
     'annotations\2026-08-12-rz09-0581-slimq-330w-readback.json'
+$admissionPath = Join-Path $repository `
+    'annotations\2026-08-12-rz09-0581-slimq-330w-production-admission.json'
 
 function Assert-True {
     param(
@@ -18,6 +20,7 @@ function Assert-True {
 }
 
 $annotation = Get-Content -LiteralPath $annotationPath -Raw | ConvertFrom-Json
+$admission = Get-Content -LiteralPath $admissionPath -Raw | ConvertFrom-Json
 
 Assert-True ($annotation.schemaVersion -eq 2) `
     'The SlimQ readback annotation must retain schema 2.'
@@ -82,6 +85,35 @@ Assert-True ($annotation.productionAdmission.slimQHyperBoostWriteAdmitted -eq $f
     'SlimQ HyperBoost writes must remain unadmitted.'
 Assert-True ($annotation.productionAdmission.padLessHyperBoostWriteAdmitted -eq $false) `
     'Pad-less HyperBoost must remain unadmitted.'
+
+Assert-True ($admission.schemaVersion -eq 1) `
+    'The SlimQ production admission must retain schema 1.'
+Assert-True ($admission.decision -ceq 'SlimQ330WAdapterProductionAdmission') `
+    'The SlimQ production admission decision changed.'
+Assert-True ($admission.device.modelNumber -ceq 'RZ09-0581') `
+    'The production admission must remain scoped to RZ09-0581.'
+Assert-True (@($admission.device.admittedBiosVersions).Count -eq 2) `
+    'The production admission must retain the current two-version host baseline.'
+Assert-True ($admission.device.admittedBiosVersions[0] -ceq '3.01') `
+    'The first admitted BIOS version changed.'
+Assert-True ($admission.device.admittedBiosVersions[1] -ceq '4.00') `
+    'The second admitted BIOS version changed.'
+Assert-True ($admission.sourceEvidence.annotationSha256 -ceq
+    'A3B9039646A8FBA307C3EDE841851769788C8FBE6DE59635D98B4589A40A89BA') `
+    'The production decision must bind the reviewed read-only evidence.'
+Assert-True ($admission.sourceEvidence.responsePayloadHex -ceq '1211') `
+    'The admitted firmware response changed.'
+Assert-True ($admission.operatorDecision.explicitProductionAdmissionApproved -eq $true) `
+    'The explicit operator admission decision must remain recorded.'
+Assert-True ($admission.productionAdmission.adapterPowerResponse1211 -ceq
+    'FullPower330W') `
+    'The approved adapter mapping changed.'
+Assert-True ($admission.productionAdmission.adapterClassificationAdmitted -eq $true) `
+    'The adapter classification must remain production-admitted.'
+Assert-True ($admission.productionAdmission.hyperBoostFullPowerPrerequisiteContributionAdmitted -eq $true) `
+    'The admitted full-power classification must remain available to separately gated features.'
+Assert-True ($admission.productionAdmission.notGeneralizedToOtherModels -eq $true) `
+    'The SlimQ admission must not be generalized to other models.'
 
 & (Join-Path $repository 'tools\Test-CaptureEvidence.ps1') `
     -AnnotationPath $annotationPath `
