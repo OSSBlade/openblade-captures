@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "OpenBlade.Capture 0.5.0+68085fa7a19dfd02a7edd8f78d258c8479c5414e",
+    "role": "OpenBladeTypedValidation",
+    "openBladeTypedApplyPerformed": true,
+    "openBladeReadbackConfirmed": true
+  },
+  "capturedAtUtc": "2026-08-09T20:30:04.6393828Z",
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "bios": "4.00",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "sha256": "7F439C7C2EF0E09B24477081C36EDC271AB1AF6861CF9EADADBCF3D5E9820755",
+    "byteLength": 4714,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddresses",
+    "selectedDeviceCount": 2,
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "kind": "SettingChange",
+    "subsystem": "Blade performance",
+    "name": "Repeated typed HyperBoost reversible validation",
+    "value": "Balanced mode 0 to HyperBoost mode 7 on both channels, then exact Balanced restoration with the exact cooling pad present",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": true,
+    "applyResult": "Applied successfully: both mode-7 setters returned status-02 semantic acknowledgements.",
+    "readbackResult": "Readback confirmed mode 7/value 0 independently on both thermal channels.",
+    "restorationResult": "Restored successfully: the saved Balanced pair was submitted once and acknowledged on both channels.",
+    "restorationReadbackResult": "Restoration readback confirmed the exact saved mode 0/value 0 state on both channels."
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "RepeatPreflight",
+      "summary": "The repeat run confirmed the exact laptop and BIOS, the exact PID 0F43 revision-0200 report-ID-5 cooling pad, inactive competing controllers, the full-power 280 W adapter state, and paired Balanced/Automatic laptop state before mutation.",
+      "configuredTargetResponseHex": "010520",
+      "adapterResponsePayloadHex": "1111",
+      "baselineThermal1Hex": "01010000",
+      "baselineThermal2Hex": "01020000"
+    },
+    {
+      "kind": "RepeatApplyAndReadback",
+      "summary": "The validator submitted exactly one mode-7 write per channel, received both acknowledgements, and independently read mode 7/value 0 from both channels.",
+      "candidateThermal1Hex": "01010700",
+      "candidateThermal2Hex": "01020700",
+      "applyAcknowledged": true,
+      "candidateConfirmed": true,
+      "indeterminatePartialWrite": false
+    },
+    {
+      "kind": "RepeatRestoration",
+      "summary": "The validator restored the saved Balanced pair exactly once, received both acknowledgements, and independently read the exact saved state from both channels.",
+      "restorationThermal1Hex": "01010000",
+      "restorationThermal2Hex": "01020000",
+      "restoreAcknowledged": true,
+      "restored": true,
+      "manualRecoveryRequired": false,
+      "servicesRestored": true
+    }
+  ],
+  "limitations": [
+    "This repeat validates the same exact-device, pad-present HyperBoost transition as the earlier admitted run. It does not expand support to another laptop model, cooling-pad revision, or pad-less use.",
+    "The laptop and cooling-pad checks are correlated across a bounded multi-device run; no raw device path or serial is committed.",
+    "No sustained workload, benchmark, pad-less activation, or long-duration thermal validation was performed.",
+    "The private typed transcript remains uncommitted."
+  ],
+  "productionAdmission": {
+    "hyperBoostAccess": "ReadWrite",
+    "hyperBoostReadbackConfirmed": true,
+    "hyperBoostWriteAdmitted": true,
+    "coolingPadRequired": true,
+    "fullPowerAdapterRequired": true,
+    "padLessActivationAdmitted": false,
+    "coolingPadFanWriteAdmitted": false,
+    "reason": "A second exact-device run reproduced the acknowledged paired apply, independent mode-7 readback, exact saved-state restoration, and paired restoration readback without retry or manual recovery."
+  },
+  "notes": [
+    "USBPcap was not running during the typed validation.",
+    "The installed OpenBlade service was not started.",
+    "Razer Game Manager Service 3 and Razer Elevation Service were restored after the bounded run."
+  ]
+}

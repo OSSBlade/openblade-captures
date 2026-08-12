@@ -29,7 +29,9 @@
       "installedMiddlewareScale": "floor(configuredTarget / 50)",
       "installedMiddlewareConfiguredRange": {
         "minimum": 500,
-        "maximum": 3200
+        "maximum": 3200,
+        "step": 50,
+        "minimumOperatorUiConfirmed": true
       },
       "fullRootObservedScaledTargetsHex": ["14", "1C", "20"],
       "requestCount": 5,
@@ -42,11 +44,23 @@
       "commandIdHex": "10",
       "declaredPayloadBytes": 3,
       "semanticFields": ["actionFromUiFlag", "modeEnum", "scaledTarget"],
-      "fullRootObservedPayloadHex": ["000600"],
-      "requestCount": 2,
-      "acknowledgedResponseCount": 2,
+      "observedPayloadHex": ["000600", "01022C"],
+      "requestCount": 4,
+      "acknowledgedResponseCount": 4,
       "responseStatusHex": "02",
-      "responseEchoesSemanticPayload": true
+      "responseEchoesSemanticPayload": true,
+      "fixed2200": {
+        "payloadHex": "01022C",
+        "configuredTarget": 2200,
+        "scaledTargetHex": "2C",
+        "operatorUiConfirmed": true,
+        "independentActiveModeReadbackConfirmed": false
+      },
+      "automatic": {
+        "payloadHex": "000600",
+        "operatorUiConfirmed": true,
+        "independentActiveModeReadbackConfirmed": false
+      }
     },
     "smartCurve": {
       "evaluationOwner": "Host",
@@ -59,13 +73,53 @@
     "readback": {
       "runtimeGetterObserved": true,
       "tachometerObserved": false,
-      "configuredTargetGetter": {
+      "opaqueFanObservationGetter": {
         "commandClassHex": "0D",
         "commandIdHex": "81",
         "requestPayloadHex": "010500",
-        "balancedResponsePayloadHex": "010500",
-        "fixed2200ResponsePayloadHex": "01052C",
-        "confirmedScale": "floor(configuredTarget / 50)"
+        "balancedSmartCurveResponsePayloadHex": "010500",
+        "vendorFixed2200ResponsePayloadHex": "01052C",
+        "semanticAssignmentConfirmed": false,
+        "physicalButtonPresetSequence": [
+          {
+            "preset": "Low",
+            "responsePayloadHex": "010520",
+            "opaqueRawDecimal": 32
+          },
+          {
+            "preset": "Medium",
+            "responsePayloadHex": "01052C",
+            "opaqueRawDecimal": 44
+          },
+          {
+            "preset": "High",
+            "responsePayloadHex": "01052C",
+            "opaqueRawDecimal": 44,
+            "note": "The operator had explicitly customized the High preset to 2200 in Synapse."
+          },
+          {
+            "preset": "AutomaticRestored",
+            "responsePayloadHex": "010500",
+            "opaqueRawDecimal": 0
+          }
+        ],
+        "directFixedWriteTrial": {
+          "controller": "OpenBlade.Capture 0.5.0+1b7354ea803f20514934989560ce249cef4e78f7",
+          "baselineResponsePayloadHex": "010520",
+          "baselineOpaqueRawDecimal": 32,
+          "fixed2200RequestPayloadHex": "01022C",
+          "setterAcknowledged": true,
+          "postWriteResponsePayloadHex": "01051F",
+          "postWriteOpaqueRawDecimal": 31,
+          "targetReadbackConfirmed": false,
+          "openBladeAutoWritePerformed": false,
+          "synapseBootAutoOperatorConfirmed": true,
+          "postRecoveryResponsePayloadHex": "010500",
+          "postRecoveryOpaqueRawDecimal": 0,
+          "productionWriteAdmitted": false,
+          "interpretation": "The standalone Fixed request was acknowledged and the opaque byte changed from 20 to 1F. The byte does not confirm a configured target or active mode; a later physically confirmed Fixed 2200 trial returned zero. Synapse, not OpenBlade, restored its Auto UI state on boot."
+        },
+        "interpretation": "The byte correlated with several vendor UI and physical-button states in these sessions, but a later physically confirmed Fixed 2200 trial returned zero. It has no assigned target, active-mode, controller-ownership, physical-speed, or tachometer semantics."
       },
       "currentSpeedGetter": {
         "commandClassHex": "0D",
@@ -76,11 +130,25 @@
       "coolingModeGetter": {
         "commandClassHex": "0D",
         "commandIdHex": "90",
-        "queried": false,
-        "reason": "The required selector is not identified by captured vendor traffic."
+        "queried": true,
+        "firmwareBank": {
+          "requestPayloadHex": "000000",
+          "responsePayloadHex": "0006",
+          "semanticFields": ["bankSelector", "storedMode"],
+          "storedMode": "TurnOffFan"
+        },
+        "synapseBank": {
+          "requestPayloadHex": "010000",
+          "responsePayloadHex": "01022C",
+          "semanticFields": ["bankSelector", "storedMode", "scaledTarget"],
+          "storedMode": "High",
+          "configuredTarget": 2200
+        },
+        "activeModeReadbackConfirmed": false,
+        "interpretation": "Both bank responses remained unchanged while the physical fan button moved through Low, Medium, and High and after Synapse restored Auto. They are stored configuration banks, not an active-controller or active-mode discriminator."
       },
       "productionWriteAdmitted": false,
-      "reason": "Configured-target readback is confirmed, but no active-mode readback or physical current-speed/tachometer readback is available."
+      "reason": "The 0D/81 getter returns an opaque byte whose semantics are unassigned; no configured-target, active-mode, controller-ownership, physical-speed, or tachometer readback is available."
     }
   },
   "lighting": {
@@ -139,6 +207,30 @@
   },
   "sourceArtifacts": [
     {
+      "name": "Final OpenBlade.Capture read-only Auto getter transcript",
+      "sha256": "BACEE9053C7832C2F603B034B0E05BAE36123DB78ABD776B12AC18169E4C82D2",
+      "byteLength": 845,
+      "rawArtifactCommitted": false
+    },
+    {
+      "name": "Repeated OpenBlade HyperBoost reversible-validation transcript",
+      "sha256": "7F439C7C2EF0E09B24477081C36EDC271AB1AF6861CF9EADADBCF3D5E9820755",
+      "byteLength": 4714,
+      "rawArtifactCommitted": false
+    },
+    {
+      "name": "OpenBlade cooling-pad Fixed-only validation transcript",
+      "sha256": "364FC56744ED1665937B3C033044B6D33071D6671C2B21725C4AD0D5C4BEF4B2",
+      "byteLength": 1620,
+      "rawArtifactCommitted": false
+    },
+    {
+      "name": "OpenBlade cooling-pad post-Synapse-recovery read-only transcript",
+      "sha256": "94CFA9DC85C5BD113CC62B338A0B4AEBF0C824F2C50FD05C5030D269791C068A",
+      "byteLength": 2054,
+      "rawArtifactCommitted": false
+    },
+    {
       "name": "Synapse PID 3907 middleware main response body",
       "sha256": "69975887AFC80EDBD548AF57D8A0DEA35EF67C7F695CABA2DDEF43391250BE13"
     },
@@ -168,11 +260,16 @@
     {
       "annotation": "2026-08-09-rz09-0581-hyperboost-full-root-transport.json",
       "rawCaptureSha256": "2743A9034B2CA0DB8B949C2BE1D8C747A431AA8F7B033D58B37605FF8FB01F3B"
+    },
+    {
+      "annotation": "2026-08-09-rz09-0581-cooling-pad-fixed-auto-oracle.json",
+      "rawCaptureSha256": "5957D8808D30247214C23C65A32A6CC2E08148BB982E5296E79755D605DF8E98"
     }
   ],
   "limitations": [
-    "Configured-target retention is independently readable, but the fan ACKs and configured-target getter do not prove physical speed, tachometer state, active mode, or ownership.",
-    "The logical strip order is known, but a photographed one-hot walk is still required to assign physical origin and direction.",
-    "No OpenBlade cooling-pad write was performed."
+    "The 0D/81 byte correlated with several physical-button and vendor UI states, but the later physical Fixed 2200 success with a zero response disproves configured-target and Auto-state interpretations. The byte remains opaque.",
+    "The two cooling-mode getter selectors expose stored firmware and Synapse configuration banks. Neither selector identifies which bank currently drives the fan.",
+    "The 18-slot logical strip order is known. Physical origin and direction remain unassigned and must not be claimed; logical whole-strip rendering does not require that claim.",
+    "The exact vendor Fixed and Auto payloads are now assigned, but both OpenBlade trials prove that encoding and status-02 echo alone are insufficient for production write admission. The safer Fixed-only trial changed the opaque byte from 20 to 1F and required Synapse for an operator-confirmed Auto UI recovery."
   ]
 }

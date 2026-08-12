@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "Razer Synapse 4.0.698.98 with OpenBlade capture tooling 05c6aee",
+    "role": "OracleCapture",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeReadbackConfirmed": false
+  },
+  "capturedAtUtc": "2026-08-09T23:02:00.5575268Z",
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "0F43",
+    "bios": "4.00",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "sha256": "7F3D2DDB203A65FF986518B42772B5D9A9E989791CD966110E8E9E362BCB7E1C",
+    "byteLength": 8046,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddress",
+    "selectedDeviceCount": 0,
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "kind": "Observation",
+    "subsystem": "Cooling-pad fan and lighting transport context",
+    "name": "Vendor Fixed and Auto context isolation",
+    "value": "Marker-aligned retained-lit, retained-physically-dark, and fresh-Synapse-session Fixed 2200 to Auto UI transitions",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": true,
+    "applyResult": "Confirmed in all three vendor-controlled contexts: one Fixed 2200 request and exact status-02 semantic acknowledgement were paired by transaction.",
+    "readbackResult": "The vendor transaction acknowledgements were confirmed, but no active-mode or physical-speed readback was present.",
+    "restorationResult": "Confirmed through the vendor UI in all three contexts: the operator returned to Auto and one marker-correlated 000600 request received an exact status-02 semantic acknowledgement.",
+    "restorationReadbackResult": "The Auto UI action and request acknowledgement were confirmed; pad or firmware ownership, active mode, and physical speed remained opaque."
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "SplitCaptureProvenance",
+      "summary": "The analyzer combined one gracefully completed retained/dark partial capture and one gracefully completed fresh-session capture without committing or modifying their raw artifacts.",
+      "retainedAndDarkCaptureSha256": "1B49C8FF1206870C03860EE8A63C8543A25FF73891371D4FA7E471A0523F3DAC",
+      "retainedAndDarkCaptureByteLength": 335561,
+      "retainedAndDarkDecodedTransactionCount": 1845,
+      "retainedAndDarkMarkerCount": 17,
+      "freshSessionCaptureSha256": "78CE87B3F074CDFA3D677AC8C5976154D4FE48905B44B254AD8879F1A1EBCD7C",
+      "freshSessionCaptureByteLength": 415541,
+      "freshSessionDecodedTransactionCount": 2270,
+      "freshSessionMarkerCount": 14
+    },
+    {
+      "kind": "RetainedLitVendorTransitions",
+      "summary": "With Synapse retained and lighting active, 745 lighting frames surrounded one exact Fixed 2200 pair and one exact Auto UI pair. One additional acknowledged vendor pair was disclosed in the Fixed window.",
+      "lightingFrameRequestCount": 745,
+      "fixed2200SemanticPayloadHex": "01022C",
+      "fixed2200RequestCount": 1,
+      "fixed2200AcknowledgementCount": 1,
+      "fixed2200StatusHex": "02",
+      "fixed2200TransactionMatched": true,
+      "fixedWindowOtherAcknowledgedVendorPairCount": 1,
+      "synapseManagedAutoSemanticPayloadHex": "000600",
+      "synapseManagedAutoRequestCount": 1,
+      "synapseManagedAutoAcknowledgementCount": 1,
+      "synapseManagedAutoStatusHex": "02",
+      "synapseManagedAutoTransactionMatched": true
+    },
+    {
+      "kind": "PhysicallyDarkZeroFrameVendorTransitions",
+      "summary": "After the operator confirmed physical darkness, exactly zero lighting frames occurred through the vendor Auto confirmation while the exact Fixed and Auto UI request/acknowledgement pairs still completed.",
+      "operatorConfirmedPhysicallyDark": true,
+      "lightingFrameRequestCount": 0,
+      "fixed2200SemanticPayloadHex": "01022C",
+      "fixed2200RequestCount": 1,
+      "fixed2200AcknowledgementCount": 1,
+      "fixed2200StatusHex": "02",
+      "fixed2200TransactionMatched": true,
+      "synapseManagedAutoSemanticPayloadHex": "000600",
+      "synapseManagedAutoRequestCount": 1,
+      "synapseManagedAutoAcknowledgementCount": 1,
+      "synapseManagedAutoStatusHex": "02",
+      "synapseManagedAutoTransactionMatched": true
+    },
+    {
+      "kind": "FreshSynapseProcessVendorTransitions",
+      "summary": "After a verified zero-process interval and fresh Synapse process session, 745 lighting frames surrounded one exact Fixed pair and one exact Auto UI pair.",
+      "freshRazerAppEngineProcessSessionObserved": true,
+      "lightingFrameRequestCount": 745,
+      "fixed2200SemanticPayloadHex": "01022C",
+      "fixed2200RequestCount": 1,
+      "fixed2200AcknowledgementCount": 1,
+      "fixed2200StatusHex": "02",
+      "fixed2200TransactionMatched": true,
+      "synapseManagedAutoSemanticPayloadHex": "000600",
+      "synapseManagedAutoRequestCount": 1,
+      "synapseManagedAutoAcknowledgementCount": 1,
+      "synapseManagedAutoStatusHex": "02",
+      "synapseManagedAutoTransactionMatched": true
+    },
+    {
+      "kind": "ContextIsolationConclusions",
+      "summary": "The vendor UI transitions completed without continuous lighting frames and after a fresh Synapse process session. Literal HID-handle retention, active mode, physical speed, and independent OpenBlade write safety remain unresolved.",
+      "continuousLightingFramesRequiredForVendorUiTransitions": false,
+      "priorSynapseProcessSessionRequiredForVendorUiTransitions": false,
+      "darkContextSameProcessSessionConfirmedAfterTransitions": false,
+      "hidHandleRetentionDetermined": false,
+      "hidHandleRetentionRequired": null,
+      "synapseManagedAutoFirmwareOwnershipConfirmed": false,
+      "activeModeReadbackConfirmed": false,
+      "physicalFanSpeedReadbackConfirmed": false,
+      "openBladeWritePerformed": false,
+      "productionWriteAdmitted": false
+    }
+  ],
+  "limitations": [
+    "Synapse-managed Auto names only the vendor UI action and its marker-correlated 000600 request and acknowledgement; it does not identify an autonomous pad mode, firmware ownership, active controller, or physical speed.",
+    "The retained/dark artifact ended after the dark Auto confirmation, so a post-transition same-process marker was unavailable and literal HID-handle retention remains undetermined.",
+    "A fresh RazerAppEngine process session disproves dependence on the prior Synapse process session, but it does not exclude state retained by another vendor service or driver.",
+    "Zero 0F/03 frames during the physically dark transition window disproves continuous lighting-frame dependence for these vendor UI transitions, not all device initialization or ownership dependencies.",
+    "Status-02 semantic acknowledgements do not prove active mode, fan motion, physical RPM, ownership, or safe standalone OpenBlade control.",
+    "OpenBlade issued no hardware write in these captures, and raw PCAP and process-monitor artifacts remain private and uncommitted."
+  ],
+  "productionAdmission": {
+    "coolingPadFanWriteAdmitted": false,
+    "fixed2200VendorTransitionObserved": true,
+    "synapseManagedAutoVendorTransitionObserved": true,
+    "continuousLightingFramesRequired": false,
+    "priorSynapseProcessSessionRequired": false,
+    "hidHandleRetentionRequirementResolved": false,
+    "activeModeReadbackConfirmed": false,
+    "tachometerReadbackConfirmed": false,
+    "reason": "The vendor transitions work without continuous lighting frames and after a fresh Synapse process session, but acknowledgements still do not establish active state, restoration ownership, or safe independent OpenBlade mutation."
+  },
+  "notes": [
+    "The partial retained/dark capture and complete fresh-session capture were analyzed together because the first wrapper intentionally stopped gracefully after its vendor worker set changed.",
+    "The OpenBlade service remained stopped throughout both vendor captures.",
+    "No raw capture, process identifier, local path, serial number, device path, or process-anchor hash is included in this annotation."
+  ]
+}

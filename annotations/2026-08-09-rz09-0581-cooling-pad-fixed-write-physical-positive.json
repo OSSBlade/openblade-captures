@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "OpenBlade.Capture 0.5.0+1c9a4dcdb4d0b627f7b9d05dbb2e59aa889d1d85",
+    "role": "NegativeCapture",
+    "openBladeTypedApplyPerformed": true,
+    "openBladeReadbackConfirmed": false
+  },
+  "capturedAtUtc": "2026-08-09T22:50:38.2622380Z",
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "0F43",
+    "bios": "4.00",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "sha256": "46445B67DF76688EB0D058124B690C35D25EC8E704AD42098BB46379ACC5E2F6",
+    "byteLength": 658,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddress",
+    "selectedDeviceCount": 0,
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "kind": "SettingChange",
+    "subsystem": "Cooling-pad fan",
+    "name": "Physically confirmed Fixed 2200 single-write trial",
+    "value": "One acknowledged Fixed 2200 write with operator-confirmed physical fan-mode change, no OpenBlade automatic-control command, then recovery to the Synapse Auto UI state",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": true,
+    "applyResult": "The exact Fixed 2200 setter was submitted once, returned a status-02 semantic acknowledgement, and the operator physically confirmed that the Fixed fan write worked.",
+    "readbackResult": "The independent 0D/81 query completed but remained normalized zero before and after the physically successful transition, proving that this getter is not active-mode or target-transition confirmation.",
+    "restorationResult": "Synapse was launched and the operator confirmed that the vendor UI returned to Auto. OpenBlade sent no automatic-control or cleanup command.",
+    "restorationReadbackResult": "No independent active-mode or tachometer readback exists. The operator confirmation establishes vendor UI recovery only, not an OpenBlade restoration primitive."
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "ExactBuildAndSafetyPreflight",
+      "summary": "The bounded validator confirmed the exact RZ09-0581 BIOS 4.00 host, exact PID 0F43 revision-0200 pad, inactive Synapse, and inactive OpenBlade service before the single write.",
+      "captureExecutableProductVersion": "0.5.0+1c9a4dcdb4d0b627f7b9d05dbb2e59aa889d1d85",
+      "captureExecutableSha256": "87AB705DEB235EE618FB8CC107C5570BA982548DBE78DB41F327C213456712B1",
+      "captureExecutableByteLength": 198144,
+      "baselineConfiguredTargetNormalizedNull": true,
+      "activeModeReadbackConfirmed": false
+    },
+    {
+      "kind": "Fixed2200PhysicalApplyPositive",
+      "summary": "OpenBlade submitted the exact Fixed 2200 candidate once and received a status-02 semantic echo. The operator then physically confirmed that the fan write worked.",
+      "commandClassHex": "0D",
+      "commandIdHex": "10",
+      "fixedSetterSemanticPayloadHex": "01022C",
+      "responseStatusHex": "02",
+      "fixedSetterAcknowledged": true,
+      "operatorPhysicalApplyConfirmed": true,
+      "fixedWriteCount": 1,
+      "openBladeAutomaticControlWriteCount": 0
+    },
+    {
+      "kind": "ConfiguredTargetGetterNegative",
+      "summary": "The immediate post-write 0D/81 query remained normalized zero despite the operator-confirmed physical Fixed transition. It cannot validate active mode, active target, ownership, or physical speed.",
+      "baselineConfiguredTargetNormalizedNull": true,
+      "postWriteConfiguredTargetNormalizedNull": true,
+      "postWriteFailureClassification": "post-read-zero",
+      "targetReadbackConfirmed": false,
+      "activeModeReadbackConfirmed": false,
+      "tachometerReadbackConfirmed": false
+    },
+    {
+      "kind": "SynapseManagedAutoRecovery",
+      "summary": "Synapse was launched after the bounded write and the operator confirmed that its UI returned to Auto. The active controller and physical speed remain opaque; this is not evidence that the pad autonomously controls temperature or that OpenBlade can restore the state.",
+      "operatorConfirmedSynapseManagedAuto": true,
+      "synapseRecoveryRequired": true,
+      "openBladeRecoveryWritePerformed": false,
+      "independentRestorationReadbackConfirmed": false
+    },
+    {
+      "kind": "TranscriptIntegrity",
+      "summary": "The retained sanitized validator transcript records one acknowledged write, negative configured-target readback, required Synapse recovery, and no OpenBlade automatic-control command.",
+      "transcriptSha256": "46445B67DF76688EB0D058124B690C35D25EC8E704AD42098BB46379ACC5E2F6",
+      "transcriptByteLength": 658,
+      "failure": "post-read-zero",
+      "productionAdmitted": false
+    }
+  ],
+  "limitations": [
+    "The operator-confirmed physical change validates this exact Fixed 2200 apply, but it is not typed active-mode, target, ownership, or tachometer readback.",
+    "The configured-target getter remained zero across the physically successful transition and must not gate or invalidate Fixed writes.",
+    "The Synapse Auto UI state does not identify the active controller or physical speed. No evidence shows that the pad has an autonomous temperature source or fan curve.",
+    "Synapse recovery is not an OpenBlade restoration primitive and cannot be a production dependency.",
+    "The earlier standalone OpenBlade 000600 cleanup remains negative evidence because the pad entered a flashing-red sleep state and required a full power cycle.",
+    "No supported active-mode getter or cooling-pad tachometer readback is available.",
+    "The private operator transcript and hardware interaction remain uncommitted; only the bounded sanitized result is recorded."
+  ],
+  "productionAdmission": {
+    "coolingPadFanWriteAdmitted": false,
+    "fixed2200SetterObserved": true,
+    "fixed2200PhysicalApplyValidated": true,
+    "fixed2200ConfiguredTargetReadbackConfirmed": false,
+    "synapseManagedAutoRecoveryConfirmed": true,
+    "openBladeAutomaticControlHandbackValidated": false,
+    "activeModeReadbackConfirmed": false,
+    "tachometerReadbackConfirmed": false,
+    "reason": "The exact Fixed 2200 command physically worked, but OpenBlade still lacks independent active-mode readback and a safe validated host-managed Automatic restoration. Production fan mutation remains unadmitted."
+  },
+  "notes": [
+    "The trial deliberately sent no standalone OpenBlade 000600 cleanup command and performed no retry.",
+    "The operator's working interpretation is that the zero-valued field reflects Synapse clearing or selecting a zero fixed target; it is not evidence of physical zero RPM.",
+    "USBPcap was not running, the installed OpenBlade service remained stopped, and the temporarily stopped Razer services were restored after the bounded trial."
+  ]
+}

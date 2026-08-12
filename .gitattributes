@@ -1,2 +1,5 @@
 # This reviewed plan is hash-gated evidence. Preserve its committed bytes exactly.
 plans/*.json -text
+
+# Annotation hashes are evidence bindings. Keep checkout bytes identical on every OS.
+annotations/*.json text eol=lf

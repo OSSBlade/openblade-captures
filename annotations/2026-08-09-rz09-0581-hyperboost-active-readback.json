@@ -60,11 +60,11 @@
       "privateTranscriptSha256": "A16C27E144541573BB126409DC199E98C13F8565C62359BBFBC5FE8D191B82D0"
     },
     {
-      "kind": "CoolingPadSmartCurveConfiguredTarget",
-      "summary": "During the paired restored state, the cooling pad was in Smart Fan Curve Balanced. Its configured-target getter returned raw 2C, corresponding to the current 2200 target through the independently established target/50 scale. Synapse exposes no measured fan-speed readback.",
-      "configuredTargetResponsePayloadHex": "01052C",
-      "configuredTargetRawDecimal": 44,
-      "configuredTargetDisplayValue": 2200,
+      "kind": "CoolingPadSmartCurveOpaqueObservation",
+      "summary": "During the paired restored state, the cooling pad was in Smart Fan Curve Balanced and the 0D/81 getter returned raw 2C. The byte has no assigned target or mode meaning, and Synapse exposes no measured fan-speed readback.",
+      "opaqueResponsePayloadHex": "01052C",
+      "opaqueRawDecimal": 44,
+      "semanticAssignmentConfirmed": false,
       "currentSpeedGetterConfirmed": false,
       "privateTranscriptSha256": "53A6231D7227E1441202DDFAD37F23B0DF8C9B5CCE03B28967F9493836DE2EAC"
     }
@@ -75,7 +75,7 @@
     "The readback proves exact-device mode 7/value 0 while HyperBoost is active and mode 0/value 0 while Balanced is active. It does not independently validate any OpenBlade setter, power-limit effect, thermal safety behavior, or mode transition.",
     "The filter-mediated path used by Synapse for the active mode-7 setter remains unresolved at the physical USB boundary.",
     "Cooling-pad presence was not spoofed or removed. Pad-less HyperBoost activation remains untested and unsupported.",
-    "The cooling-pad configured target is commanded state, not measured RPM. The candidate current-speed getter failed protocol validation and Synapse exposes no fan-speed readback.",
+    "The cooling-pad 0D/81 byte is opaque and is neither configured-target nor measured-RPM readback. The candidate current-speed getter failed protocol validation and Synapse exposes no fan-speed readback.",
     "The raw transcripts, process inventory, and Synapse logs remain local and uncommitted. The committed evidence contains no device serial, user path, or raw process inventory."
   ],
   "productionAdmission": {

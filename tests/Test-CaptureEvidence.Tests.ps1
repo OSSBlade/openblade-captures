@@ -195,6 +195,18 @@ try {
     Assert-True ($schemaResult.ValidationMode -ceq 'SchemaOnly') `
         'Schema-only validation reported the wrong mode.'
 
+    $negative = New-ValidAnnotation `
+        -CaptureHash $captureHash -CaptureLength $captureLength
+    $negative.evidenceProvenance.role = 'NegativeCapture'
+    $negative.evidenceProvenance.openBladeReadbackConfirmed = $false
+    $negative.validation.readbackResult = `
+        'The typed transaction completed but the semantic readback mismatched.'
+    $negativePath = Join-Path $testRoot 'valid-negative.json'
+    Write-Json -Path $negativePath -Value $negative
+    $negativeResult = & $validator -AnnotationPath $negativePath -SchemaOnly
+    Assert-True $negativeResult.Valid `
+        'A bounded typed negative capture did not validate.'
+
     $missingModeFailed = $false
     try {
         & $validator -AnnotationPath $validPath | Out-Null
