@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "OpenBlade.Capture commit b395d4a4",
+    "role": "ReadOnlyQueryCapture",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeReadbackConfirmed": true
+  },
+  "capturedAtUtc": "2026-08-12T02:56:44.7944325Z",
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "bios": "4.00",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "sha256": "274BE61C6FC3CD03D85BC85D08C5B1281A25BB6917F96FEF5B40A04755EDF947",
+    "byteLength": 1638,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddress",
+    "selectedDeviceCount": null,
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "kind": "ReadOnlyQuery",
+    "subsystem": "Blade adapter-power identification",
+    "name": "SlimQ 330 W Razer-converter readback",
+    "value": "Ten successful 07/8C adapter-power queries with a four-sample Windows AC stability window",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": false
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "ExactDevicePreflight",
+      "summary": "The exact RZ09-0581, PID 02E0, BIOS 4.00 host and sole protocol collection were confirmed before the read-only query. OpenBlade and competing Razer controllers were inactive.",
+      "exactHostConfirmed": true,
+      "exactDeviceConfirmed": true,
+      "bios400Confirmed": true,
+      "openBladeServiceInactive": true,
+      "competingControllersInactive": true
+    },
+    {
+      "kind": "RepeatedAdapterPowerReadback",
+      "summary": "Ten successful read-only sessions returned the same two-byte 07/8C payload. The value differs from the reviewed 1111 OEM 280 W and 0711 USB-C 100 W mappings.",
+      "requestPayloadHex": "0000",
+      "responsePayloadHex": "1211",
+      "successfulQueryCount": 10,
+      "allResponsesIdentical": true,
+      "knownOem280WResponsePayloadHex": "1111",
+      "knownUsbC100WResponsePayloadHex": "0711"
+    },
+    {
+      "kind": "WindowsAcStabilityWindow",
+      "summary": "Four samples over approximately 33 seconds retained PowerOnline true, Charging false, Discharging false, and zero charge and discharge rates while the battery remained full. Each paired firmware query returned 1211.",
+      "sampleCount": 4,
+      "elapsedSeconds": 33,
+      "powerOnlineThroughout": true,
+      "chargingObserved": false,
+      "dischargingObserved": false,
+      "chargeRateThroughout": 0,
+      "dischargeRateThroughout": 0,
+      "adapterResponsePayloadHex": "1211"
+    },
+    {
+      "kind": "ExternalDocumentationCorrelation",
+      "summary": "SlimQ documents its 330 W Razer three-prong converter as enabling recognition as 330 W, and lists Razer Blade 16 models using 330 W, 280 W, or 230 W adapters. This correlates 1211 with the connected SlimQ converter but does not independently assign the firmware value.",
+      "slimQConverterDocumentation": "https://slimq.life/products/dc-to-razer-blade-converter",
+      "slimQChargerDocumentation": "https://slimq.life/products/330w-laptop-charger",
+      "razerThirdPartyAdapterGuidance": "https://mysupport.razer.com/app/answers/detail/a_id/652/",
+      "firmwareSemanticAssignmentConfirmed": false
+    }
+  ],
+  "limitations": [
+    "The 1211 payload is a stable exact-device observation, but no OEM Razer 330 W adapter was available for an independent same-machine comparison. It therefore remains an unassigned 330 W candidate rather than a production-admitted power class.",
+    "The generic query command retained stale BIOS 3.01 presentation metadata. Exact BIOS 4.00 was independently confirmed by the guarded host preflight, and only the response payload and canonical output hash are used from the generic command.",
+    "The Windows stability window was idle and short. It did not validate sustained gaming load, transient peaks, charger temperature, connector temperature, battery behavior under load, or HyperBoost.",
+    "Official product compatibility and operator-reported gaming success do not replace exact firmware semantics or a bounded load validation.",
+    "The connected Razer converter revision and any applicability of SlimQ's reported 2025 metal-connector replacement program were not physically inspected in this session.",
+    "No OpenBlade setting, HyperBoost mode, fan state, power profile, or charger state was changed by the read-only query sessions."
+  ],
+  "productionAdmission": {
+    "slimQAdapterObservation": "QueryValidated",
+    "slimQFullPowerClass": "ObservedOnly",
+    "slimQHyperBoostWriteAdmitted": false,
+    "padLessHyperBoostWriteAdmitted": false,
+    "reason": "The exact machine repeatedly returned 1211 and remained stably AC-online, but the payload lacks an independent OEM 330 W comparison and no sustained-load or HyperBoost validation was performed with this charger."
+  },
+  "notes": [
+    "The raw query transcript remains local and uncommitted; only bounded response bytes, counts, and the canonical output hash are retained.",
+    "Razer Game Manager Service 3 is intentionally left stopped after validation per operator instruction.",
+    "OpenBlade and Razer Elevation Service are restored separately after the read-only validation."
+  ]
+}
