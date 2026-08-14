@@ -10,6 +10,11 @@ Blade from inventory through query discovery, isolated oracle captures,
 readback, restoration, lifecycle testing, sanitization, and production
 admission.
 
+Installed Razer driver packages are tracked separately in the
+[`blade-driver-catalog`](https://github.com/OSSBlade/blade-driver-catalog).
+This repository retains the protocol captures and physical behavior evidence
+used to decide whether a cataloged package supports a device capability.
+
 The broader project documentation is maintained in
 [`OSSBlade/openblade-docs`](https://github.com/OSSBlade/openblade-docs).
 
