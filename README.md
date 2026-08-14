@@ -12,6 +12,7 @@ admission.
 
 Installed Razer driver packages are tracked separately in the
 [`blade-driver-catalog`](https://github.com/OSSBlade/blade-driver-catalog).
+That repository is currently private, so the link works only for collaborators.
 This repository retains the protocol captures and physical behavior evidence
 used to decide whether a cataloged package supports a device capability.
 

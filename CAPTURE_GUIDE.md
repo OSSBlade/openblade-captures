@@ -52,9 +52,10 @@ query; do not guess them.
 
 If the investigation concerns an installed Razer driver path, use the separate
 [`blade-driver-catalog`](https://github.com/OSSBlade/blade-driver-catalog) for
-package inventory and export instructions. This repository retains the
-protocol and physical validation evidence. Driver Store exports and full
-device-instance reports remain private.
+package inventory and export instructions. The catalog is currently private,
+so its link works only for collaborators. This repository retains the protocol
+and physical validation evidence. Driver Store exports and full device-instance
+reports remain private.
 
 For the exact Razer Laptop Cooling Pad (`1532:0F43`, USB revision `0200`),
 record its USB interfaces and HID report geometry separately:
