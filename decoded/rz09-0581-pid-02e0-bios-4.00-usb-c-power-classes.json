@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorId": "1532",
+    "productId": "02E0",
+    "biosVersion": "4.00"
+  },
+  "sourceEvidence": {
+    "annotation": "annotations/2026-08-18-rz09-0581-usb-c-power-classes.json",
+    "annotationSha256": "8F60334E99BE58570AF53F3387E0FACDB6063CC4805E8AA3ABA7BA792E64B0AA",
+    "readOnly": true,
+    "rawCapturesCommitted": false
+  },
+  "query": {
+    "commandClass": "07",
+    "commandId": "8C",
+    "requestPayloadHex": "0000",
+    "expectedResponsePayloadLength": 2
+  },
+  "responseFormat": {
+    "byte0": "CurrentAdapterWattageLevel",
+    "byte1": "RecommendedAdapterWattageLevel",
+    "recommendedLevelHex": "11",
+    "recommendedWatts": 280
+  },
+  "mappings": [
+    {
+      "responsePayloadHex": "0211",
+      "currentLevelHex": "02",
+      "currentWatts": 45,
+      "recommendedWatts": 280,
+      "classification": "UsbCPower45W",
+      "successfulReadOnlySamples": 2,
+      "configuredChargerWatts": [
+        45,
+        55
+      ]
+    },
+    {
+      "responsePayloadHex": "0411",
+      "currentLevelHex": "04",
+      "currentWatts": 65,
+      "recommendedWatts": 280,
+      "classification": "UsbCPower65W",
+      "successfulReadOnlySamples": 4,
+      "configuredChargerWatts": [
+        65,
+        75,
+        90,
+        99
+      ]
+    }
+  ],
+  "knownComparisons": [
+    {
+      "responsePayloadHex": "0711",
+      "currentWatts": 100,
+      "recommendedWatts": 280,
+      "classification": "UsbCPower100W"
+    },
+    {
+      "responsePayloadHex": "1111",
+      "currentWatts": 280,
+      "recommendedWatts": 280,
+      "classification": "FullPower280W"
+    }
+  ],
+  "productionAdmission": {
+    "modelNumber": "RZ09-0581",
+    "biosVersion": "4.00",
+    "responsePayloads": [
+      "0211",
+      "0411"
+    ],
+    "uncapturedValuesFailClosed": true,
+    "notGeneralizedToOtherModels": true
+  }
+}
