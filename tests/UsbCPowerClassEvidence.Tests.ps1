@@ -99,6 +99,23 @@ Assert-True ((@($annotation.productionAdmission.authoritativeSynapseOnlyResponse
 Assert-True ($annotation.productionAdmission.otherUncapturedSynapseEnumsAdmitted `
         -eq $false) `
     'Other uncaptured Synapse adapter enums must remain fail-closed.'
+Assert-True ($annotation.productionAdmission.reportedPowerSource -ceq 'UsbC') `
+    'All admitted lower adapter classes must remain one shared USB-C source.'
+Assert-True ($annotation.productionAdmission.wattageSpecificIpcStateExposed `
+        -eq $false) `
+    'The evidence must not claim wattage-specific service IPC state.'
+Assert-True ($annotation.productionAdmission.wattageSpecificProfileSelected `
+        -eq $false) `
+    'The evidence must not claim wattage-specific profile selection.'
+$limitations = @($annotation.limitations)
+Assert-True (@($limitations | Where-Object {
+            $_ -like '*90 W and 99 W source limits returned 0411*'
+        }).Count -eq 1) `
+    'The configured-source-limit limitation must remain explicit.'
+Assert-True (@($limitations | Where-Object {
+            $_ -like '*one USB-C profile applies across admitted 45 W through 100 W*'
+        }).Count -eq 1) `
+    'The shared USB-C profile limitation must remain explicit.'
 
 Assert-True ($fixture.sourceEvidence.annotationSha256 -ceq $annotationHash) `
     'The decoded fixture must remain bound to the reviewed annotation bytes.'
@@ -120,6 +137,18 @@ Assert-True ((@($fixture.authoritativeSynapseMappings.classification) -join ',')
 Assert-True (@($fixture.authoritativeSynapseMappings |
         Where-Object physicalSampleCaptured -ne $false).Count -eq 0) `
     'The Synapse-only mappings must not claim physical samples.'
+Assert-True ($fixture.productBehavior.reportedPowerSource -ceq 'UsbC') `
+    'The decoded fixture must retain the shared USB-C product state.'
+Assert-True ($fixture.productBehavior.wattageSpecificIpcStateExposed -eq $false) `
+    'The decoded fixture must not claim wattage-specific IPC state.'
+Assert-True ($fixture.productBehavior.wattageSpecificProfileSelected -eq $false) `
+    'The decoded fixture must not claim wattage-specific profile selection.'
+Assert-True ($fixture.productBehavior.configured90And99WReturnedPayloadHex -ceq `
+        '0411') `
+    'The decoded fixture must preserve the 90 W and 99 W configured response.'
+Assert-True ($fixture.productBehavior.configuredSourceLimitProvesNegotiatedPower `
+        -eq $false) `
+    'The decoded fixture must not equate a configured limit with negotiated power.'
 Assert-True ($fixture.productionAdmission.biosVersion -ceq '4.00') `
     'The decoded production admission must remain scoped to BIOS 4.00.'
 Assert-True ($fixture.productionAdmission.otherValuesFailClosed -eq $true) `

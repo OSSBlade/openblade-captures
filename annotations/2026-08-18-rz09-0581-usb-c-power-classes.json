@@ -134,7 +134,9 @@
   "limitations": [
     "The charger setting is an operator-selected source limit, not an independent inline measurement of negotiated USB-PD voltage and current.",
     "The measurements establish the exact firmware response classes returned by this RZ09-0581 and charger combination; they do not establish continuous wattage measurement or a linear encoding.",
+    "The configured 90 W and 99 W source limits returned 0411, which Synapse names the 65 W class. A configured source limit therefore does not prove that the enum equals the configured limit, negotiated USB-PD power, or actual laptop draw.",
     "Responses 0311, 0511, and 0611 were not produced by the available charger. Their exact mappings are admitted from the official RZ09-0581 Synapse parser rather than a physical query sample.",
+    "OpenBlade collapses all six admitted lower adapter states to the shared PowerSource.UsbC contract. It does not expose the wattage-specific enum over service IPC or select a wattage-specific profile, so the one USB-C profile applies across admitted 45 W through 100 W classes.",
     "The 0211 and 0411 responses are production evidence only for exact RZ09-0581 admission. They are not generalized to RZ09-0528 or another Blade model.",
     "Stopping the service can perform its separately reviewed shutdown cleanup. The capture operation itself issued read-only queries and no adapter or performance write."
   ],
@@ -157,6 +159,9 @@
       "0611"
     ],
     "otherUncapturedSynapseEnumsAdmitted": false,
+    "reportedPowerSource": "UsbC",
+    "wattageSpecificIpcStateExposed": false,
+    "wattageSpecificProfileSelected": false,
     "reason": "Repeated exact-device read-only replies assign 0211 and 0411, while the official RZ09-0581 Synapse parser authoritatively assigns 0311, 0511, and 0611. Admission remains exact-value, exact-model, and BIOS 4.00 scoped."
   },
   "notes": [

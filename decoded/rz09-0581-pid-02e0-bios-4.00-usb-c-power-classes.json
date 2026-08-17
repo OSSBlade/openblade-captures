@@ -8,7 +8,7 @@
   },
   "sourceEvidence": {
     "annotation": "annotations/2026-08-18-rz09-0581-usb-c-power-classes.json",
-    "annotationSha256": "3D9F4A0E4651FBA9EEEC4D1ACA8FFD8ADFAF82B396620028061666D11BD7454F",
+    "annotationSha256": "7298282E22BBE9DD1E094EF6DE02F152E537FC1B5A4B6279D10D856E4D41D7C0",
     "readOnly": true,
     "rawCapturesCommitted": false
   },
@@ -92,6 +92,14 @@
       "classification": "FullPower280W"
     }
   ],
+  "productBehavior": {
+    "reportedPowerSource": "UsbC",
+    "wattageSpecificIpcStateExposed": false,
+    "wattageSpecificProfileSelected": false,
+    "profileScope": "One shared USB-C profile across admitted 45 W through 100 W classes",
+    "configured90And99WReturnedPayloadHex": "0411",
+    "configuredSourceLimitProvesNegotiatedPower": false
+  },
   "productionAdmission": {
     "modelNumber": "RZ09-0581",
     "biosVersion": "4.00",
