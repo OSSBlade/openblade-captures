@@ -8,7 +8,7 @@
   },
   "sourceEvidence": {
     "annotation": "annotations/2026-08-18-rz09-0581-usb-c-power-classes.json",
-    "annotationSha256": "8F60334E99BE58570AF53F3387E0FACDB6063CC4805E8AA3ABA7BA792E64B0AA",
+    "annotationSha256": "3D9F4A0E4651FBA9EEEC4D1ACA8FFD8ADFAF82B396620028061666D11BD7454F",
     "readOnly": true,
     "rawCapturesCommitted": false
   },
@@ -52,6 +52,32 @@
       ]
     }
   ],
+  "authoritativeSynapseMappings": [
+    {
+      "responsePayloadHex": "0311",
+      "currentLevelHex": "03",
+      "currentWatts": 60,
+      "recommendedWatts": 280,
+      "classification": "UsbCPower60W",
+      "physicalSampleCaptured": false
+    },
+    {
+      "responsePayloadHex": "0511",
+      "currentLevelHex": "05",
+      "currentWatts": 80,
+      "recommendedWatts": 280,
+      "classification": "UsbCPower80W",
+      "physicalSampleCaptured": false
+    },
+    {
+      "responsePayloadHex": "0611",
+      "currentLevelHex": "06",
+      "currentWatts": 90,
+      "recommendedWatts": 280,
+      "classification": "UsbCPower90W",
+      "physicalSampleCaptured": false
+    }
+  ],
   "knownComparisons": [
     {
       "responsePayloadHex": "0711",
@@ -71,9 +97,12 @@
     "biosVersion": "4.00",
     "responsePayloads": [
       "0211",
-      "0411"
+      "0311",
+      "0411",
+      "0511",
+      "0611"
     ],
-    "uncapturedValuesFailClosed": true,
+    "otherValuesFailClosed": true,
     "notGeneralizedToOtherModels": true
   }
 }

@@ -88,7 +88,7 @@
     },
     {
       "kind": "SynapseStaticCorrelation",
-      "summary": "Synapse 4.0.698 names 07/8C Get Adapter Wattage Level, decodes byte zero as current adapter wattage and byte one as recommended adapter wattage, and maps enum 02 to 45 W, 04 to 65 W, 07 to 100 W, and 11 to 280 W.",
+      "summary": "Synapse 4.0.698 names 07/8C Get Adapter Wattage Level, decodes byte zero as current adapter wattage and byte one as recommended adapter wattage, and maps enums 02 through 07 to the exact lower adapter classes retained here.",
       "synapseVersion": "4.0.698",
       "protocolModuleSha256": "FA5D8302402E7A4153C71DC926D40670BF792249912E4AA108740119CF2C0489",
       "rz090581MiddlewareSha256": "F93E37FAFCD2844DE2FA4B4149830AA8A4F03F9762014A5C39D098C9716BBA20",
@@ -99,8 +99,20 @@
         "currentWatts": 45,
         "recommendedWatts": 280
       },
+      "response0311": {
+        "currentWatts": 60,
+        "recommendedWatts": 280
+      },
       "response0411": {
         "currentWatts": 65,
+        "recommendedWatts": 280
+      },
+      "response0511": {
+        "currentWatts": 80,
+        "recommendedWatts": 280
+      },
+      "response0611": {
+        "currentWatts": 90,
         "recommendedWatts": 280
       }
     },
@@ -122,13 +134,16 @@
   "limitations": [
     "The charger setting is an operator-selected source limit, not an independent inline measurement of negotiated USB-PD voltage and current.",
     "The measurements establish the exact firmware response classes returned by this RZ09-0581 and charger combination; they do not establish continuous wattage measurement or a linear encoding.",
-    "Synapse documents additional wattage enums, but uncaptured responses remain outside OpenBlade production admission.",
+    "Responses 0311, 0511, and 0611 were not produced by the available charger. Their exact mappings are admitted from the official RZ09-0581 Synapse parser rather than a physical query sample.",
     "The 0211 and 0411 responses are production evidence only for exact RZ09-0581 admission. They are not generalized to RZ09-0528 or another Blade model.",
     "Stopping the service can perform its separately reviewed shutdown cleanup. The capture operation itself issued read-only queries and no adapter or performance write."
   ],
   "productionAdmission": {
     "adapterPowerResponse0211": "UsbCPower45W",
+    "adapterPowerResponse0311": "UsbCPower60W",
     "adapterPowerResponse0411": "UsbCPower65W",
+    "adapterPowerResponse0511": "UsbCPower80W",
+    "adapterPowerResponse0611": "UsbCPower90W",
     "adapterPowerResponse0711": "UsbCPower100W",
     "adapterClassificationAdmitted": true,
     "admittedModelNumber": "RZ09-0581",
@@ -136,8 +151,13 @@
       "4.00"
     ],
     "notGeneralizedToOtherModels": true,
-    "uncapturedSynapseEnumsAdmitted": false,
-    "reason": "Repeated exact-device read-only replies, Synapse's explicit parser, and Razer's published USB-C classes jointly assign 0211 and 0411 while preserving exact-value and exact-model fail-closed admission."
+    "authoritativeSynapseOnlyResponses": [
+      "0311",
+      "0511",
+      "0611"
+    ],
+    "otherUncapturedSynapseEnumsAdmitted": false,
+    "reason": "Repeated exact-device read-only replies assign 0211 and 0411, while the official RZ09-0581 Synapse parser authoritatively assigns 0311, 0511, and 0611. Admission remains exact-value, exact-model, and BIOS 4.00 scoped."
   },
   "notes": [
     "The six sanitized source reports remain local and uncommitted. Their individual hashes and a deterministic concatenated aggregate hash bind this annotation to the reviewed outputs.",
