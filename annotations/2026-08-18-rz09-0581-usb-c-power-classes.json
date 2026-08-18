@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "OpenBlade.Capture commit 7a85b2f2",
+    "role": "ReadOnlyQueryCapture",
+    "openBladeTypedApplyPerformed": false,
+    "openBladeReadbackConfirmed": true
+  },
+  "capturedAtUtc": "2026-08-17T18:11:40.3446710Z",
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "bios": "4.00",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "sha256": "5ED7E8EAE4CF708174A0023DC292F7AE717507DEBAD4104DFA557F627A1BF66D",
+    "byteLength": 17517,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddress",
+    "selectedDeviceCount": null,
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true,
+    "aggregateMode": "Six sanitized read-only query reports concatenated in ascending configured-wattage order"
+  },
+  "action": {
+    "kind": "ReadOnlyQuery",
+    "subsystem": "Blade adapter-power identification",
+    "name": "Third-party USB-C adapter wattage classification",
+    "value": "Six exact-device 07/8C reads at operator-selected 45, 55, 65, 75, 90, and 99 W charger settings",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": false
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "ExactDevicePreflight",
+      "summary": "Every read confirmed the exact RZ09-0581, PID 02E0, BIOS 4.00 target. The OpenBlade service released its device handle before each query, and no USBPcap or second OpenBlade.Capture owner was active.",
+      "exactHostConfirmed": true,
+      "exactDeviceConfirmed": true,
+      "bios400Confirmed": true,
+      "serviceHandleReleasedBeforeEachQuery": true,
+      "competingCaptureOwnerAbsent": true
+    },
+    {
+      "kind": "AdapterPowerClassMeasurements",
+      "summary": "The two lower configured settings returned 0211, while 65 through 99 W returned 0411. Each session issued the exact read-only 07/8C request payload 0000 once.",
+      "requestPayloadHex": "0000",
+      "measurements": [
+        {
+          "configuredChargerWatts": 45,
+          "responsePayloadHex": "0211",
+          "sourceReportSha256": "BF5BE84329E447C882EBAB0526C2CA03D4DC204AE8BB718E0B64E583F2D8F240"
+        },
+        {
+          "configuredChargerWatts": 55,
+          "responsePayloadHex": "0211",
+          "sourceReportSha256": "0E9DCF61876A28F4B14C972801ED6266C0ED9A4D8B29E177110112884F749DD4"
+        },
+        {
+          "configuredChargerWatts": 65,
+          "responsePayloadHex": "0411",
+          "sourceReportSha256": "4C1D17CA5EC2E5ED8956DF89F9D7B69315100C08394D3A17AD8D835DE2884997"
+        },
+        {
+          "configuredChargerWatts": 75,
+          "responsePayloadHex": "0411",
+          "sourceReportSha256": "6352912ECB3692C41CCC6333BD2F2B4A5BE3EAE2DAB54D781B7DB5FF4201FA32"
+        },
+        {
+          "configuredChargerWatts": 90,
+          "responsePayloadHex": "0411",
+          "sourceReportSha256": "BB2DDCE4B9F932DCFF8CC3B408DF6FAC85432BD04AF3D1E6D9E5F3499EBDB003"
+        },
+        {
+          "configuredChargerWatts": 99,
+          "responsePayloadHex": "0411",
+          "sourceReportSha256": "BB3CD34D1A3C33E137C0A8B1E928A03E324A26CDEB2340F378E3238B7E61556D"
+        }
+      ],
+      "response0211Count": 2,
+      "response0411Count": 4,
+      "allQueriesReadOnly": true
+    },
+    {
+      "kind": "SynapseStaticCorrelation",
+      "summary": "Synapse 4.0.698 names 07/8C Get Adapter Wattage Level, decodes byte zero as current adapter wattage and byte one as recommended adapter wattage, and maps enums 02 through 07 to the exact lower adapter classes retained here.",
+      "synapseVersion": "4.0.698",
+      "protocolModuleSha256": "FA5D8302402E7A4153C71DC926D40670BF792249912E4AA108740119CF2C0489",
+      "rz090581MiddlewareSha256": "F93E37FAFCD2844DE2FA4B4149830AA8A4F03F9762014A5C39D098C9716BBA20",
+      "commandBytesHex": "02078C",
+      "responseByte0Semantic": "CurrentAdapterWattageLevel",
+      "responseByte1Semantic": "RecommendedAdapterWattageLevel",
+      "response0211": {
+        "currentWatts": 45,
+        "recommendedWatts": 280
+      },
+      "response0311": {
+        "currentWatts": 60,
+        "recommendedWatts": 280
+      },
+      "response0411": {
+        "currentWatts": 65,
+        "recommendedWatts": 280
+      },
+      "response0511": {
+        "currentWatts": 80,
+        "recommendedWatts": 280
+      },
+      "response0611": {
+        "currentWatts": 90,
+        "recommendedWatts": 280
+      }
+    },
+    {
+      "kind": "ExternalDocumentationCorrelation",
+      "summary": "Razer documents third-party USB-C inputs as 45 W, 65 W, or exactly 100 W equivalent classes. The repeated exact-device responses align with those classes, while the firmware and Synapse evidence assigns the protocol values.",
+      "razerUsbCAdapterGuidance": "https://mysupport.razer.com/app/answers/detail/a_id/3948/",
+      "razerRz090581Support": "https://mysupport.razer.com/app/answers/detail/a_id/20585/",
+      "documentationIndependentlyAssignsProtocolBytes": false
+    },
+    {
+      "kind": "KnownValueComparison",
+      "summary": "Existing reviewed evidence maps 0711 to USB-C 100 W and 1111 to OEM 280 W. Synapse's two-enum parser explains all four values without treating byte 11 as an opaque USB-C marker.",
+      "knownUsbC100WResponsePayloadHex": "0711",
+      "knownOem280WResponsePayloadHex": "1111",
+      "existingEvidenceAnnotation": "2026-07-17-usb-c-pd-synapse.json"
+    }
+  ],
+  "limitations": [
+    "The charger setting is an operator-selected source limit, not an independent inline measurement of negotiated USB-PD voltage and current.",
+    "The measurements establish the exact firmware response classes returned by this RZ09-0581 and charger combination; they do not establish continuous wattage measurement or a linear encoding.",
+    "The configured 90 W and 99 W source limits returned 0411, which Synapse names the 65 W class. A configured source limit therefore does not prove that the enum equals the configured limit, negotiated USB-PD power, or actual laptop draw.",
+    "Responses 0311, 0511, and 0611 were not produced by the available charger. Their exact mappings are admitted from the official RZ09-0581 Synapse parser rather than a physical query sample.",
+    "OpenBlade collapses all six admitted lower adapter states to the shared PowerSource.UsbC contract. It does not expose the wattage-specific enum over service IPC or select a wattage-specific profile, so the one USB-C profile applies across admitted 45 W through 100 W classes.",
+    "The 0211 and 0411 responses are production evidence only for exact RZ09-0581 admission. They are not generalized to RZ09-0528 or another Blade model.",
+    "Stopping the service can perform its separately reviewed shutdown cleanup. The capture operation itself issued read-only queries and no adapter or performance write."
+  ],
+  "productionAdmission": {
+    "adapterPowerResponse0211": "UsbCPower45W",
+    "adapterPowerResponse0311": "UsbCPower60W",
+    "adapterPowerResponse0411": "UsbCPower65W",
+    "adapterPowerResponse0511": "UsbCPower80W",
+    "adapterPowerResponse0611": "UsbCPower90W",
+    "adapterPowerResponse0711": "UsbCPower100W",
+    "adapterClassificationAdmitted": true,
+    "admittedModelNumber": "RZ09-0581",
+    "admittedBiosVersions": [
+      "4.00"
+    ],
+    "notGeneralizedToOtherModels": true,
+    "authoritativeSynapseOnlyResponses": [
+      "0311",
+      "0511",
+      "0611"
+    ],
+    "otherUncapturedSynapseEnumsAdmitted": false,
+    "reportedPowerSource": "UsbC",
+    "wattageSpecificIpcStateExposed": false,
+    "wattageSpecificProfileSelected": false,
+    "reason": "Repeated exact-device read-only replies assign 0211 and 0411, while the official RZ09-0581 Synapse parser authoritatively assigns 0311, 0511, and 0611. Admission remains exact-value, exact-model, and BIOS 4.00 scoped."
+  },
+  "notes": [
+    "The six sanitized source reports remain local and uncommitted. Their individual hashes and a deterministic concatenated aggregate hash bind this annotation to the reviewed outputs.",
+    "The capture executable was OpenBlade 0.11.1+7a85b2f2 with SHA-256 08DE21686257591B1F04B97B857062CA5718A9B8F67CEDED89A2191678093BCE.",
+    "The service was restored after each operator-approved session and the laptop was returned to its 100 W USB-C setting after the final measurement."
+  ]
+}
