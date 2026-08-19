@@ -24,7 +24,7 @@ Assert-True ($annotation.schemaVersion -eq 1) `
 Assert-True ($annotation.device.modelNumber -ceq 'RZ09-0581') `
     'Touchpad admission must remain exact-model scoped.'
 Assert-True ($annotation.device.bios -ceq '4.00' -and $annotation.device.ec -ceq '1.04') `
-    'Touchpad admission must remain on the captured BIOS and EC baseline.'
+    'Touchpad evidence must retain its capture BIOS and EC provenance.'
 Assert-True ($annotation.hidIdentity.api -ceq 'HidD_GetAttributes' -and `
     $annotation.hidIdentity.desiredAccess -eq 0) `
     'Touchpad discovery must remain a zero-access HID descriptor read.'
@@ -41,12 +41,21 @@ Assert-True ($annotation.hidIdentity.versionNumberHex -ceq '0107' -and `
     $annotation.hidIdentity.displayVersion -ceq '1.07') `
     'The observed touchpad descriptor version or encoding changed.'
 Assert-True ($annotation.productionAdmission.access -ceq 'ReadOnly' -and `
+    $annotation.productionAdmission.firmwareAdmission -ceq 'ModelScoped' -and `
+    $annotation.productionAdmission.captureBios -ceq $annotation.device.bios -and `
+    $annotation.productionAdmission.captureEc -ceq $annotation.device.ec -and `
     $annotation.productionAdmission.requiredVersionSource -ceq `
         'HidD_GetAttributes.VersionNumber' -and `
     $annotation.productionAdmission.requiresExactlyOneSemanticMatch -eq $true -and `
     $annotation.productionAdmission.firmwareWritesAdmitted -eq $false -and `
+    $annotation.productionAdmission.otherFirmwareVersionsAdmitted -eq $true -and `
     $annotation.productionAdmission.otherModelsAdmitted -eq $false) `
-    'Touchpad admission must remain read-only, unambiguous, and model-scoped.'
+    'Touchpad admission must remain read-only, unambiguous, and model-scoped across firmware.'
+Assert-True ($annotation.productionAdmission.PSObject.Properties.Name -notcontains `
+    'requiredBios' -and `
+    $annotation.productionAdmission.PSObject.Properties.Name -notcontains `
+        'requiredEc') `
+    'Captured firmware versions must not become runtime admission gates.'
 Assert-True ($annotation.evidenceProvenance.packetCapturePerformed -eq $false -and `
     $annotation.evidenceProvenance.deviceWritePerformed -eq $false -and `
     $annotation.evidenceProvenance.featureReportPerformed -eq $false) `

@@ -33,8 +33,9 @@
     "component": "Touchpad",
     "access": "ReadOnly",
     "requiredModelNumber": "RZ09-0581",
-    "requiredBios": "4.00",
-    "requiredEc": "1.04",
+    "firmwareAdmission": "ModelScoped",
+    "captureBios": "4.00",
+    "captureEc": "1.04",
     "requiredVendorIdHex": "093A",
     "requiredProductIdHex": "3001",
     "requiredUsagePageHex": "000D",
@@ -44,7 +45,7 @@
     "observedVersionNumberHex": "0107",
     "observedFirmwareVersion": "1.07",
     "firmwareWritesAdmitted": false,
-    "otherFirmwareBaselinesRemainObservedOnly": true,
+    "otherFirmwareVersionsAdmitted": true,
     "otherModelsAdmitted": false
   },
   "privacy": {
@@ -59,7 +60,7 @@
   },
   "limitations": [
     "This is the HID descriptor bcdDevice value exposed by Windows, not a packet-confirmed firmware response.",
-    "The evidence admits readback only on RZ09-0581 BIOS 4.00 and EC 1.04.",
+    "The evidence was captured on BIOS 4.00 and EC 1.04; those versions are provenance and admission is model-scoped.",
     "Only the exact Precision Touchpad collection at usage 000D:0005 is admitted.",
     "It does not establish a Synapse runtime path, Thunderbolt readback, or any firmware update or write operation."
   ]

@@ -24,7 +24,7 @@ Assert-True ($annotation.schemaVersion -eq 1) `
 Assert-True ($annotation.device.modelNumber -ceq 'RZ09-0581') `
     'Thunderbolt admission must remain exact-model scoped.'
 Assert-True ($annotation.device.bios -ceq '4.00' -and $annotation.device.ec -ceq '1.04') `
-    'Thunderbolt admission must remain on the captured BIOS and EC baseline.'
+    'Thunderbolt evidence must retain its capture BIOS and EC provenance.'
 Assert-True ($annotation.property.formatId -ceq `
     '{540B947E-8B40-45BC-A8A2-6A0B894CBDA2}') `
     'The Windows firmware-version property GUID changed.'
@@ -51,9 +51,18 @@ Assert-True ($selected.Count -eq 1 -and `
     $selected[0].firmwareVersion -ceq '69.1') `
     'Exactly one fully identified Thunderbolt 5 router must remain selected.'
 Assert-True ($annotation.productionAdmission.access -ceq 'ReadOnly' -and `
+    $annotation.productionAdmission.firmwareAdmission -ceq 'ModelScoped' -and `
+    $annotation.productionAdmission.captureBios -ceq $annotation.device.bios -and `
+    $annotation.productionAdmission.captureEc -ceq $annotation.device.ec -and `
     $annotation.productionAdmission.requiresExactlyOneMatch -eq $true -and `
+    $annotation.productionAdmission.otherFirmwareVersionsAdmitted -eq $true -and `
     $annotation.productionAdmission.otherModelsAdmitted -eq $false) `
-    'Thunderbolt admission must remain read-only, unambiguous, and model-scoped.'
+    'Thunderbolt admission must remain read-only, unambiguous, and model-scoped across firmware.'
+Assert-True ($annotation.productionAdmission.PSObject.Properties.Name -notcontains `
+    'requiredBios' -and `
+    $annotation.productionAdmission.PSObject.Properties.Name -notcontains `
+        'requiredEc') `
+    'Captured firmware versions must not become runtime admission gates.'
 Assert-True ($annotation.evidenceProvenance.packetCapturePerformed -eq $false -and `
     $annotation.evidenceProvenance.deviceWritePerformed -eq $false) `
     'Thunderbolt evidence must not claim a packet capture or device write.'

@@ -49,15 +49,16 @@
     "component": "Thunderbolt5",
     "access": "ReadOnly",
     "requiredModelNumber": "RZ09-0581",
-    "requiredBios": "4.00",
-    "requiredEc": "1.04",
+    "firmwareAdmission": "ModelScoped",
+    "captureBios": "4.00",
+    "captureEc": "1.04",
     "requiredInstanceIdPrefix": "USB4\\ROOT_DEVICE_ROUTER&VID_8086&PID_5781\\",
     "requiredHardwareId": "USB4\\ROOT_DEVICE_ROUTER&VID_8086&PID_5781&REV_0084",
     "requiredService": "Usb4DeviceRouter",
     "requiredParentInstanceIdPrefix": "PCI\\VEN_8086&DEV_5781&SUBSYS_30101A58&REV_84&USB4_MS_CM\\",
     "requiresExactlyOneMatch": true,
     "observedFirmwareVersion": "69.1",
-    "otherFirmwareBaselinesRemainObservedOnly": true,
+    "otherFirmwareVersionsAdmitted": true,
     "otherModelsAdmitted": false
   },
   "privacy": {
@@ -71,7 +72,7 @@
   },
   "limitations": [
     "This is Windows-reported PnP firmware metadata, not a packet-confirmed firmware response.",
-    "The evidence admits readback only on RZ09-0581 BIOS 4.00 and EC 1.04.",
+    "The evidence was captured on BIOS 4.00 and EC 1.04; those versions are provenance and admission is model-scoped.",
     "It does not establish touchpad firmware readback or any firmware update or write operation.",
     "Friendly device names are not used as production identity gates."
   ]
