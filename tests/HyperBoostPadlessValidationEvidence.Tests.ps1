@@ -9,6 +9,8 @@ $paths = [ordered]@{
     NoLoad = 'annotations\2026-08-19-rz09-0581-hyperboost-padless-sustained-no-load.json'
     Load = 'annotations\2026-08-19-rz09-0581-hyperboost-padless-steel-nomad.json'
     Adapter = 'annotations\2026-08-19-rz09-0581-hyperboost-padless-adapter-transition.json'
+    LowPower = 'annotations\2026-08-19-rz09-0581-hyperboost-padless-low-power-negative.json'
+    Crash = 'annotations\2026-08-19-rz09-0581-hyperboost-padless-crash-recovery.json'
 }
 
 function Assert-True {
@@ -89,6 +91,47 @@ Assert-True ($transition.Count -eq 1 -and
     $adapter.productionAdmission.adapterTransitionValidated -eq $true -and
     $adapter.productionAdmission.padLessActivationAdmitted -eq $false) `
     'The reviewed adapter-transition evidence changed.'
+
+$lowPower = $evidence.LowPower
+$lowPowerBoundary = @($lowPower.sanitizedEvidence |
+    Where-Object kind -ceq 'LowPowerBoundaryNegative')
+$lowPowerCleanup = @($lowPower.sanitizedEvidence |
+    Where-Object kind -ceq 'SeparateSafeCleanup')
+Assert-True ($lowPower.evidenceProvenance.role -ceq 'NegativeCapture' -and
+    $lowPowerBoundary.Count -eq 1 -and
+    $lowPowerBoundary[0].recoveryAttemptsObserved -eq 0 -and
+    $lowPowerBoundary[0].recoveryCompletionsObserved -eq 0 -and
+    $lowPowerBoundary[0].lowPowerLifecycleValidated -eq $false -and
+    $lowPowerCleanup.Count -eq 1 -and
+    $lowPowerCleanup[0].cleanupAttemptCount -eq 1 -and
+    $lowPowerCleanup[0].balancedAndAutomaticConfirmed -eq $true -and
+    $lowPower.productionAdmission.lowPowerLifecycleValidated -eq $false -and
+    $lowPower.productionAdmission.padLessActivationAdmitted -eq $false) `
+    'The installed low-power negative evidence changed.'
+
+$crash = $evidence.Crash
+$crashBoundary = @($crash.sanitizedEvidence |
+    Where-Object kind -ceq 'ExactUnexpectedExitBoundary')
+$crashRecovery = @($crash.sanitizedEvidence |
+    Where-Object kind -ceq 'InstalledRecoveryVerification')
+$verifierCorrection = @($crash.sanitizedEvidence |
+    Where-Object kind -ceq 'VerifierCorrection')
+Assert-True ($crashBoundary.Count -eq 1 -and
+    $crashBoundary[0].oldServiceExited -eq $true -and
+    $crashBoundary[0].serviceInstanceReplaced -eq $true -and
+    $crashRecovery.Count -eq 1 -and
+    $crashRecovery[0].exactInstalledGeneration -eq $true -and
+    $crashRecovery[0].exactBaseAndAutomaticConfirmed -eq $true -and
+    $crashRecovery[0].journalRetired -eq $true -and
+    $crashRecovery[0].recoveryAttemptsObserved -eq 1 -and
+    $crashRecovery[0].recoveryCompletionsObserved -eq 1 -and
+    $crashRecovery[0].stableSecondObservation -eq $true -and
+    $verifierCorrection.Count -eq 1 -and
+    $verifierCorrection[0].additionalHyperBoostWriteCount -eq 0 -and
+    $crash.productionAdmission.crashRecoveryValidated -eq $true -and
+    $crash.productionAdmission.lowPowerLifecycleValidated -eq $false -and
+    $crash.productionAdmission.padLessActivationAdmitted -eq $false) `
+    'The installed unexpected-exit recovery evidence changed.'
 
 foreach ($entry in $paths.GetEnumerator()) {
     $raw = Get-Content -LiteralPath (Join-Path $repository $entry.Value) -Raw
