@@ -9,6 +9,8 @@ $paths = [ordered]@{
     NoLoad = 'annotations\2026-08-19-rz09-0581-hyperboost-padless-sustained-no-load.json'
     Load = 'annotations\2026-08-19-rz09-0581-hyperboost-padless-steel-nomad.json'
     Adapter = 'annotations\2026-08-19-rz09-0581-hyperboost-padless-adapter-transition.json'
+    BatteryBoundary = 'annotations\2026-08-19-rz09-0581-hyperboost-battery-auto-exit.json'
+    UsbCBoundary = 'annotations\2026-08-19-rz09-0581-hyperboost-usb-c-persistence-negative.json'
     LowPowerNegative = 'annotations\2026-08-19-rz09-0581-hyperboost-padless-low-power-negative.json'
     LowPower = 'annotations\2026-08-19-rz09-0581-hyperboost-padless-low-power-recovery.json'
     Crash = 'annotations\2026-08-19-rz09-0581-hyperboost-padless-crash-recovery.json'
@@ -92,6 +94,55 @@ Assert-True ($transition.Count -eq 1 -and
     $adapter.productionAdmission.adapterTransitionValidated -eq $true -and
     $adapter.productionAdmission.padLessActivationAdmitted -eq $false) `
     'The reviewed adapter-transition evidence changed.'
+
+$batteryBoundary = $evidence.BatteryBoundary
+$batteryExit = @($batteryBoundary.sanitizedEvidence |
+    Where-Object kind -ceq 'BatteryFirmwareAutoExit')
+$batteryRestoration = @($batteryBoundary.sanitizedEvidence |
+    Where-Object kind -ceq 'FullPowerReconnectAndRestoration')
+Assert-True ($batteryBoundary.evidenceProvenance.controller -ceq `
+        'OpenBlade.Capture 0.17.0+1a8190a83b141cffa2ad33b6eb711cbd1d2de8db' -and
+    $batteryExit.Count -eq 1 -and
+    $batteryExit[0].destinationAdapterState -ceq 'battery' -and
+    $batteryExit[0].completedSampleCount -eq 20 -and
+    $batteryExit[0].firmwareAutoExitConfirmed -eq $true -and
+    $batteryExit[0].firmwareExitState -ceq 'batterySaverAutomatic' -and
+    $batteryExit[0].hyperBoostReappearedAfterExit -eq $false -and
+    $batteryExit[0].openBladeDisableIssuedDuringObservation -eq $false -and
+    $batteryRestoration.Count -eq 1 -and
+    $batteryRestoration[0].fullPowerReconnectConfirmed -eq $true -and
+    $batteryRestoration[0].openBladeCleanupWriteCount -eq 2 -and
+    $batteryRestoration[0].finalBalancedRestorationConfirmed -eq $true -and
+    $batteryBoundary.productionAdmission.batteryFirmwareAutoExitObserved -eq $true -and
+    $batteryBoundary.productionAdmission.explicitOpenBladeBatteryTransitionDisableRequired -eq $false -and
+    $batteryBoundary.productionAdmission.externalPowerHyperBoostPersistenceAccepted -eq $true -and
+    $batteryBoundary.productionAdmission.hyperBoostPowerTransitionPolicyChanged -eq $true) `
+    'The Battery firmware auto-exit evidence changed.'
+
+$usbCBoundary = $evidence.UsbCBoundary
+$usbCPersistence = @($usbCBoundary.sanitizedEvidence |
+    Where-Object kind -ceq 'UsbCHyperBoostPersistenceNegative')
+$usbCRestoration = @($usbCBoundary.sanitizedEvidence |
+    Where-Object kind -ceq 'FullPowerReconnectAndRestoration')
+Assert-True ($usbCBoundary.evidenceProvenance.role -ceq 'NegativeCapture' -and
+    $usbCBoundary.evidenceProvenance.controller -ceq `
+        'OpenBlade.Capture 0.17.0+1a8190a83b141cffa2ad33b6eb711cbd1d2de8db' -and
+    $usbCPersistence.Count -eq 1 -and
+    $usbCPersistence[0].destinationAdapterState -ceq 'usbCPower100W' -and
+    $usbCPersistence[0].completedSampleCount -eq 20 -and
+    $usbCPersistence[0].firmwareAutoExitConfirmed -eq $false -and
+    $null -eq $usbCPersistence[0].firmwareExitState -and
+    $usbCPersistence[0].openBladeDisableIssuedDuringObservation -eq $false -and
+    $usbCPersistence[0].boundaryFailure -ceq 'hyperBoostDidNotExit' -and
+    $usbCRestoration.Count -eq 1 -and
+    $usbCRestoration[0].fullPowerReconnectConfirmed -eq $true -and
+    $usbCRestoration[0].openBladeCleanupWriteCount -eq 2 -and
+    $usbCRestoration[0].finalBalancedRestorationConfirmed -eq $true -and
+    $usbCBoundary.productionAdmission.usbCFirmwareAutoExitObserved -eq $false -and
+    $usbCBoundary.productionAdmission.externalPowerHyperBoostPersistenceAccepted -eq $true -and
+    $usbCBoundary.productionAdmission.explicitOpenBladeUsbCTransitionDisableRequired -eq $false -and
+    $usbCBoundary.productionAdmission.hyperBoostPowerTransitionPolicyChanged -eq $true) `
+    'The USB-C firmware auto-exit negative evidence changed.'
 
 $lowPowerNegative = $evidence.LowPowerNegative
 $lowPowerBoundary = @($lowPowerNegative.sanitizedEvidence |
