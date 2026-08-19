@@ -9,7 +9,8 @@ $paths = [ordered]@{
     NoLoad = 'annotations\2026-08-19-rz09-0581-hyperboost-padless-sustained-no-load.json'
     Load = 'annotations\2026-08-19-rz09-0581-hyperboost-padless-steel-nomad.json'
     Adapter = 'annotations\2026-08-19-rz09-0581-hyperboost-padless-adapter-transition.json'
-    LowPower = 'annotations\2026-08-19-rz09-0581-hyperboost-padless-low-power-negative.json'
+    LowPowerNegative = 'annotations\2026-08-19-rz09-0581-hyperboost-padless-low-power-negative.json'
+    LowPower = 'annotations\2026-08-19-rz09-0581-hyperboost-padless-low-power-recovery.json'
     Crash = 'annotations\2026-08-19-rz09-0581-hyperboost-padless-crash-recovery.json'
 }
 
@@ -92,12 +93,12 @@ Assert-True ($transition.Count -eq 1 -and
     $adapter.productionAdmission.padLessActivationAdmitted -eq $false) `
     'The reviewed adapter-transition evidence changed.'
 
-$lowPower = $evidence.LowPower
-$lowPowerBoundary = @($lowPower.sanitizedEvidence |
+$lowPowerNegative = $evidence.LowPowerNegative
+$lowPowerBoundary = @($lowPowerNegative.sanitizedEvidence |
     Where-Object kind -ceq 'LowPowerBoundaryNegative')
-$lowPowerCleanup = @($lowPower.sanitizedEvidence |
+$lowPowerCleanup = @($lowPowerNegative.sanitizedEvidence |
     Where-Object kind -ceq 'SeparateSafeCleanup')
-Assert-True ($lowPower.evidenceProvenance.role -ceq 'NegativeCapture' -and
+Assert-True ($lowPowerNegative.evidenceProvenance.role -ceq 'NegativeCapture' -and
     $lowPowerBoundary.Count -eq 1 -and
     $lowPowerBoundary[0].recoveryAttemptsObserved -eq 0 -and
     $lowPowerBoundary[0].recoveryCompletionsObserved -eq 0 -and
@@ -105,9 +106,37 @@ Assert-True ($lowPower.evidenceProvenance.role -ceq 'NegativeCapture' -and
     $lowPowerCleanup.Count -eq 1 -and
     $lowPowerCleanup[0].cleanupAttemptCount -eq 1 -and
     $lowPowerCleanup[0].balancedAndAutomaticConfirmed -eq $true -and
-    $lowPower.productionAdmission.lowPowerLifecycleValidated -eq $false -and
-    $lowPower.productionAdmission.padLessActivationAdmitted -eq $false) `
+    $lowPowerNegative.productionAdmission.lowPowerLifecycleValidated -eq $false -and
+    $lowPowerNegative.productionAdmission.padLessActivationAdmitted -eq $false) `
     'The installed low-power negative evidence changed.'
+
+$lowPower = $evidence.LowPower
+$lowPowerArm = @($lowPower.sanitizedEvidence |
+    Where-Object kind -ceq 'OwnedLifecycleArm')
+$modernStandby = @($lowPower.sanitizedEvidence |
+    Where-Object kind -ceq 'ObservedModernStandbyBoundary')
+$lowPowerRecovery = @($lowPower.sanitizedEvidence |
+    Where-Object kind -ceq 'InstalledRecoveryVerification')
+Assert-True ($lowPower.evidenceProvenance.controller -ceq `
+        'OpenBlade installed Service 0.17.0+f52440583dbdf7f20bca0564cb37e01603f68d4e verified by OpenBlade.FirmwareSmoke 0.17.0+f52440583dbdf7f20bca0564cb37e01603f68d4e' -and
+    $lowPowerArm.Count -eq 1 -and
+    $lowPowerArm[0].hyperBoostConfirmed -eq $true -and
+    $lowPowerArm[0].durableOwnershipConfirmed -eq $true -and
+    $modernStandby.Count -eq 1 -and
+    $modernStandby[0].entryEventId -eq 506 -and
+    $modernStandby[0].exitEventId -eq 507 -and
+    $modernStandby[0].orderedEntryAndExitConfirmed -eq $true -and
+    $lowPowerRecovery.Count -eq 1 -and
+    $lowPowerRecovery[0].exactInstalledGeneration -eq $true -and
+    $lowPowerRecovery[0].expectedServiceBoundary -eq $true -and
+    $lowPowerRecovery[0].exactBaseAndAutomaticConfirmed -eq $true -and
+    $lowPowerRecovery[0].journalRetired -eq $true -and
+    $lowPowerRecovery[0].recoveryAttemptsObserved -eq 1 -and
+    $lowPowerRecovery[0].recoveryCompletionsObserved -eq 1 -and
+    $lowPowerRecovery[0].stableSecondObservation -eq $true -and
+    $lowPower.productionAdmission.lowPowerLifecycleValidated -eq $true -and
+    $lowPower.productionAdmission.padLessActivationAdmitted -eq $true) `
+    'The installed low-power recovery evidence changed.'
 
 $crash = $evidence.Crash
 $crashBoundary = @($crash.sanitizedEvidence |
