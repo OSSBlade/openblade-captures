@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "OpenBlade.Capture 0.17.0+1a8190a83b141cffa2ad33b6eb711cbd1d2de8db",
+    "role": "NegativeCapture",
+    "openBladeTypedApplyPerformed": true,
+    "openBladeReadbackConfirmed": true
+  },
+  "capturedAtUtc": "2026-08-19T16:09:24.8551029Z",
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "bios": "4.00",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "sha256": "8970E10971511787BF095A097F1058654D095E3888A1C6DF3C1C23DA8F04244F",
+    "byteLength": 9244,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddress",
+    "selectedDeviceCount": 0,
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "kind": "SettingChange",
+    "subsystem": "Blade performance and power-source transition",
+    "name": "Padless HyperBoost firmware auto-exit negative control on USB-C 100 W",
+    "value": "Apply paired mode 7 once on FullPower330W, switch to USB-C 100 W, observe paired thermal state for ten seconds without an OpenBlade disable, then reconnect full power and restore the exact Balanced baseline",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": true,
+    "applyResult": "Applied successfully once from the confirmed Balanced and Automatic baseline on FullPower330W.",
+    "readbackResult": "The firmware did not exit HyperBoost: paired mode 7 remained active for all twenty UsbCPower100W samples without an OpenBlade disable.",
+    "restorationResult": "After FullPower330W was freshly reconfirmed, one bounded paired cleanup restored the saved Balanced state.",
+    "restorationReadbackResult": "Exact Balanced restoration and final physical pad absence were confirmed with no indeterminate write or manual recovery state."
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "ReviewedPowerSourceBoundaryPlan",
+      "summary": "The validator used the hash-pinned ten-second boundary plan with 500 ms cadence, no OpenBlade disable during observation, and full-power reconnection before cleanup.",
+      "planId": "rz09-0581-bios-4.00-hyperboost-power-source-boundary-v1",
+      "planSha256": "90C5CC2D06EB8C2CD47524E168550F3A75B6E55F5398A347A134BE67E1903DD1"
+    },
+    {
+      "kind": "UsbCHyperBoostPersistenceNegative",
+      "summary": "After paired mode-7 confirmation, the adapter classified as UsbCPower100W for the complete observation while both thermal channels remained in mode 7. Firmware auto-exit was not observed.",
+      "initialAdapterState": "fullPower330W",
+      "destinationAdapterState": "usbCPower100W",
+      "completedSampleCount": 20,
+      "destinationAdapterMaintained": true,
+      "completedFullObservation": true,
+      "firmwareAutoExitConfirmed": false,
+      "firmwareExitState": null,
+      "hyperBoostReappearedAfterExit": false,
+      "openBladeDisableIssuedDuringObservation": false,
+      "boundaryFailure": "hyperBoostDidNotExit"
+    },
+    {
+      "kind": "FullPowerReconnectAndRestoration",
+      "summary": "After the negative observation, FullPower330W was freshly confirmed before one two-channel Balanced cleanup and exact readback.",
+      "reconnectedAdapterState": "fullPower330W",
+      "fullPowerReconnectConfirmed": true,
+      "baselineReturnedWithoutCleanupWrite": false,
+      "openBladeCleanupWriteCount": 2,
+      "finalBalancedRestorationConfirmed": true,
+      "postRunPadAbsentConfirmed": true,
+      "indeterminatePartialWrite": false,
+      "manualRecoveryRequired": false
+    },
+    {
+      "kind": "ArtifactIntegrity",
+      "summary": "The private transcript remains uncommitted; this annotation retains its hash and length plus the exact Capture executable and final read-only Balanced confirmation.",
+      "captureProductVersion": "0.17.0+1a8190a83b141cffa2ad33b6eb711cbd1d2de8db",
+      "captureExecutableSha256": "AE18F62CE5711696B359D21E71A37DE1DA039626E5EA2DF29552426EE4E22DF9",
+      "finalReadOnlyQuerySha256": "BB06FE903566E5442485EED82E20966ACDF87203328485158F2AE8366A897DE3",
+      "validatorExitCode": 2,
+      "success": false
+    }
+  ],
+  "limitations": [
+    "This is authoritative negative evidence for firmware auto-exit on the tested transition: mode 7 persisted for ten seconds on UsbCPower100W.",
+    "Persistent semantic mode 7 does not by itself prove that elevated CPU or GPU power limits remained available on USB-C.",
+    "The test begins on admitted full power and does not test whether firmware accepts a new HyperBoost command submitted while already on USB-C.",
+    "The result is scoped to the exact RZ09-0581, BIOS 4.00 evidence provenance, Balanced and Automatic baseline, and confirmed physical cooling-pad absence."
+  ],
+  "productionAdmission": {
+    "usbCFirmwareAutoExitObserved": false,
+    "externalPowerHyperBoostPersistenceAccepted": true,
+    "explicitOpenBladeUsbCTransitionDisableRequired": false,
+    "hyperBoostPowerTransitionPolicyChanged": true,
+    "reason": "Firmware left paired mode 7 active throughout the complete USB-C 100 W observation. The reviewed policy accepts HyperBoost persistence on any external-power class and relies on the separately confirmed firmware exit when external power is removed."
+  },
+  "notes": [
+    "USBPcap was not running.",
+    "The OpenBlade service and competing Razer applications remained inactive.",
+    "No Razer service was started, stopped, or restored."
+  ]
+}

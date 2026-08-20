@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 2,
+  "evidenceProvenance": {
+    "controller": "OpenBlade.Capture 0.17.0+1a8190a83b141cffa2ad33b6eb711cbd1d2de8db",
+    "role": "OpenBladeTypedValidation",
+    "openBladeTypedApplyPerformed": true,
+    "openBladeReadbackConfirmed": true
+  },
+  "capturedAtUtc": "2026-08-19T16:07:57.1724216Z",
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "bios": "4.00",
+    "ec": null,
+    "mcu": null
+  },
+  "capture": {
+    "sha256": "26B3584C0F6A1A3E8A97DDD4F6C0F21A6F9C5CD5DD41E11E3F83B0373FFBBF74",
+    "byteLength": 9130,
+    "rawCaptureCommitted": false,
+    "captureMode": "DeviceAddress",
+    "selectedDeviceCount": 0,
+    "stopMode": "Graceful",
+    "forcedShutdownDataLossDisclosed": false,
+    "decodable": true
+  },
+  "action": {
+    "kind": "SettingChange",
+    "subsystem": "Blade performance and power-source transition",
+    "name": "Padless HyperBoost firmware auto-exit on Battery",
+    "value": "Apply paired mode 7 once on FullPower330W, switch to Battery, observe paired thermal state for ten seconds without an OpenBlade disable, then reconnect full power and restore the exact Balanced baseline if required",
+    "operatorConfirmed": true
+  },
+  "validation": {
+    "priorStateSaved": true,
+    "applyResult": "Applied successfully once from the confirmed Balanced and Automatic baseline on FullPower330W.",
+    "readbackResult": "Confirmed paired mode 7 before the transition, then confirmed BatterySaverAutomatic for all twenty Battery samples without an OpenBlade disable or HyperBoost re-entry.",
+    "restorationResult": "Restored successfully to the exact saved Balanced pair with one bounded paired cleanup after admitted full power was freshly reconfirmed.",
+    "restorationReadbackResult": "Confirmed exact Balanced restoration, final physical pad absence, and no indeterminate write or manual recovery state."
+  },
+  "sanitizedEvidence": [
+    {
+      "kind": "ReviewedPowerSourceBoundaryPlan",
+      "summary": "The validator used the hash-pinned ten-second boundary plan with 500 ms cadence, three consecutive automatic samples required, no OpenBlade disable during observation, and full-power reconnection before cleanup.",
+      "planId": "rz09-0581-bios-4.00-hyperboost-power-source-boundary-v1",
+      "planSha256": "90C5CC2D06EB8C2CD47524E168550F3A75B6E55F5398A347A134BE67E1903DD1"
+    },
+    {
+      "kind": "BatteryFirmwareAutoExit",
+      "summary": "After paired mode-7 confirmation, the firmware changed both thermal channels to BatterySaverAutomatic and maintained that state for every Battery sample without an OpenBlade disable.",
+      "initialAdapterState": "fullPower330W",
+      "destinationAdapterState": "battery",
+      "completedSampleCount": 20,
+      "destinationAdapterMaintained": true,
+      "completedFullObservation": true,
+      "firmwareAutoExitConfirmed": true,
+      "firmwareExitState": "batterySaverAutomatic",
+      "hyperBoostReappearedAfterExit": false,
+      "openBladeDisableIssuedDuringObservation": false
+    },
+    {
+      "kind": "FullPowerReconnectAndRestoration",
+      "summary": "After the observation, FullPower330W was freshly confirmed before any cleanup. The exact original Balanced pair had not yet returned, so OpenBlade issued one two-channel cleanup and confirmed restoration.",
+      "reconnectedAdapterState": "fullPower330W",
+      "fullPowerReconnectConfirmed": true,
+      "baselineReturnedWithoutCleanupWrite": false,
+      "openBladeCleanupWriteCount": 2,
+      "finalBalancedRestorationConfirmed": true,
+      "postRunPadAbsentConfirmed": true,
+      "indeterminatePartialWrite": false,
+      "manualRecoveryRequired": false
+    },
+    {
+      "kind": "ArtifactIntegrity",
+      "summary": "The private transcript remains uncommitted; this annotation retains its hash and length plus the exact Capture executable and final read-only Balanced confirmation.",
+      "captureProductVersion": "0.17.0+1a8190a83b141cffa2ad33b6eb711cbd1d2de8db",
+      "captureExecutableSha256": "AE18F62CE5711696B359D21E71A37DE1DA039626E5EA2DF29552426EE4E22DF9",
+      "finalReadOnlyQuerySha256": "BB06FE903566E5442485EED82E20966ACDF87203328485158F2AE8366A897DE3",
+      "validatorExitCode": 0,
+      "success": true
+    }
+  ],
+  "limitations": [
+    "This one exact-host run proves firmware auto-exit after a FullPower330W-to-Battery transition; it does not prove that a direct HyperBoost enable attempted while already on Battery is rejected.",
+    "The semantic thermal state confirms mode exit, not physical power limits, temperatures, or performance behavior.",
+    "The exact original Balanced pair did not return immediately after full power was reconnected, so the validator used its authorized one-shot paired cleanup.",
+    "The result is scoped to the exact RZ09-0581, BIOS 4.00 evidence provenance, Balanced and Automatic baseline, and confirmed physical cooling-pad absence."
+  ],
+  "productionAdmission": {
+    "batteryFirmwareAutoExitObserved": true,
+    "explicitOpenBladeBatteryTransitionDisableRequired": false,
+    "externalPowerHyperBoostPersistenceAccepted": true,
+    "hyperBoostPowerTransitionPolicyChanged": true,
+    "reason": "The firmware independently exited mode 7 and maintained BatterySaverAutomatic for the complete observation. The reviewed policy therefore relies on firmware for Battery exit and permits HyperBoost to persist on any external-power class, including USB-C."
+  },
+  "notes": [
+    "USBPcap was not running.",
+    "The OpenBlade service and competing Razer applications remained inactive.",
+    "No Razer service was started, stopped, or restored."
+  ]
+}
