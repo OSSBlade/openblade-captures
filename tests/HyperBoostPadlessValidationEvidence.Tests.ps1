@@ -14,6 +14,8 @@ $paths = [ordered]@{
     LowPowerNegative = 'annotations\2026-08-19-rz09-0581-hyperboost-padless-low-power-negative.json'
     LowPower = 'annotations\2026-08-19-rz09-0581-hyperboost-padless-low-power-recovery.json'
     Crash = 'annotations\2026-08-19-rz09-0581-hyperboost-padless-crash-recovery.json'
+    ExactHeadLowPower = 'annotations\2026-08-21-rz09-0581-hyperboost-padless-low-power-recovery.json'
+    ExactHeadCrash = 'annotations\2026-08-21-rz09-0581-hyperboost-padless-crash-recovery.json'
 }
 
 function Assert-True {
@@ -212,6 +214,67 @@ Assert-True ($crashBoundary.Count -eq 1 -and
     $crash.productionAdmission.lowPowerLifecycleValidated -eq $false -and
     $crash.productionAdmission.padLessActivationAdmitted -eq $false) `
     'The installed unexpected-exit recovery evidence changed.'
+
+$exactHeadLowPower = $evidence.ExactHeadLowPower
+$exactHeadLowPowerArm = @($exactHeadLowPower.sanitizedEvidence |
+    Where-Object kind -ceq 'OwnedLifecycleArm')
+$exactHeadLowPowerBoundary = @($exactHeadLowPower.sanitizedEvidence |
+    Where-Object kind -ceq 'ObservedLowPowerSafetyBoundary')
+$exactHeadLowPowerRecovery = @($exactHeadLowPower.sanitizedEvidence |
+    Where-Object kind -ceq 'InstalledRecoveryVerification')
+Assert-True ($exactHeadLowPower.evidenceProvenance.controller -ceq `
+        'OpenBlade installed validation Service 0.19.1+b071753a71b72980a134cf8f9530c3e8d9a15481 verified by OpenBlade.FirmwareSmoke 0.19.1+b071753a71b72980a134cf8f9530c3e8d9a15481' -and
+    $exactHeadLowPowerArm.Count -eq 1 -and
+    $exactHeadLowPowerArm[0].hyperBoostConfirmed -eq $true -and
+    $exactHeadLowPowerArm[0].durableOwnershipConfirmed -eq $true -and
+    $exactHeadLowPowerBoundary.Count -eq 1 -and
+    $exactHeadLowPowerBoundary[0].operatorSleepAndResumeConfirmed -eq $true -and
+    $exactHeadLowPowerBoundary[0].expectedSameServiceBoundary -eq $true -and
+    $exactHeadLowPowerBoundary[0].boundaryNotificationPathDetermined -eq $false -and
+    $exactHeadLowPowerRecovery.Count -eq 1 -and
+    $exactHeadLowPowerRecovery[0].exactInstalledGeneration -eq $true -and
+    $exactHeadLowPowerRecovery[0].exactBaseAndAutomaticConfirmed -eq $true -and
+    $exactHeadLowPowerRecovery[0].journalRetired -eq $true -and
+    $exactHeadLowPowerRecovery[0].recoveryAttemptsObserved -eq 1 -and
+    $exactHeadLowPowerRecovery[0].recoveryCompletionsObserved -eq 1 -and
+    $exactHeadLowPowerRecovery[0].stableSecondObservation -eq $true -and
+    $exactHeadLowPower.productionAdmission.lowPowerLifecycleValidated -eq $true -and
+    $exactHeadLowPower.productionAdmission.crashRecoveryValidated -eq $false -and
+    $exactHeadLowPower.productionAdmission.padLessActivationAdmitted -eq $false) `
+    'The exact-head installed low-power recovery evidence changed.'
+
+$exactHeadCrash = $evidence.ExactHeadCrash
+$oneShotGuard = @($exactHeadCrash.sanitizedEvidence |
+    Where-Object kind -ceq 'KnownNotAppliedOneShotGuard')
+$exactHeadCrashArm = @($exactHeadCrash.sanitizedEvidence |
+    Where-Object kind -ceq 'OwnedLifecycleArm')
+$exactHeadCrashBoundary = @($exactHeadCrash.sanitizedEvidence |
+    Where-Object kind -ceq 'ExactUnexpectedExitBoundary')
+$exactHeadCrashRecovery = @($exactHeadCrash.sanitizedEvidence |
+    Where-Object kind -ceq 'InstalledRecoveryVerification')
+Assert-True ($oneShotGuard.Count -eq 1 -and
+    $oneShotGuard[0].hyperBoostConfirmed -eq $false -and
+    $oneShotGuard[0].markerCreated -eq $false -and
+    $oneShotGuard[0].cleanupAttempted -eq $false -and
+    $oneShotGuard[0].manualRecoveryRequired -eq $false -and
+    $exactHeadCrashArm.Count -eq 1 -and
+    $exactHeadCrashArm[0].hyperBoostConfirmed -eq $true -and
+    $exactHeadCrashArm[0].durableOwnershipConfirmed -eq $true -and
+    $exactHeadCrashBoundary.Count -eq 1 -and
+    $exactHeadCrashBoundary[0].oldServiceExited -eq $true -and
+    $exactHeadCrashBoundary[0].serviceInstanceReplaced -eq $true -and
+    $exactHeadCrashBoundary[0].sameValidationBuildConfirmed -eq $true -and
+    $exactHeadCrashRecovery.Count -eq 1 -and
+    $exactHeadCrashRecovery[0].exactInstalledGeneration -eq $true -and
+    $exactHeadCrashRecovery[0].exactBaseAndAutomaticConfirmed -eq $true -and
+    $exactHeadCrashRecovery[0].journalRetired -eq $true -and
+    $exactHeadCrashRecovery[0].recoveryAttemptsObserved -eq 1 -and
+    $exactHeadCrashRecovery[0].recoveryCompletionsObserved -eq 1 -and
+    $exactHeadCrashRecovery[0].stableSecondObservation -eq $true -and
+    $exactHeadCrash.productionAdmission.crashRecoveryValidated -eq $true -and
+    $exactHeadCrash.productionAdmission.lowPowerLifecycleValidated -eq $true -and
+    $exactHeadCrash.productionAdmission.padLessActivationAdmitted -eq $true) `
+    'The exact-head installed unexpected-exit recovery evidence changed.'
 
 foreach ($entry in $paths.GetEnumerator()) {
     $raw = Get-Content -LiteralPath (Join-Path $repository $entry.Value) -Raw
