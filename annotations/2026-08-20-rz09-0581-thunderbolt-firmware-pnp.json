@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "evidenceKind": "windowsPnpFirmwareVersionReadback",
+  "evidenceProvenance": {
+    "controller": "Windows PnP read-only inventory",
+    "role": "DirectReadOnlyMetadata",
+    "packetCapturePerformed": false,
+    "deviceWritePerformed": false,
+    "rawEnumerationCommitted": false
+  },
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "bios": "4.00",
+    "ec": "1.04"
+  },
+  "property": {
+    "keyName": "DEVPKEY_Device_FirmwareVersion",
+    "formatId": "{540B947E-8B40-45BC-A8A2-6A0B894CBDA2}",
+    "propertyId": 18,
+    "propertyType": "DEVPROP_TYPE_STRING",
+    "readOnly": true
+  },
+  "observations": {
+    "presentUsb4RootRouterCount": 2,
+    "rootRouters": [
+      {
+        "role": "IntegratedUsb4RootRouter",
+        "instanceIdPrefix": "USB4\\ROOT_DEVICE_ROUTER&VID_8086&PID_E333\\",
+        "hardwareId": "USB4\\ROOT_DEVICE_ROUTER&VID_8086&PID_E333&REV_0000",
+        "service": "Usb4DeviceRouter",
+        "parentInstanceIdPrefix": "PCI\\VEN_8086&DEV_E333&SUBSYS_30101A58&REV_00&USB4_MS_CM\\",
+        "firmwareVersion": "11.7",
+        "selectedForThunderbolt5": false
+      },
+      {
+        "role": "Thunderbolt5RootRouter",
+        "instanceIdPrefix": "USB4\\ROOT_DEVICE_ROUTER&VID_8086&PID_5781\\",
+        "hardwareId": "USB4\\ROOT_DEVICE_ROUTER&VID_8086&PID_5781&REV_0084",
+        "service": "Usb4DeviceRouter",
+        "parentInstanceIdPrefix": "PCI\\VEN_8086&DEV_5781&SUBSYS_30101A58&REV_84&USB4_MS_CM\\",
+        "firmwareVersion": "69.1",
+        "selectedForThunderbolt5": true
+      }
+    ]
+  },
+  "productionAdmission": {
+    "component": "Thunderbolt5",
+    "access": "ReadOnly",
+    "requiredModelNumber": "RZ09-0581",
+    "firmwareAdmission": "ModelScoped",
+    "captureBios": "4.00",
+    "captureEc": "1.04",
+    "requiredInstanceIdPrefix": "USB4\\ROOT_DEVICE_ROUTER&VID_8086&PID_5781\\",
+    "requiredHardwareId": "USB4\\ROOT_DEVICE_ROUTER&VID_8086&PID_5781&REV_0084",
+    "requiredService": "Usb4DeviceRouter",
+    "requiredParentInstanceIdPrefix": "PCI\\VEN_8086&DEV_5781&SUBSYS_30101A58&REV_84&USB4_MS_CM\\",
+    "requiresExactlyOneMatch": true,
+    "observedFirmwareVersion": "69.1",
+    "otherFirmwareVersionsAdmitted": true,
+    "otherModelsAdmitted": false
+  },
+  "privacy": {
+    "fullDeviceInstanceIdsIncluded": false,
+    "deviceInstanceSuffixesIncluded": false,
+    "serialNumbersIncluded": false,
+    "containerIdsIncluded": false,
+    "locationPathsIncluded": false,
+    "userIdentifiersIncluded": false,
+    "localPathsIncluded": false
+  },
+  "limitations": [
+    "This is Windows-reported PnP firmware metadata, not a packet-confirmed firmware response.",
+    "The evidence was captured on BIOS 4.00 and EC 1.04; those versions are provenance and admission is model-scoped.",
+    "It does not establish touchpad firmware readback or any firmware update or write operation.",
+    "Friendly device names are not used as production identity gates."
+  ]
+}

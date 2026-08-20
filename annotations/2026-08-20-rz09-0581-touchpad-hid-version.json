@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "evidenceKind": "windowsHidDescriptorVersionReadback",
+  "evidenceProvenance": {
+    "controller": "Windows HidD_GetAttributes read-only inventory",
+    "role": "DirectReadOnlyMetadata",
+    "packetCapturePerformed": false,
+    "deviceWritePerformed": false,
+    "featureReportPerformed": false,
+    "rawEnumerationCommitted": false
+  },
+  "device": {
+    "modelNumber": "RZ09-0581",
+    "vendorIdHex": "1532",
+    "productIdHex": "02E0",
+    "bios": "4.00",
+    "ec": "1.04"
+  },
+  "hidIdentity": {
+    "api": "HidD_GetAttributes",
+    "desiredAccess": 0,
+    "vendorIdHex": "093A",
+    "productIdHex": "3001",
+    "usagePageHex": "000D",
+    "usageHex": "0005",
+    "presentVidPidCollectionCount": 4,
+    "exactSemanticMatchCount": 1,
+    "versionNumberHex": "0107",
+    "versionEncoding": "packed BCD major/minor",
+    "displayVersion": "1.07"
+  },
+  "productionAdmission": {
+    "component": "Touchpad",
+    "access": "ReadOnly",
+    "requiredModelNumber": "RZ09-0581",
+    "firmwareAdmission": "ModelScoped",
+    "captureBios": "4.00",
+    "captureEc": "1.04",
+    "requiredVendorIdHex": "093A",
+    "requiredProductIdHex": "3001",
+    "requiredUsagePageHex": "000D",
+    "requiredUsageHex": "0005",
+    "requiredVersionSource": "HidD_GetAttributes.VersionNumber",
+    "requiresExactlyOneSemanticMatch": true,
+    "observedVersionNumberHex": "0107",
+    "observedFirmwareVersion": "1.07",
+    "firmwareWritesAdmitted": false,
+    "otherFirmwareVersionsAdmitted": true,
+    "otherModelsAdmitted": false
+  },
+  "privacy": {
+    "fullDevicePathsIncluded": false,
+    "fullDeviceInstanceIdsIncluded": false,
+    "deviceInstanceSuffixesIncluded": false,
+    "serialNumbersIncluded": false,
+    "containerIdsIncluded": false,
+    "locationPathsIncluded": false,
+    "userIdentifiersIncluded": false,
+    "localPathsIncluded": false
+  },
+  "limitations": [
+    "This is the HID descriptor bcdDevice value exposed by Windows, not a packet-confirmed firmware response.",
+    "The evidence was captured on BIOS 4.00 and EC 1.04; those versions are provenance and admission is model-scoped.",
+    "Only the exact Precision Touchpad collection at usage 000D:0005 is admitted.",
+    "It does not establish a Synapse runtime path, Thunderbolt readback, or any firmware update or write operation."
+  ]
+}
